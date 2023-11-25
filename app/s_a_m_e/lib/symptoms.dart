@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SecondRoute extends StatelessWidget {
-  const SecondRoute({super.key});
+class Symptoms extends StatelessWidget {
+  const Symptoms({super.key});
 
   @override
   Widget build(BuildContext context) {

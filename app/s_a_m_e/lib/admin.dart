@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/SecondRoute.dart';
+import 'package:s_a_m_e/Symptoms.dart';
 
-class FirstRoute extends StatelessWidget {
-  const FirstRoute({super.key});
+class Admin extends StatelessWidget {
+  const Admin({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class FirstRoute extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SecondRoute()),
+                MaterialPageRoute(builder: (context) => const Symptoms()),
               );
             },
           ),
