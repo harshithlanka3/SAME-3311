@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:s_a_m_e/symptomlist.dart';
 
 // Chief Complaint Model
 class ChiefComplaint {
@@ -120,7 +121,8 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
                   if (response.statusCode == 201) {
                     // Symptom added successfully
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Symptom added successfully')),
+                      const SnackBar(
+                          content: Text('Symptom added successfully')),
                     );
                     // Optionally, clear the form or navigate away
                   } else {
@@ -137,6 +139,15 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
                 }
               },
               child: const Text('Create Symptom'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SymptomsListPage()),
+                );
+              },
+              child: Text('View All Symptoms'),
             ),
           ],
         ),

@@ -1,4 +1,4 @@
-import'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 const MaterialColor teal = MaterialColor(_tealPrimaryValue, <int, Color>{
   50: Color(0xFFECF6F9),
@@ -14,7 +14,8 @@ const MaterialColor teal = MaterialColor(_tealPrimaryValue, <int, Color>{
 });
 const int _tealPrimaryValue = 0xFF62B6CB;
 
-const MaterialColor background = MaterialColor(_backgroundPrimaryValue, <int, Color>{
+const MaterialColor background =
+    MaterialColor(_backgroundPrimaryValue, <int, Color>{
   50: Color(0xFFFEFEFE),
   100: Color(0xFFFEFEFE),
   200: Color(0xFFFDFDFD),
@@ -60,7 +61,8 @@ const int _bluePrimaryValue = 0xFF5FA8D3;
 
 // these are used for symptoms box insides
 
-const MaterialColor boxinsides = MaterialColor(_boxinsidesPrimaryValue, <int, Color>{
+const MaterialColor boxinsides =
+    MaterialColor(_boxinsidesPrimaryValue, <int, Color>{
   50: Color(0xFFFCFEFF),
   100: Color(0xFFF8FCFE),
   200: Color(0xFFF3FAFE),
@@ -73,3 +75,17 @@ const MaterialColor boxinsides = MaterialColor(_boxinsidesPrimaryValue, <int, Co
   900: Color(0xFFD7ECFC),
 });
 const int _boxinsidesPrimaryValue = 0xFFE7F4FD;
+
+const MaterialColor white = MaterialColor(_whitePrimaryValue, <int, Color>{
+  50: Color(0xFFFFFFFF), // You can adjust shades of white if needed
+  100: Color(0xFFFFFFFF),
+  200: Color(0xFFFFFFFF),
+  300: Color(0xFFFFFFFF),
+  400: Color(0xFFFFFFFF),
+  500: Color(_whitePrimaryValue),
+  600: Color(0xFFFFFFFF),
+  700: Color(0xFFFFFFFF),
+  800: Color(0xFFFFFFFF),
+  900: Color(0xFFFFFFFF),
+});
+const int _whitePrimaryValue = 0xFFFFFFFF;

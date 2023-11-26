@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/symptoms.dart';
+import 'package:s_a_m_e/add.dart';
 
 class Admin extends StatelessWidget {
   const Admin({super.key});
@@ -19,6 +19,7 @@ class Admin extends StatelessWidget {
             const Text('Hello Admin User!'),
             ElevatedButton(
               style: const ButtonStyle(
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
               child: const Text('Add Symptom'),
