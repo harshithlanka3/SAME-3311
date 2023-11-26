@@ -16,6 +16,9 @@ class MainApp extends StatelessWidget {
       title: 'Software Aid for Medical Emergencies',
       theme: ThemeData(
           primarySwatch: teal,
+          textSelectionTheme: const TextSelectionThemeData(
+            cursorColor: navy
+          ),
           fontFamily: "PT Serif",
           scaffoldBackgroundColor: background,
           appBarTheme: const AppBarTheme(

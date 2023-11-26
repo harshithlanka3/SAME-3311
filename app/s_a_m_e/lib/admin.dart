@@ -11,27 +11,58 @@ class Admin extends StatelessWidget {
       appBar: AppBar(
         title: const Text('S.A.M.E'),
       ),
-      body: Center(
+      body: Align(
+          alignment: Alignment.topCenter,
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-            const Text('Update Symptoms'),
-            const Text('Hello Admin User!'),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+            children: <Widget>[
+              const SizedBox(height: 25),
+              const Text('Hello Admin User!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                style: const ButtonStyle(
+                  foregroundColor: MaterialStatePropertyAll<Color>(white),
+                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                ),
+                child: const Text('Add Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SymptomCreationPage()),
+                  );
+                },
               ),
-              child: const Text('Add Symptom'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SymptomCreationPage()),
-                );
-              },
-            ),
-          ])),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                style: const ButtonStyle(
+                  foregroundColor: MaterialStatePropertyAll<Color>(white),
+                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                ),
+                child: const Text('Symptoms List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+                onPressed: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => SymptomCreationPage()),
+                  // );
+                },
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                style: const ButtonStyle(
+                  foregroundColor: MaterialStatePropertyAll<Color>(white),
+                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                ),
+                child: const Text('Diagnosis List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+                onPressed: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => SymptomCreationPage()),
+                  // );
+                },
+              ),
+            ])),
     );
   }
 }

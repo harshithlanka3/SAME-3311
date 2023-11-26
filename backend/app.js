@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const app = express();
-const uri = "";
+const uri = "mongodb+srv://allisonw22:4vWVBWk2qTTuqxjM@cluster0.9kkf582.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose.connect(uri)
 .then(() => console.log('Connected to MongoDB Cloud'))

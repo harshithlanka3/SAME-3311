@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:s_a_m_e/colors.dart';
 import 'dart:convert';
 
 class SymptomsListPage extends StatefulWidget {
@@ -32,29 +33,45 @@ class _SymptomsListPageState extends State<SymptomsListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("All Symptoms"),
+        title: Text("S.A.M.E"),
       ),
-      body: FutureBuilder<List<Symptom>>(
-        future: symptoms,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(snapshot.data![index].name),
-                );
-              },
-            );
-          } else {
-            return Center(child: Text('No symptoms found'));
-          }
-        },
-      ),
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: FutureBuilder<List<Symptom>>(
+          future: symptoms,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: teal),
+                          color: boxinsides,
+                          borderRadius: BorderRadius.circular(20),
+                        ), //BoxDecoration
+                        child: ListTile(
+                          title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                          subtitle: const Text('Symptom Description'), // this will need to be integrated later with the API
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  );
+                },
+              );
+            } else {
+              return const Center(child: Text('No symptoms found'));
+            }
+          },
+        ),
+      )  
     );
   }
 }

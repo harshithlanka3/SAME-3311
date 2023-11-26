@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/symptomlist.dart';
+import 'package:s_a_m_e/colors.dart';
 
 // Chief Complaint Model
 class ChiefComplaint {
@@ -74,17 +75,27 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Symptom'),
+        title: const Text('S.A.M.E'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(15.0),
         child: Column(
           children: [
+            const SizedBox(height: 20),
+            const Text('Add Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
+            const SizedBox(height: 20),
             TextField(
               controller: _symptomNameController,
               decoration: const InputDecoration(
                 labelText: 'Symptom Name',
+                labelStyle: TextStyle(color: navy),
                 border: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: navy),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: navy),
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -97,6 +108,11 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
                   return Text('Error: ${snapshot.error}');
                 } else {
                   return MultiSelectDialogField<ChiefComplaint>(
+                    backgroundColor: background,
+                    cancelText: const Text('CANCEL', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
+                    confirmText: const Text('SELECT', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
+                    unselectedColor: navy,
+                    selectedColor: navy,
                     items: snapshot.data!
                         .map((complaint) => MultiSelectItem<ChiefComplaint>(
                             complaint, complaint.name))
@@ -109,7 +125,12 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
                 }
               },
             ),
+            const SizedBox(height: 20),
             ElevatedButton(
+              style: const ButtonStyle(
+                  foregroundColor: MaterialStatePropertyAll<Color>(white),
+                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                ),
               onPressed: () async {
                 if (_symptomNameController.text.isNotEmpty &&
                     _selectedComplaints.isNotEmpty) {
@@ -138,16 +159,20 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
                   );
                 }
               },
-              child: const Text('Create Symptom'),
+              child: const Text('Create Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
+              style: const ButtonStyle(
+                  foregroundColor: MaterialStatePropertyAll<Color>(white),
+                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                ),
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => SymptomsListPage()),
                 );
               },
-              child: Text('View All Symptoms'),
+              child: const Text('View All Symptoms', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
           ],
         ),
