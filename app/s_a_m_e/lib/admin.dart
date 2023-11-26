@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/add.dart';
+import 'package:s_a_m_e/symptomlist.dart';
 
 class Admin extends StatelessWidget {
   const Admin({super.key});
@@ -40,11 +41,11 @@ class Admin extends StatelessWidget {
                 ),
                 child: const Text('Symptoms List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //       builder: (context) => SymptomCreationPage()),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SymptomsListPage()),
+                  );
                 },
               ),
               const SizedBox(height: 10),

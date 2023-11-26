@@ -145,7 +145,6 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
                       const SnackBar(
                           content: Text('Symptom added successfully')),
                     );
-                    // Optionally, clear the form or navigate away
                   } else {
                     // Handle failure
                     ScaffoldMessenger.of(context).showSnackBar(
