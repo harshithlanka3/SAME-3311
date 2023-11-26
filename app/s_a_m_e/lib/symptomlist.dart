@@ -4,6 +4,8 @@ import 'package:s_a_m_e/colors.dart';
 import 'dart:convert';
 
 class SymptomsListPage extends StatefulWidget {
+  const SymptomsListPage({super.key});
+
   @override
   _SymptomsListPageState createState() => _SymptomsListPageState();
 }

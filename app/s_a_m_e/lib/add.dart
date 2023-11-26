@@ -164,7 +164,7 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
                 ),
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SymptomsListPage()),
+                  MaterialPageRoute(builder: (context) => const SymptomsListPage()),
                 );
               },
               child: const Text('View All Symptoms', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),

@@ -29,7 +29,7 @@ class Admin extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => SymptomCreationPage()),
+                        builder: (context) => const SymptomCreationPage()),
                   );
                 },
               ),
@@ -44,7 +44,7 @@ class Admin extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => SymptomsListPage()),
+                        builder: (context) => const SymptomsListPage()),
                   );
                 },
               ),

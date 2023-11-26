@@ -29,7 +29,7 @@ class MainApp extends StatelessWidget {
                   fontSize: 48.0,
                   color: white,
                   fontWeight: FontWeight.bold))),
-      home: Admin(),
+      home: const Admin(),
     );
   }
 }
