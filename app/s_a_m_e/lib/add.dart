@@ -5,7 +5,6 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/symptomlist.dart';
 import 'package:s_a_m_e/colors.dart';
 
-// Chief Complaint Model
 class ChiefComplaint {
   final String id;
   final String name;
@@ -20,7 +19,7 @@ class ChiefComplaint {
   }
 }
 
-// API Service
+// pulls from the API
 class ApiService {
   Future<List<ChiefComplaint>> fetchChiefComplaints() async {
     final response =
@@ -52,7 +51,7 @@ class ApiService {
   }
 }
 
-// Symptom Creation Page
+// creating the actual page to add symptoms
 class SymptomCreationPage extends StatefulWidget {
   const SymptomCreationPage({super.key});
 
@@ -140,19 +139,16 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
                   );
 
                   if (response.statusCode == 201) {
-                    // Symptom added successfully
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                           content: Text('Symptom added successfully')),
                     );
                   } else {
-                    // Handle failure
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Failed to add symptom')),
                     );
                   }
                 } else {
-                  // Validation error
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Please fill all the fields')),
                   );

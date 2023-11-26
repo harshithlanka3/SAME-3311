@@ -33,7 +33,7 @@ class _SymptomsListPageState extends State<SymptomsListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Symptoms", style: TextStyle(fontSize: 36.0)),
+        title: const Text("Symptoms", style: TextStyle(fontSize: 36.0)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -56,11 +56,11 @@ class _SymptomsListPageState extends State<SymptomsListPage> {
                           decoration: BoxDecoration(
                             border: Border.all(color: teal),
                             color: boxinsides,
-                            borderRadius: BorderRadius.circular(20),
-                          ), //BoxDecoration
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                           child: ListTile(
                             title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                            subtitle: const Text('Symptom Description'), // this will need to be integrated later with the API
+                            subtitle: const Text('Symptom Description'), // this will be integrated in a later sprint
                           ),
                         ),
                         const SizedBox(height: 10),
