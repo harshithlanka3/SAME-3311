@@ -49,3 +49,16 @@ This means in your local copy of the repo in the backend directory you have to c
 <img width="1440" alt="Screenshot 2023-12-17 at 12 26 21" src="https://github.com/harshithlanka3/S.A.M.E/assets/98058276/6a23e3ae-0ee6-4a4a-be18-2c1221fadce0">
 As I have setup the .gitignore to ignore .env files you can put sensitive data such as your personal MongoDB atlas username and password URI without pushing that information to the repo for everyone else to see.
 
+
+
+
+# Backend
+
+For the backend we are using Node.js and some packages like express, mongoose, and dotenv. We are bound to use other packages in the future as well so keep that in mind. To install all the packages we are currently using cd to the our backend directory. Once you are there run the following command: `npm install`. This will automatically install all the packages specified in package-lock.json with the exact versions specified. Once that is done you can make whatever changes you want to the backend. The current structure of the backend is clear with models, controllers, and routes with everything being collated together in app.js. In its current state, if you want to run the server locally you can just do `node app.js` and the server is now running locally on `http://localhost:3000/`. The terminal should also output ```Server is running on port 3000
+Connected to MongoDB Cloud```
+Showing that it has successfully connected to MongoDB atlas. 
+
+
+# Frontend
+
+Make sure that flutter is installed and run `flutter doctor` to ensure everything is installed as it should be. From there, you can just do flutter run in the frontend/s_a_m_e directory or if you are using visual studio code (You should its infinitely better) then you can just go to the main.dart file under the lib directory, make sure your simulator for iPhone or android is running, and click on run on the top right. If the backend server is running, the frontend should be able to access the server locally and pull symptoms and a bunch of other stuff that way as well. In all honesty, our understanding of flutter right now is very low and I highly recommend everyone learn it as much as possible. 
