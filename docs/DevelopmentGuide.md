@@ -38,3 +38,14 @@ Now, lets go back to the example of pushing the test.txt file onto the repo.
 Now I put in my username as usual and put the token in (you can paste the token directly) instead of the password to get a successul push
 <img width="1220" alt="Screenshot 2023-12-17 at 12 00 38" src="https://github.com/harshithlanka3/S.A.M.E/assets/98058276/33b03cdf-77af-4b31-a340-d8b72f892c54">
 
+
+
+
+# MongoDB
+
+For now, we are using MongoDB's Atlas platform to host our database. As such, I have created a generic username and password. This means that wherever we want to connect to the database in the backend, we will have a variable called `uri` which is usually equal to something along the lines of `process.env.MONGODB_URI;`
+
+This means in your local copy of the repo in the backend directory you have to create a file called `.env` and put in the following line:
+<img width="1440" alt="Screenshot 2023-12-17 at 12 26 21" src="https://github.com/harshithlanka3/S.A.M.E/assets/98058276/6a23e3ae-0ee6-4a4a-be18-2c1221fadce0">
+As I have setup the .gitignore to ignore .env files you can put sensitive data such as your personal MongoDB atlas username and password URI without pushing that information to the repo for everyone else to see.
+
