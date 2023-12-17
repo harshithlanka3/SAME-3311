@@ -1,8 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
+require('dotenv').config();
+
 
 const app = express();
-const uri = "";
+const uri = process.env.MONGODB_URI;
 
 mongoose.connect(uri)
 .then(() => console.log('Connected to MongoDB Cloud'))
