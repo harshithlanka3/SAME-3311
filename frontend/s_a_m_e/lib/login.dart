@@ -1,9 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/add.dart';
-import 'package:s_a_m_e/symptomlist.dart';
 import 'package:s_a_m_e/colors.dart';
 
 // perhaps might have to use ApiService ???
@@ -30,18 +29,24 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('S.A.M.E'),
-      // ),
+      appBar: AppBar(
+        // title: const Text('S.A.M.E'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Align(
           alignment: Alignment.center,
           child:  Column(
             children: <Widget>[
-              const SizedBox(height: 100),
-              const Text('Sign in', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.0)),
-              const SizedBox(height: 50),
+              const SizedBox(height: 15),
+              const Image(
+                height: 220,
+                image: AssetImage('assets/logo.png')
+              ),
+              const SizedBox(height: 20), 
+              const Text('Welcome back!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0)),
+              const Text('Login with your credentials below', style: TextStyle(fontSize: 14.0)),
+              const SizedBox(height: 40),
               TextField(
                 controller: _usernameController,
                 decoration: const InputDecoration(
@@ -60,7 +65,7 @@ class _LoginState extends State<Login> {
                   )
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
               TextField(
                 controller: _passwordController,
                 decoration: const InputDecoration(
@@ -80,9 +85,24 @@ class _LoginState extends State<Login> {
                 ),
               ),
               const SizedBox(height: 40),
-              const Text("Don't have an account? Register here", style: TextStyle(fontSize: 14.0),),
-              const SizedBox(height: 30),
-              const Text("Terms and Conditions"),
+              RichText(text: TextSpan(
+                style: const TextStyle(fontFamily: "PT Serif"),
+                children: <TextSpan>[
+                  const TextSpan(
+                    text: "Don't have an account?  ",
+                    style: TextStyle(color: Colors.black)
+                  ),
+                  TextSpan(
+                    text: "Register here",
+                    style: const TextStyle(color: blue, decoration: TextDecoration.underline),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        print("Go to register page"); // insert navigation to register page
+                      } 
+                  ),
+                ],
+              )),
+              // const Text("Don't have an account? Register here", style: TextStyle(fontSize: 14.0),),
               const SizedBox(height: 40),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
@@ -92,17 +112,31 @@ class _LoginState extends State<Login> {
                     foregroundColor: MaterialStatePropertyAll<Color>(white),
                     backgroundColor: MaterialStatePropertyAll<Color>(teal),
                   ),
-                  // check to make sure username & password are NOT empty
                   // make sure Terms & Conditions are read & approved
-                  // check if the username and password are in the database
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const SymptomCreationPage()),
-                    );
+                    // check to make sure username & password are NOT empty
+                    if (_usernameController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
+                      // AND if the username & password are in the database
+                      // then go to the disclaimer page
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => const SymptomCreationPage()),
+                      );
+                      // if the username & password is incorrect, show an error
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Username or password is incorrect')),
+                      );
+                    } else {
+                      // if one of the fields is empty, show an alert to fill in all fields
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Please fill in all fields')),
+                      );
+                    }
                   },
-                  child: const Text('Sign Up', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0))
+                  child: const Text('Sign In', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0))
                 )
-              )
+              ),
+              const SizedBox(height: 30),
+              // const Text('Forgot password?'),
             ],
           ),
         ),
