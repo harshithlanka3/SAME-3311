@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/add.dart';
+import 'package:s_a_m_e/signup.dart';
 import 'package:s_a_m_e/symptomlist.dart';
 
 class Admin extends StatelessWidget {
@@ -62,6 +63,21 @@ class Admin extends StatelessWidget {
                   //       builder: (context) => SymptomCreationPage()),
                   // );
                 },
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                style: const ButtonStyle(
+                  foregroundColor: MaterialStatePropertyAll<Color>(white),
+                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                ),
+                child: const Text('TempForRamya', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SignUpPage()),
+                  );
+                }, // This is a temp for ramya
               ),
             ])),
     );
