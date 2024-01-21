@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:s_a_m_e/admin.dart';
 import 'package:s_a_m_e/colors.dart';
+import 'package:s_a_m_e/login.dart';
 
 class User {
   final String email;
@@ -38,7 +40,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _userEmail = TextEditingController();
   final _username = TextEditingController();
   final _userPassword = TextEditingController();
-
+  
   @override
   void dispose() {
     _userEmail.dispose();
@@ -84,12 +86,23 @@ class _SignUpPageState extends State<SignUpPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                final email = _userEmail.text;
-                final username = _username.text;
-                final password = _userPassword.text;
+                if (_username.text.isNotEmpty && _userPassword.text.isNotEmpty && _userEmail.text.isNotEmpty) {
+                      final email = _userEmail.text;
+                      final username = _username.text;
+                      final password = _userPassword.text;
 
-                // Create a User instance with its info
-                final user = User(email: email, username: username, password: password);
+                      // Create a User instance with its info
+                      final user = User(email: email, username: username, password: password);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => const Login()),
+                      );
+                      
+                    } else {
+                      // if one of the fields is empty, show an alert to fill in all fields
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Please fill in all fields.')),
+                      );
+                    }
               },
               child: const Text('Sign Up', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
