@@ -51,7 +51,7 @@ class Admin extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const Admin(),
+                          builder: (context) => const SignUpPage(),
                         ),
                       );
                     } else {
@@ -175,7 +175,7 @@ class Admin extends StatelessWidget {
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
-              child: const Text('Disclaimer Placeholder for Sign-up Button', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              child: const Text('Sign-up', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
                 // Show the disclaimer dialog when this button is pressed
                 _showDisclaimerDialog(context);
@@ -188,4 +188,4 @@ class Admin extends StatelessWidget {
   }
 }
 
-String disclaimer = "This application is for general informational purposes only and is not intended to be a substitute for professional medical advice. The information provided should not be considered as medical advice, and we do not guarantee its accuracy.\nOur application is a guideline, and individual cases may vary.\n\nWe are not liable for any loss or damage arising from the use of this information. Consult with qualified healthcare professionals for advice tailored to your specific circumstances.\n\nBy using this application, you agree to these terms. S.A.M.E. is not responsible for errors or omissions. Use this application responsibly and in accordance with applicable laws.\n";
+String disclaimer = "This application is for general informational purposes only and is not intended to be a substitute for professional medical advice. The information provided should not be considered as medical advice, and we do not guarantee its accuracy. Our application is a guideline, and individual cases may vary.\n\nWe are not liable for any loss or damage arising from the use of this information. Consult with qualified healthcare professionals for advice tailored to your specific circumstances.\n\nBy using this application, you agree to these terms. S.A.M.E. is not responsible for errors or omissions. Use this application responsibly and in accordance with applicable laws.\n";
