@@ -88,9 +88,9 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
               decoration: const InputDecoration(
                 labelText: 'Symptom Name',
                 labelStyle: TextStyle(color: navy),
-                border: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: navy),
+                  borderRadius: BorderRadius.all(Radius.circular(40.0))
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: navy),
