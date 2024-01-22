@@ -47,6 +47,18 @@ class _SignUpPageState extends State<SignUpPage> {
     super.dispose();
   }
 
+  //if returns true then the email is in valid format 
+  bool isValidEmail(String email) {
+    // regular expression for valid email format
+    RegExp emailFormat = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+    // Check if the email matches the pattern
+    return emailFormat.hasMatch(email);
+  }
+  bool isValidUserOrPass (String username) {
+    RegExp userFormat = RegExp(r'^[\w.-]+$');
+    return userFormat.hasMatch(username.trim());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,12 +96,50 @@ class _SignUpPageState extends State<SignUpPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                final email = _userEmail.text;
-                final username = _username.text;
-                final password = _userPassword.text;
+                // final email = _userEmail.text;
+                // final username = _username.text;
+                // final password = _userPassword.text;
+
+                //g
+                if (_userEmail.text.isEmpty || _username.text.isEmpty || _userPassword.text.isEmpty) {
+                    // Show a warning snackbar to the user
+                    final snackBar = SnackBar(
+                      content: Text('Please fill out all fields to sign up.'),
+                      duration: Duration(seconds: 3),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                } else {
+                  if (!isValidEmail(_userEmail.text)) {
+                    final snackBar = SnackBar(
+                      content: Text('Invalid email format, please input a valid email'),
+                      duration: Duration(seconds: 3),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } 
+                  if (!isValidUserOrPass(_username.text)) {
+                    final snackBar = SnackBar(
+                      content: Text('Invalid username, please input a valid username with no spaces'),
+                      duration: Duration(seconds: 3),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                  if (!isValidUserOrPass(_userPassword.text)) {
+                    final snackBar = SnackBar(
+                      content: Text('Invalid password, please input a valid password with no spaces'),
+                      duration: Duration(seconds: 3),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                  final email = _userEmail.text;
+                  final username = _username.text;
+                  final password = _userPassword.text;
+                  // Create a User instance with its info
+                  final user = User(email: email, username: username, password: password);
+                }
+                //g
 
                 // Create a User instance with its info
-                final user = User(email: email, username: username, password: password);
+                //final user = User(email: email, username: username, password: password);
               },
               child: const Text('Sign Up', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
@@ -97,5 +147,9 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+
+  void registerUser() async{
+
   }
 }
