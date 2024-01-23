@@ -12,13 +12,9 @@ mongoose.connect(uri)
 
 app.use(express.json());
 
-const chiefComplaintRoutes = require('./routes/chiefComplaintRoutes');
-const symptomRoutes = require('./routes/symptomRoutes');
-const diagnosisRoutes = require('./routes/diagnosisRoutes');
+const routes = require('./routes/index');
 
-app.use('/api/chiefComplaints', chiefComplaintRoutes);
-app.use('/api/symptoms', symptomRoutes);
-app.use('/api/diagnoses', diagnosisRoutes);
+app.use('/api', routes);
 
 app.get('/', (req, res) => {
   res.send('Hello from the backend server!');
