@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/colors.dart';
 
+
 class User {
   final String email;
   final String username;
@@ -20,10 +21,44 @@ class User {
     );
   }
 }
-// RAMYA ADD THIS
+//Giselle addition connection/pull to/from API
+
+// pulls from the API
 class ApiService {
-  // ... (unchanged)
+  Future<void> registerUser({
+    required String email,
+    required String username,
+    required String password,
+  }) async {
+    final url = Uri.parse('http://localhost:3000/api/user'); 
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'email': email,
+        'username': username,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      // User registered successfully
+      // You can handle the success scenario as needed
+    } else {
+      // Failed to register user
+      throw Exception('Failed to register user');
+    }
+  }
 }
+
+//end Giselle edition
+
+// RAMYA ADD THIS
+// class ApiService {
+//   // ... (unchanged)
+// }
 
 // creating the page to sign up
 class SignUpPage extends StatefulWidget {
