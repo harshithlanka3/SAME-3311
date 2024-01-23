@@ -1,7 +1,7 @@
 const User = require('../models/User');
 
 // Register new user
-const registerUser = async (req, res) => {
+exports.registerUser = async (req, res) => {
   try {
     const { email, username, password } = req.body;
 
@@ -28,8 +28,4 @@ const registerUser = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-};
-
-module.exports = {
-  registerUser,
 };
