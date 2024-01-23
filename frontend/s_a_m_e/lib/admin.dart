@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/add.dart';
+import 'package:s_a_m_e/profilepicture.dart';
 import 'package:s_a_m_e/symptomlist.dart';
 
 class Admin extends StatelessWidget {
@@ -11,6 +12,8 @@ class Admin extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('S.A.M.E'),
+        // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
+        actions: [ProfilePicturePage()]
       ),
       body: Align(
           alignment: Alignment.topCenter,
