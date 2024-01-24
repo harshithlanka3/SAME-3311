@@ -1,7 +1,7 @@
 # Setting up GitHub
 ## Cloning Repository
 you can clone the repository into any directory by simply doing:
-`git clone https://github.com/harshithlanka3/S.A.M.E.git`
+`git clone https://github.com/harshithlanka3/SAME-3311.git`
 Currently, the repo has a backend, docs, and frontend directory. 
 
 ## Contributing to the Repository
