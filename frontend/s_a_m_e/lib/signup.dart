@@ -6,6 +6,7 @@ import 'package:s_a_m_e/admin.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/login.dart';
 
+
 class User {
   final String email;
   final String username;
@@ -22,10 +23,44 @@ class User {
     );
   }
 }
-// RAMYA ADD THIS
+//Giselle addition connection/pull to/from API
+
+// pulls from the API
 class ApiService {
-  // ... (unchanged)
+  Future<void> registerUser({
+    required String email,
+    required String username,
+    required String password,
+  }) async {
+    final url = Uri.parse('http://localhost:3000/api/user'); 
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'email': email,
+        'username': username,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      // User registered successfully
+      // You can handle the success scenario as needed
+    } else {
+      // Failed to register user
+      throw Exception('Failed to register user');
+    }
+  }
 }
+
+//end Giselle edition
+
+// RAMYA ADD THIS
+// class ApiService {
+//   // ... (unchanged)
+// }
 
 // creating the page to sign up
 class SignUpPage extends StatefulWidget {
@@ -47,6 +82,18 @@ class _SignUpPageState extends State<SignUpPage> {
     _username.dispose();
     _userPassword.dispose();
     super.dispose();
+  }
+
+  //if returns true then the email is in valid format 
+  bool isValidEmail(String email) {
+    // regular expression for valid email format
+    RegExp emailFormat = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+    // Check if the email matches the pattern
+    return emailFormat.hasMatch(email);
+  }
+  bool isValidUserOrPass (String username) {
+    RegExp userFormat = RegExp(r'^[\w.-]+$');
+    return userFormat.hasMatch(username.trim());
   }
 
   @override
@@ -86,23 +133,50 @@ class _SignUpPageState extends State<SignUpPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                if (_username.text.isNotEmpty && _userPassword.text.isNotEmpty && _userEmail.text.isNotEmpty) {
-                      final email = _userEmail.text;
-                      final username = _username.text;
-                      final password = _userPassword.text;
+                // final email = _userEmail.text;
+                // final username = _username.text;
+                // final password = _userPassword.text;
 
-                      // Create a User instance with its info
-                      final user = User(email: email, username: username, password: password);
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const Login()),
-                      );
-                      
-                    } else {
-                      // if one of the fields is empty, show an alert to fill in all fields
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please fill in all fields.')),
-                      );
-                    }
+                //g
+                if (_userEmail.text.isEmpty || _username.text.isEmpty || _userPassword.text.isEmpty) {
+                    // Show a warning snackbar to the user
+                    final snackBar = SnackBar(
+                      content: Text('Please fill out all fields to sign up.'),
+                      duration: Duration(seconds: 3),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                } else {
+                  if (!isValidEmail(_userEmail.text)) {
+                    final snackBar = SnackBar(
+                      content: Text('Invalid email format, please input a valid email'),
+                      duration: Duration(seconds: 3),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } 
+                  if (!isValidUserOrPass(_username.text)) {
+                    final snackBar = SnackBar(
+                      content: Text('Invalid username, please input a valid username with no spaces'),
+                      duration: Duration(seconds: 3),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                  if (!isValidUserOrPass(_userPassword.text)) {
+                    final snackBar = SnackBar(
+                      content: Text('Invalid password, please input a valid password with no spaces'),
+                      duration: Duration(seconds: 3),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                  final email = _userEmail.text;
+                  final username = _username.text;
+                  final password = _userPassword.text;
+                  // Create a User instance with its info
+                  final user = User(email: email, username: username, password: password);
+                }
+                //g
+
+                // Create a User instance with its info
+                //final user = User(email: email, username: username, password: password);
               },
               child: const Text('Sign Up', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
@@ -110,5 +184,9 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+
+  void registerUser() async{
+
   }
 }
