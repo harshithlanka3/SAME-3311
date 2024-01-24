@@ -221,6 +221,12 @@ class Admin extends StatelessWidget {
                 );
               },
             ),
+            ListTile(
+              title: const Text('Request Admin Access'),
+              onTap: () {
+                _adminAccessQuestionnaire(context);
+              },
+            ),
           ],
         ),
       ),
@@ -277,30 +283,6 @@ class Admin extends StatelessWidget {
                 //       builder: (context) => SymptomCreationPage()),
                 // );
               },
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Disclaimer Placeholder for Sign-up Button', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
-                // Show the disclaimer dialog when this button is pressed
-                _showDisclaimerDialog(context);
-              },
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Placeholder for requesting admin access', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
-                _adminAccessQuestionnaire(context);
-              },
-
             ),
           ],
         ),
