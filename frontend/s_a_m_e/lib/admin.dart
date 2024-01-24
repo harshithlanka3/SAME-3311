@@ -51,7 +51,7 @@ class Admin extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const Admin(),
+                          builder: (context) => const SignUpPage(),
                         ),
                       );
                     } else {
@@ -216,7 +216,7 @@ class Admin extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ManageAccountPage(),
+                    builder: (context) => const ManageAccountPage(),
                   ),
                 );
               },
@@ -262,22 +262,6 @@ class Admin extends StatelessWidget {
                 );
               },
             ),
-  
-              const SizedBox(height: 10),
-              ElevatedButton(
-                style: const ButtonStyle(
-                  foregroundColor: MaterialStatePropertyAll<Color>(white),
-                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                ),
-                child: const Text('TempForRamya', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SignUpPage()),
-                  );
-                }, // This is a temp for ramya
-              ),
            
         const SizedBox(height: 10),
             ElevatedButton(

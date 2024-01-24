@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:s_a_m_e/admin.dart';
 import 'package:s_a_m_e/colors.dart';
+import 'package:s_a_m_e/login.dart';
 
 
 class User {
@@ -73,7 +75,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _userEmail = TextEditingController();
   final _username = TextEditingController();
   final _userPassword = TextEditingController();
-
+  
   @override
   void dispose() {
     _userEmail.dispose();

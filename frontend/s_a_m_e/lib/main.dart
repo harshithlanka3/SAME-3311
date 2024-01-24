@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
+import 'package:s_a_m_e/login.dart';
 import 'admin.dart';
 
 void main() {
@@ -29,7 +30,7 @@ class MainApp extends StatelessWidget {
                   fontSize: 48.0,
                   color: white,
                   fontWeight: FontWeight.bold))),
-      home: const Admin(),
+      home: const Login(), // this changes where the app starts
     );
   }
 }
