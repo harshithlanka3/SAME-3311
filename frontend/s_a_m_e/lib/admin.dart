@@ -42,7 +42,7 @@ class Admin extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Close'),
+                  child: const Text('Close'),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -66,7 +66,7 @@ class Admin extends StatelessWidget {
                       );
                     }
                   },
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                 ),
               ],
             );
@@ -91,7 +91,7 @@ class Admin extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ManageAccountPage(),
+                    builder: (context) => const ManageAccountPage(),
                   ),
                 );
               },

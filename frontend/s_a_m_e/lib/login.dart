@@ -1,11 +1,26 @@
 import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:s_a_m_e/add.dart';
 import 'package:s_a_m_e/colors.dart';
+import 'package:s_a_m_e/signup.dart';
+import 'package:http/http.dart' as http;
 
 // perhaps might have to use ApiService ???
+
+// class ApiService {
+//   Future<User> getUsers() async {
+//     final url = Uri.parse('http://localhost:3000/api/user');
+//     final response = await http.get(url);
+//     if (response.statusCode == 200) {
+//       return User.fromJson(jsonDecode(response.body) as Map<String>)
+//     }
+//     //make request json file
+//     // fetch them all and then search through the list
+//     // will need to change this later
+//     // need specific backend function to get a certian object -- controller & route
+//   }
+// }
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -97,12 +112,13 @@ class _LoginState extends State<Login> {
                     style: const TextStyle(color: blue, decoration: TextDecoration.underline),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        print("Go to register page"); // insert navigation to register page
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => const SignUpPage()),
+                        ); // insert navigation to register page
                       } 
                   ),
                 ],
               )),
-              // const Text("Don't have an account? Register here", style: TextStyle(fontSize: 14.0),),
               const SizedBox(height: 40),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
