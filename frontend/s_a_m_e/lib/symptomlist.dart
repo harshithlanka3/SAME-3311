@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:s_a_m_e/colors.dart';
 import 'dart:convert';
+import 'package:s_a_m_e/profilepicture.dart';
 
 class SymptomsListPage extends StatefulWidget {
   const SymptomsListPage({super.key});
@@ -36,6 +37,8 @@ class _SymptomsListPageState extends State<SymptomsListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Symptoms", style: TextStyle(fontSize: 36.0)),
+        // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
+        actions: [ProfilePicturePage()]
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

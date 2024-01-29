@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/login.dart';
+import 'admin.dart';
 
 void main() {
   runApp(const MainApp());

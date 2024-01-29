@@ -39,6 +39,9 @@ dependencies:
   multi_select_flutter: ^4.1.3
   http: ^1.1.0
 
+  # The below dependency makes it so users can upload images for their profile pictures
+  image_picker: ^0.8.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

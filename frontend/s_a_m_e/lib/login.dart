@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:s_a_m_e/admin.dart';
 import 'package:s_a_m_e/add.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/signup.dart';
@@ -39,6 +41,73 @@ class _LoginState extends State<Login> {
     _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void _showDisclaimerDialog(BuildContext context) {
+    bool checkboxValue = false;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: const Text('Disclaimer:'),
+              content: Column(
+                children: <Widget>[
+                  Text(disclaimer),
+                  Row(
+                    children: <Widget>[
+                      Checkbox(
+                        value: checkboxValue,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            checkboxValue = value!;
+                          });
+                        },
+                      ),
+                      const Text('I agree to the terms and conditions.'),
+                    ],
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Close'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (checkboxValue) {
+                      Navigator.of(context).pop(); 
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignUpPage(),
+                        ),
+                      );
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: 'Please agree to the terms and conditions.',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
+                  },
+                  child: Text('Submit'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -112,13 +181,13 @@ class _LoginState extends State<Login> {
                     style: const TextStyle(color: blue, decoration: TextDecoration.underline),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => const SignUpPage()),
-                        ); // insert navigation to register page
+                        print("Go to register page"); // insert navigation to register page
+                        _showDisclaimerDialog(context);
                       } 
                   ),
                 ],
               )),
+              // const Text("Don't have an account? Register here", style: TextStyle(fontSize: 14.0),),
               const SizedBox(height: 40),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
@@ -135,16 +204,16 @@ class _LoginState extends State<Login> {
                       // AND if the username & password are in the database
                       // then go to the disclaimer page
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const SymptomCreationPage()),
+                        MaterialPageRoute(builder: (context) => const Admin()),
                       );
                       // if the username & password is incorrect, show an error
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Username or password is incorrect')),
+                        const SnackBar(content: Text('Username or password is incorrect.')),
                       );
                     } else {
                       // if one of the fields is empty, show an alert to fill in all fields
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please fill in all fields')),
+                        const SnackBar(content: Text('Please fill in all fields.')),
                       );
                     }
                   },
