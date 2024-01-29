@@ -81,23 +81,27 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            const Text('Add Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
-            const SizedBox(height: 20),
+            const Text('Add Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0)),
+            const SizedBox(height: 40),
             TextField(
               controller: _symptomNameController,
               decoration: const InputDecoration(
+                contentPadding: EdgeInsets.all(20.0),
                 labelText: 'Symptom Name',
                 labelStyle: TextStyle(color: navy),
+                filled: true,
+                fillColor: boxinsides,
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: navy),
+                  borderSide: BorderSide(color: boxinsides),
                   borderRadius: BorderRadius.all(Radius.circular(40.0))
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: navy),
+                  borderSide: BorderSide(color: boxinsides),
+                  borderRadius: BorderRadius.all(Radius.circular(40.0))
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             FutureBuilder<List<ChiefComplaint>>(
               future: _apiService.fetchChiefComplaints(),
               builder: (context, snapshot) {
@@ -124,51 +128,59 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
                 }
               },
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              style: const ButtonStyle(
-                  foregroundColor: MaterialStatePropertyAll<Color>(white),
-                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                ),
-              onPressed: () async {
-                if (_symptomNameController.text.isNotEmpty &&
-                    _selectedComplaints.isNotEmpty) {
-                  final response = await _apiService.addSymptom(
-                    _symptomNameController.text,
-                    _selectedComplaints,
-                  );
-
-                  if (response.statusCode == 201) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Symptom added successfully')),
+            const SizedBox(height: 50),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              child: ElevatedButton(
+                style: const ButtonStyle(
+                    foregroundColor: MaterialStatePropertyAll<Color>(white),
+                    backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                  ),
+                onPressed: () async {
+                  if (_symptomNameController.text.isNotEmpty &&
+                      _selectedComplaints.isNotEmpty) {
+                    final response = await _apiService.addSymptom(
+                      _symptomNameController.text,
+                      _selectedComplaints,
                     );
+
+                    if (response.statusCode == 201) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Symptom added successfully')),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Failed to add symptom')),
+                      );
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Failed to add symptom')),
+                      const SnackBar(content: Text('Please fill all the fields')),
                     );
                   }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Please fill all the fields')),
+                },
+                child: const Text('Create Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
+              ),
+            ),
+            const SizedBox(height: 25),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              child: ElevatedButton(
+                style: const ButtonStyle(
+                    foregroundColor: MaterialStatePropertyAll<Color>(white),
+                    backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                  ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const SymptomsListPage()),
                   );
-                }
-              },
-              child: const Text('Create Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              style: const ButtonStyle(
-                  foregroundColor: MaterialStatePropertyAll<Color>(white),
-                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                ),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const SymptomsListPage()),
-                );
-              },
-              child: const Text('View All Symptoms', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-            ),
+                },
+                child: const Text('View All Symptoms', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
+              ),
+            )
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:s_a_m_e/admin.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/login.dart';
 
@@ -132,7 +133,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 )
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             TextField(
               controller: _username,
               decoration: const InputDecoration(
@@ -151,7 +152,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             TextField(
               controller: _userPassword,
               obscureText: true,
@@ -171,7 +172,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 25),
             RichText(text: TextSpan(
                 style: const TextStyle(fontFamily: "PT Serif"),
                 children: <TextSpan>[
@@ -191,14 +192,14 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ],
               )),
-              const SizedBox(height: 30),
+              const SizedBox(height: 25),
             SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 50,
               child: ElevatedButton(
                 style: const ButtonStyle(
                   foregroundColor: MaterialStatePropertyAll(white),
-                  backgroundColor: MaterialStatePropertyAll(teal)
+                  backgroundColor: MaterialStatePropertyAll(navy)
                 ),
                 onPressed: () {
                   // final email = _userEmail.text;
@@ -249,7 +250,25 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: const Text('Sign Up', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
               )
             ),
-            
+            // debugging button to continue through flow
+            const SizedBox(height: 20),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 30,
+              child: ElevatedButton(
+                style: const ButtonStyle(
+                  foregroundColor: MaterialStatePropertyAll<Color>(white),
+                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const Admin()),
+                  );
+                },
+                child: const Text('Debugging go to admin page', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+              ),
+
+            )
           ],
         ),
       ),

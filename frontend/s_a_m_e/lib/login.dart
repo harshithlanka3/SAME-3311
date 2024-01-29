@@ -6,7 +6,7 @@ import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/signup.dart';
 import 'package:http/http.dart' as http;
 
-// perhaps might have to use ApiService ???
+// create ApiService class to verify the logins from database
 
 // class ApiService {
 //   Future<User> getUsers() async {
@@ -126,7 +126,7 @@ class _LoginState extends State<Login> {
                 child: ElevatedButton(
                   style:  const ButtonStyle(
                     foregroundColor: MaterialStatePropertyAll<Color>(white),
-                    backgroundColor: MaterialStatePropertyAll<Color>(teal),
+                    backgroundColor: MaterialStatePropertyAll<Color>(navy),
                   ),
                   // make sure Terms & Conditions are read & approved
                   onPressed: () {
