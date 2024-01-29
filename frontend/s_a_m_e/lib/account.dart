@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:s_a_m_e/colors.dart';
-import 'dart:convert';
 
 class ManageAccountPage extends StatefulWidget {
   const ManageAccountPage({super.key});

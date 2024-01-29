@@ -2,13 +2,27 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
-import 'package:s_a_m_e/add.dart';
 import 'package:s_a_m_e/admin.dart';
+import 'package:s_a_m_e/add.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/signup.dart';
+import 'package:http/http.dart' as http;
 
-// perhaps might have to use ApiService ???
+// create ApiService class to verify the logins from database
+
+// class ApiService {
+//   Future<User> getUsers() async {
+//     final url = Uri.parse('http://localhost:3000/api/user');
+//     final response = await http.get(url);
+//     if (response.statusCode == 200) {
+//       return User.fromJson(jsonDecode(response.body) as Map<String>)
+//     }
+//     //make request json file
+//     // fetch them all and then search through the list
+//     // will need to change this later
+//     // need specific backend function to get a certian object -- controller & route
+//   }
+// }
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -114,8 +128,8 @@ class _LoginState extends State<Login> {
                 image: AssetImage('assets/logo.png')
               ),
               const SizedBox(height: 20), 
-              const Text('Welcome!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0)),
-              const Text('Login with your credentials below.', style: TextStyle(fontSize: 14.0)),
+              const Text('Welcome back!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0)),
+              const Text('Login with your credentials below', style: TextStyle(fontSize: 14.0)),
               const SizedBox(height: 40),
               TextField(
                 controller: _usernameController,
@@ -181,7 +195,7 @@ class _LoginState extends State<Login> {
                 child: ElevatedButton(
                   style:  const ButtonStyle(
                     foregroundColor: MaterialStatePropertyAll<Color>(white),
-                    backgroundColor: MaterialStatePropertyAll<Color>(teal),
+                    backgroundColor: MaterialStatePropertyAll<Color>(navy),
                   ),
                   // make sure Terms & Conditions are read & approved
                   onPressed: () {
