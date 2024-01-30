@@ -1,35 +1,67 @@
 const User = require('../models/User');
 const ProfilePicture = require('../models/ProfilePicture');
 const multer = require('multer');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
+
+
+const createToken = (userId) => {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1d' });
+};
 
 // Register new user
-exports.registerUser = async (req, res) => {
+exports.register = async (req, res) => {
   try {
-    const { email, username, password } = req.body;
+    const { username, email, password } = req.body;
 
-    // Validation checks
-    if (!email || !username || !password) {
-      return res.status(400).json({ error: 'Please fill out all fields to sign up.' });
+    // Simple regex for basic email validation
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'Invalid email format.' });
     }
 
-    // Additional validation checks (you may want to modify these)
-    // ...
+    // Password validation regex
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        error: 'Password must be at least 8 characters long and include at least one uppercase letter, one digit, and one special character.'
+      });
+    }
 
-    // Create a new User instance
-    const user = new User({
-      email,
-      username,
-      password,
-    });
-
-    // Save the user to the database
+    const user = new User({ username, email, password });
     await user.save();
 
-    res.status(201).json({ message: 'User registered successfully.' });
+    const token = createToken(user._id);
+
+    res.status(201).send('User created successfully');
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    if (error.code === 11000) {
+      res.status(400).json({ error: 'Username or email already exists.' });
+    } else {
+      res.status(500).json({ error: 'Error registering new user.' });
+    }
+  }
+};
+
+
+exports.login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(401).json({ error: 'Login failed: User not found.' });
+    }
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Login failed: Incorrect password.' });
+    }
+
+    const token = createToken(user._id);
+    res.status(200).json({ token });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error during login.' });
   }
 };
 
