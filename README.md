@@ -12,23 +12,20 @@ The artifact chosen to be implemented is the admin symptom adding functionality 
 
 
 ## Release Notes
-### Version 0.2.0
-
-#### New Features
-* Feature 1 for this release
-* feature 2 for this release
-
-#### Bug Fixes
-* bug fixed 1
-* bug fixed 2
 ---
 
 ### Version 0.1.0:
 #### New Features
-* Feature 1
-* feature 2...
+* Disclaimer Popup
+* Sign-up and Sign-in UI and API
+* Admin Page
+* Symptom List Page
+* Symptom Addition API
+* Profile Picture Icon Functionality
+* Profile Picture Upload API
 
 #### Bug Fixes
-N/A
+* Temporary User Flow Fixed
+* Backend Sign-up Fixed
 
 ---
