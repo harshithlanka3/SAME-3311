@@ -1,7 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:s_a_m_e/colors.dart';
-import 'dart:convert';
+import 'package:s_a_m_e/firebase_service.dart';
 
 class ManageAccountPage extends StatefulWidget {
   const ManageAccountPage({super.key});
@@ -11,37 +11,30 @@ class ManageAccountPage extends StatefulWidget {
 }
 
 class _ManageAccountPageState extends State<ManageAccountPage> {
-  late Future<List<Account>> account;
+  late Future<UserClass?> account;
 
   @override
   void initState() {
     super.initState();
-    //account = fetchAccount();
+    account = fetchUser();
   }
 
-  /*
-  Future<List<Account>> fetchAccount() async {
-    final response =
-        await http.get(Uri.parse('http://localhost:3000/api/account'));
-
-    if (response.statusCode == 200) {
-      List accountJson = json.decode(response.body);
-      return accountJson.map((json) => Account.fromJson(json)).toList();
-    } else {
-      throw Exception('Failed to load account page!');
-    }
+  Future<UserClass?> fetchUser() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String uid = user?.uid as String;
+    return FirebaseService().getUser(uid);
   }
-  */
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Account", style: TextStyle(fontSize: 36.0)),
-      ),/*
+      ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: FutureBuilder<List<Account>>(
+        child: FutureBuilder<UserClass?>(
           future: account,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -49,52 +42,29 @@ class _ManageAccountPageState extends State<ManageAccountPage> {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (snapshot.hasData) {
-              return Scrollbar(
-                trackVisibility: true,
-                child: ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: teal),
-                            color: boxinsides,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: ListTile(
-                            title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                            subtitle: const Text('Account Description'), // this will be integrated in a later sprint
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                      ],
-                    );
-                  },
-                )
+              // Display user information based on the fetched data
+              return Column(
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: teal),
+                      color: boxinsides,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: ListTile(
+                      title: Text('User Role: ${snapshot.data!.role}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle: const Text('Account Description'), 
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
               );
             } else {
               return const Center(child: Text('No account found'));
             }
           },
         ),
-      )  */
-    );
-  }
-}
-
-class Account {
-  final String id;
-  final String name;
-  String userType;
-
-  Account({required this.id, required this.name, required this.userType});
-
-  factory Account.fromJson(Map<String, dynamic> json) {
-    return Account(
-      id: json['_id'],
-      name: json['name'],
-      userType: json["userType"],
+      ),
     );
   }
 }
