@@ -1,24 +1,13 @@
 import 'dart:convert';
+import 'dart:ffi';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/symptomlist.dart';
 import 'package:s_a_m_e/colors.dart';
-
-class ChiefComplaint {
-  final String id;
-  final String name;
-
-  ChiefComplaint({required this.id, required this.name});
-
-  factory ChiefComplaint.fromJson(Map<String, dynamic> json) {
-    return ChiefComplaint(
-      id: json['_id'],
-      name: json['name'],
-    );
-  }
-}
-
+import 'package:s_a_m_e/firebase_service.dart';
+/*
 // pulls from the API
 class ApiService {
   Future<List<ChiefComplaint>> fetchChiefComplaints() async {
@@ -50,7 +39,7 @@ class ApiService {
     return response;
   }
 }
-
+*/
 // creating the actual page to add symptoms
 class SymptomCreationPage extends StatefulWidget {
   const SymptomCreationPage({super.key});
@@ -60,8 +49,9 @@ class SymptomCreationPage extends StatefulWidget {
 }
 
 class _SymptomCreationPageState extends State<SymptomCreationPage> {
-  final _apiService = ApiService();
+  //final _apiService = ApiService();
   final _symptomNameController = TextEditingController();
+  final FirebaseService _firebaseService = FirebaseService();
   List<ChiefComplaint> _selectedComplaints = [];
 
   @override
@@ -99,31 +89,38 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
             ),
             const SizedBox(height: 20),
             FutureBuilder<List<ChiefComplaint>>(
-              future: _apiService.fetchChiefComplaints(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+              future: _firebaseService.getAllChiefComplaints(),
+              builder: (context, chiefComplaintsSnapshot) {
+                if (chiefComplaintsSnapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
+                } else if (chiefComplaintsSnapshot.hasError) {
+                  return Text('Error: ${chiefComplaintsSnapshot.error}');
                 } else {
-                  return MultiSelectDialogField<ChiefComplaint>(
-                    backgroundColor: background,
-                    cancelText: const Text('CANCEL', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
-                    confirmText: const Text('SELECT', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
-                    unselectedColor: navy,
-                    selectedColor: navy,
-                    items: snapshot.data!
-                        .map((complaint) => MultiSelectItem<ChiefComplaint>(
-                            complaint, complaint.name))
-                        .toList(),
-                    title: const Text("Chief Complaints"),
-                    onConfirm: (values) {
-                      _selectedComplaints = values;
-                    },
-                  );
+                  List<ChiefComplaint>? chiefComplaints = chiefComplaintsSnapshot.data;
+
+                  if (chiefComplaints != null && chiefComplaints.isNotEmpty) {
+                    return MultiSelectDialogField<ChiefComplaint>(
+                      backgroundColor: background,
+                      cancelText: const Text('CANCEL', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
+                      confirmText: const Text('SELECT', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
+                      unselectedColor: navy,
+                      selectedColor: navy,
+                      items: chiefComplaints
+                          .map((complaint) => MultiSelectItem<ChiefComplaint>(
+                              complaint, complaint.name))
+                          .toList(),
+                      title: const Text("Chief Complaints"),
+                      onConfirm: (values) {
+                        _selectedComplaints = values;
+                      },
+                    );
+                  } else {
+                    return const Text('No chief complaints available');
+                  }
                 }
               },
             ),
+
             const SizedBox(height: 20),
             ElevatedButton(
               style: const ButtonStyle(
@@ -133,12 +130,11 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
               onPressed: () async {
                 if (_symptomNameController.text.isNotEmpty &&
                     _selectedComplaints.isNotEmpty) {
-                  final response = await _apiService.addSymptom(
+                  final response = await _firebaseService.addSymptom(
                     _symptomNameController.text,
                     _selectedComplaints,
                   );
-
-                  if (response.statusCode == 201) {
+                  if (response == 200) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                           content: Text('Symptom added successfully')),
@@ -175,3 +171,5 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
     );
   }
 }
+
+
