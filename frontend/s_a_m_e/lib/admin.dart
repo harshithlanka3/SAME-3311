@@ -203,34 +203,46 @@ class Admin extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('S.A.M.E'),
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('S.A.M.E'),
+    ),
+    drawer: Drawer(
+      child: ListView(
+        children: <Widget>[
+          ListTile(
+            title: const Text('Manage Account'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ManageAccountPage(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Request Admin Access'),
+            onTap: () {
+              _adminAccessQuestionnaire(context);
+            },
+          ),
+          ListTile(
+            title: const Text('Sign Out'),
+            onTap: () {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Login(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            ListTile(
-              title: const Text('Manage Account'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ManageAccountPage(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Request Admin Access'),
-              onTap: () {
-                _adminAccessQuestionnaire(context);
-              },
-            ),
-          ],
-        ),
-      ),
+    ),
       body: Align(
         alignment: Alignment.topCenter,
         child: Column(
@@ -283,22 +295,6 @@ class Admin extends StatelessWidget {
                 //   MaterialPageRoute(
                 //       builder: (context) => SymptomCreationPage()),
                 // );
-              },
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Sign Out', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Login(),
-                  ),
-                );
               },
             ),
           ],
