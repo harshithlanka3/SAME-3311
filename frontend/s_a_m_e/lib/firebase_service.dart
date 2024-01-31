@@ -1,12 +1,4 @@
-import 'dart:convert';
-import 'dart:ffi';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:s_a_m_e/symptomlist.dart';
-import 'package:s_a_m_e/colors.dart';
-
 
 class Symptom {
   final String name;
@@ -28,9 +20,25 @@ class ChiefComplaint {
 
 }
 
+class UserClass {
+  final String email;
+  String role;
+
+  UserClass({required this.email, required this.role});
+
+  factory UserClass.fromJson(Map<String, dynamic> json) {
+  return UserClass(
+    email: json['email'],
+    role: json['role'] ?? 'user', 
+  );
+}
+
+}
+
 class FirebaseService {
   final _symptomsRef = FirebaseDatabase.instance.ref('data/symptoms');
   final _chiefRef = FirebaseDatabase.instance.ref('data/chiefComplaints');
+  final _usersRef = FirebaseDatabase.instance.ref('users/');
 
   Future<int> addSymptom(String name, List<ChiefComplaint> chiefComplaints) async {
   try {
@@ -93,9 +101,25 @@ class FirebaseService {
     }
   }
 
+Future<UserClass?> getUser(String uid) async {
+    try {
+      DataSnapshot snapshot = await _usersRef.child(uid).get();
 
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
 
+        var user = UserClass(
+          email: data['email'],
+          role: data["role"]
+        );
 
+        return user;
+      }
+
+      return null;
+    } catch (e) {
+      print('Error getting user data: $e');
+      return null;
+    }
+  }
 }
-
-

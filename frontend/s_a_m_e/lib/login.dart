@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -8,6 +9,8 @@ import 'package:s_a_m_e/add.dart';
 import 'package:s_a_m_e/admin.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/signup.dart';
+import 'package:s_a_m_e/user_home.dart';
+import 'package:s_a_m_e/firebase_service.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -17,6 +20,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  late Future<UserClass> user;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -34,38 +38,38 @@ class _LoginState extends State<Login> {
       email: _emailController.text.trim(),
       password: _passwordController.text,
     );
-    print("User signed in.");
-    _emailController.text = '';
-    _passwordController.text = '';
+
     if (userCredential.user != null) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => Admin()),
-      );
+      String uid = userCredential.user!.uid;
+
+      UserClass? userData = await FirebaseService().getUser(uid);
+
+      if (userData != null) {
+        String role = userData.role ?? 'user'; // Make sure 'role' is a property in UserClass
+        print(role);
+
+        if (role == 'user') {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => UserHome()),
+          );
+        } else if (role == 'admin') {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => Admin()),
+          );
+        }
+      } else {
+        print('Error: User data not found in the database.');
+      }
     } else {
       print('Error: User is null after sign-in.');
     }
-  } on FirebaseAuthException catch (e) {
-    print('Error: $e');
-    if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid username or password.')),
-      );
-    } else if (e.code == 'invalid-email') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid email format.')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sign-in failed. Please try again later.')),
-      );
-    }
   } catch (e) {
-    print('Unexpected error during sign-in: $e');
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('An unexpected error occurred. Please try again later.')),
-    );
+    print('Error during sign-in: $e');
+    // Handle exceptions
   }
 }
+
+
 
   void _showDisclaimerDialog(BuildContext context) {
     bool checkboxValue = false;
@@ -82,7 +86,7 @@ class _LoginState extends State<Login> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      disclaimer,
+                      userDisclaimer,
                       style: TextStyle(
                         fontFamily: "PT Serif",
                         fontSize: 16.0,

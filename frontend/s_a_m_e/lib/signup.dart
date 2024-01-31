@@ -1,60 +1,14 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/admin.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/login.dart';
-
-
-class User {
-  final String email;
-  final String password;
-  //final String username;
-
-  User({required this.email, required this.password/*, required this.username*/});
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      email: json['email'],
-      password: json['password'],
-      //username: json['username']
-    );
-  }
-}
-
-
-/*
-class ApiService {
-  Future<void> registerUser({
-    required String email,
-    required String username,
-    required String password,
-  }) async {
-    final url = Uri.parse('http://localhost:3000/api/user'); 
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode({
-        'email': email,
-        'username': username,
-        'password': password,
-      }),
-    );
-
-    if (response.statusCode == 201) {
-      // User registered successfully
-      
-    } else {
-      // Failed to register user
-      throw Exception('Failed to register user');
-    }
-  }
-}
-*/
+import 'package:s_a_m_e/user_home.dart';
+import 'package:s_a_m_e/firebase_service.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -69,7 +23,7 @@ class _SignUpPageState extends State<SignUpPage> {
   //final _username = TextEditingController();
   final _userPassword = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  
+
   @override
   void dispose() {
     _userEmail.dispose();
@@ -90,21 +44,21 @@ class _SignUpPageState extends State<SignUpPage> {
   }
   */
 
-  Future<void> registerUser() async {
+  Future<void> registerUser(BuildContext context) async {
   try {
     final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
       email: _userEmail.text,
       password: _userPassword.text,
     );
-
-    print('User registered: ${userCredential.user?.uid}');
-
+    final String uid = userCredential.user!.uid;
+    await _storeUserData(uid);
+    print('User registered: $uid');
+  
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => Admin()),
+        MaterialPageRoute(builder: (_context) => UserHome()),
     );
   } catch (e) {
-    // Failed to register user
-    print('Failed to register user: $e');
+    print('Error during user registration: $e');
 
     final snackBar = SnackBar(
       content: Text('Failed to register user. Please try again. Error: $e'),
@@ -113,6 +67,14 @@ class _SignUpPageState extends State<SignUpPage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
+
+    Future<void> _storeUserData(String uid) async {
+    final userRef = FirebaseDatabase.instance.ref('users').child(uid);
+    await userRef.set({
+      'email': _userEmail.text,
+      'role': 'user',
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,23 +148,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       } else {
-                        try {
-                          final UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                            email: _userEmail.text,
-                            password: _userPassword.text,
-                          );
-                          print('User registered: ${userCredential.user?.uid}');
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => Admin()),
-                          );
-                        } catch (e) {
-                          print('Failed to register user: $e');
-                          const snackBar = SnackBar(
-                            content: Text('Failed to register user. Please try again.'),
-                            duration: Duration(seconds: 3),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
+                        registerUser(context);
                       }
                     }
                   },
