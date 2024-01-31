@@ -24,17 +24,39 @@ import 'package:http/http.dart' as http;
 //   }
 // }
 
+class ApiService {
+  Future<bool> login(String username, String password) async {
+    final response = await http.post(
+      Uri.parse(
+          'http://localhost:3000/api/user/login'), // Replace with your actual API endpoint
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'username': username,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // Here you should handle and store the JWT token received in the response
+      return true;
+    }
+    return false;
+  }
+}
+
 class Login extends StatefulWidget {
-  const Login({super.key});
+  const Login({Key? key}) : super(key: key);
 
   @override
-  _LoginState createState()  => _LoginState();
+  _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  // api service
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _apiService = ApiService(); // API service instance
 
   @override
   void dispose() {
@@ -81,7 +103,7 @@ class _LoginState extends State<Login> {
                 ElevatedButton(
                   onPressed: () {
                     if (checkboxValue) {
-                      Navigator.of(context).pop(); 
+                      Navigator.of(context).pop();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -110,17 +132,39 @@ class _LoginState extends State<Login> {
     );
   }
 
+  void _login() async {
+    String username = _usernameController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if (username.isNotEmpty && password.isNotEmpty) {
+      bool loggedIn = await _apiService.login(username, password);
+      if (loggedIn) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const Admin()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Username or password is incorrect.')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // title: const Text('S.A.M.E'),
-      ),
+          // title: const Text('S.A.M.E'),
+          ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Align(
           alignment: Alignment.center,
-          child:  Column(
+          child: Column(
             children: <Widget>[
               const SizedBox(height: 15),
               const Image(
@@ -134,20 +178,17 @@ class _LoginState extends State<Login> {
               TextField(
                 controller: _usernameController,
                 decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.all(20.0),
-                  labelText: 'Username',
-                  labelStyle: TextStyle(color: navy),
-                  filled: true,
-                  fillColor: boxinsides,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                    borderSide: BorderSide(color: boxinsides)
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                    borderSide: BorderSide(color: boxinsides)
-                  )
-                ),
+                    contentPadding: EdgeInsets.all(20.0),
+                    labelText: 'Username',
+                    labelStyle: TextStyle(color: navy),
+                    filled: true,
+                    fillColor: boxinsides,
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                        borderSide: BorderSide(color: boxinsides)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                        borderSide: BorderSide(color: boxinsides))),
               ),
               const SizedBox(height: 30),
               TextField(
@@ -159,67 +200,49 @@ class _LoginState extends State<Login> {
                   filled: true,
                   fillColor: boxinsides,
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                    borderSide: BorderSide(color: boxinsides, width: 0)
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderSide: BorderSide(color: boxinsides, width: 0)),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                    borderSide: BorderSide(color: boxinsides, width: 0)
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderSide: BorderSide(color: boxinsides, width: 0)),
                 ),
               ),
               const SizedBox(height: 40),
-              RichText(text: TextSpan(
+              RichText(
+                  text: TextSpan(
                 style: const TextStyle(fontFamily: "PT Serif"),
                 children: <TextSpan>[
                   const TextSpan(
-                    text: "Don't have an account?  ",
-                    style: TextStyle(color: Colors.black)
-                  ),
+                      text: "Don't have an account?  ",
+                      style: TextStyle(color: Colors.black)),
                   TextSpan(
-                    text: "Register here",
-                    style: const TextStyle(color: blue, decoration: TextDecoration.underline),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        print("Go to register page"); // insert navigation to register page
-                        _showDisclaimerDialog(context);
-                      } 
-                  ),
+                      text: "Register here",
+                      style: const TextStyle(
+                          color: blue, decoration: TextDecoration.underline),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          print(
+                              "Go to register page"); // insert navigation to register page
+                          _showDisclaimerDialog(context);
+                        }),
                 ],
               )),
               // const Text("Don't have an account? Register here", style: TextStyle(fontSize: 14.0),),
               const SizedBox(height: 40),
               SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                child: ElevatedButton(
-                  style:  const ButtonStyle(
-                    foregroundColor: MaterialStatePropertyAll<Color>(white),
-                    backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                  ),
-                  // make sure Terms & Conditions are read & approved
-                  onPressed: () {
-                    // check to make sure username & password are NOT empty
-                    if (_usernameController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
-                      // AND if the username & password are in the database
-                      // then go to the disclaimer page
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const Admin()),
-                      );
-                      // if the username & password is incorrect, show an error
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Username or password is incorrect.')),
-                      );
-                    } else {
-                      // if one of the fields is empty, show an alert to fill in all fields
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please fill in all fields.')),
-                      );
-                    }
-                  },
-                  child: const Text('Sign In', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0))
-                )
-              ),
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: ElevatedButton(
+                      style: const ButtonStyle(
+                        foregroundColor: MaterialStatePropertyAll<Color>(white),
+                        backgroundColor: MaterialStatePropertyAll<Color>(teal),
+                      ),
+                      // make sure Terms & Conditions are read & approved
+                      onPressed: _login,
+                      child: const Text('Sign In',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 24.0)))),
+
               const SizedBox(height: 30),
               // const Text('Forgot password?'),
             ],
