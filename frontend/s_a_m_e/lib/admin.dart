@@ -43,7 +43,7 @@ class Admin extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Close'),
+                  child: const Text('Close'),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -67,7 +67,7 @@ class Admin extends StatelessWidget {
                       );
                     }
                   },
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                 ),
               ],
             );

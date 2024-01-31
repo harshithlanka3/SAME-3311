@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -96,35 +97,76 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('S.A.M.E'),
+        // title: const Text('S.A.M.E'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: [
+            const SizedBox(height: 15),
+            const Image(
+                height: 220,
+                image: AssetImage('assets/logo.png')
+              ),
             const SizedBox(height: 20),
-            const Text('Sign Up',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
-            const SizedBox(height: 20),
+            const Text('Create an account', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0)),
+            const Text('Enter your information below', style: TextStyle(fontSize: 14.0)),
+            const SizedBox(height: 30),
             TextField(
               controller: _userEmail,
               decoration: const InputDecoration(
+                contentPadding: EdgeInsets.all(20.0),
                 labelText: 'Email',
+                labelStyle: TextStyle(color: navy),
+                filled: true,
+                fillColor: boxinsides,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                  borderSide: BorderSide(color: boxinsides),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                  borderSide: BorderSide(color: boxinsides),
+                )
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             TextField(
               controller: _username,
               decoration: const InputDecoration(
+                contentPadding: EdgeInsets.all(20.0),
                 labelText: 'Username',
+                labelStyle: TextStyle(color: navy),
+                filled: true,
+                fillColor: boxinsides,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                  borderSide: BorderSide(color: boxinsides),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                  borderSide: BorderSide(color: boxinsides),
+                ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             TextField(
               controller: _userPassword,
               obscureText: true,
               decoration: const InputDecoration(
+                contentPadding: EdgeInsets.all(20.0),
                 labelText: 'Password',
+                labelStyle: TextStyle(color: navy),
+                filled: true,
+                fillColor: boxinsides,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                  borderSide: BorderSide(color: boxinsides),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                  borderSide: BorderSide(color: boxinsides),
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -184,6 +226,25 @@ class _SignUpPageState extends State<SignUpPage> {
                   style:
                       TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
+            // debugging button to continue through flow
+            const SizedBox(height: 20),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 30,
+              child: ElevatedButton(
+                style: const ButtonStyle(
+                  foregroundColor: MaterialStatePropertyAll<Color>(white),
+                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const Admin()),
+                  );
+                },
+                child: const Text('Debugging go to admin page', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+              ),
+
+            )
           ],
         ),
       ),
