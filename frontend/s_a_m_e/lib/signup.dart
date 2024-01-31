@@ -5,14 +5,13 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/admin.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/login.dart';
-
+import 'package:s_a_m_e/symptomlist.dart';
 
 class User {
   final String email;
   final String username;
   final String password;
 
-  // Requires user to type in input for these fields
   User({required this.email, required this.username, required this.password});
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -25,14 +24,14 @@ class User {
 }
 //Giselle addition connection/pull to/from API
 
-// pulls from the API
 class ApiService {
-  Future<void> registerUser({
+  Future<bool> registerUser({
     required String email,
     required String username,
     required String password,
   }) async {
-    final url = Uri.parse('http://localhost:3000/api/user'); 
+    final url = Uri.parse(
+        'http://localhost:3000/api/user/register'); // Adjusted endpoint for clarity
     final response = await http.post(
       url,
       headers: <String, String>{
@@ -45,13 +44,8 @@ class ApiService {
       }),
     );
 
-    if (response.statusCode == 201) {
-      // User registered successfully
-      // You can handle the success scenario as needed
-    } else {
-      // Failed to register user
-      throw Exception('Failed to register user');
-    }
+    return response.statusCode ==
+        201; // Returns true if user is registered successfully
   }
 }
 
@@ -75,7 +69,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _userEmail = TextEditingController();
   final _username = TextEditingController();
   final _userPassword = TextEditingController();
-  
+
   @override
   void dispose() {
     _userEmail.dispose();
@@ -84,16 +78,18 @@ class _SignUpPageState extends State<SignUpPage> {
     super.dispose();
   }
 
-  //if returns true then the email is in valid format 
+  //if returns true then the email is in valid format
   bool isValidEmail(String email) {
     // regular expression for valid email format
     RegExp emailFormat = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
     // Check if the email matches the pattern
     return emailFormat.hasMatch(email);
   }
-  bool isValidUserOrPass (String username) {
-    RegExp userFormat = RegExp(r'^[\w.-]+$');
-    return userFormat.hasMatch(username.trim());
+
+  bool isValidPassword(String password) {
+    RegExp passwordRegex = RegExp(
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$');
+    return passwordRegex.hasMatch(password);
   }
 
   @override
@@ -107,7 +103,8 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            const Text('Sign Up', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
+            const Text('Sign Up',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
             const SizedBox(height: 20),
             TextField(
               controller: _userEmail,
@@ -132,53 +129,60 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // final email = _userEmail.text;
-                // final username = _username.text;
-                // final password = _userPassword.text;
-
-                //g
-                if (_userEmail.text.isEmpty || _username.text.isEmpty || _userPassword.text.isEmpty) {
-                    // Show a warning snackbar to the user
-                    final snackBar = SnackBar(
-                      content: Text('Please fill out all fields to sign up.'),
-                      duration: Duration(seconds: 3),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              onPressed: () async {
+                if (_userEmail.text.isEmpty ||
+                    _username.text.isEmpty ||
+                    _userPassword.text.isEmpty) {
+                  final snackBar = SnackBar(
+                    content: Text('Please fill out all fields to sign up.'),
+                    duration: Duration(seconds: 3),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                } else if (!isValidEmail(_userEmail.text)) {
+                  final snackBar = SnackBar(
+                    content: Text(
+                        'Invalid email format, please input a valid email'),
+                    duration: Duration(seconds: 3),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                } else if (!isValidPassword(_userPassword.text)) {
+                  final snackBar = SnackBar(
+                    content: Text(
+                        'Password must be at least 8 characters long and include at least one uppercase letter, one digit, and one special character.'),
+                    duration: Duration(seconds: 3),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 } else {
-                  if (!isValidEmail(_userEmail.text)) {
-                    final snackBar = SnackBar(
-                      content: Text('Invalid email format, please input a valid email'),
-                      duration: Duration(seconds: 3),
+                  try {
+                    final success = await _apiService.registerUser(
+                      email: _userEmail.text,
+                      username: _username.text,
+                      password: _userPassword.text,
                     );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  } 
-                  if (!isValidUserOrPass(_username.text)) {
-                    final snackBar = SnackBar(
-                      content: Text('Invalid username, please input a valid username with no spaces'),
-                      duration: Duration(seconds: 3),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
-                  if (!isValidUserOrPass(_userPassword.text)) {
-                    final snackBar = SnackBar(
-                      content: Text('Invalid password, please input a valid password with no spaces'),
-                      duration: Duration(seconds: 3),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
-                  final email = _userEmail.text;
-                  final username = _username.text;
-                  final password = _userPassword.text;
-                  // Create a User instance with its info
-                  final user = User(email: email, username: username, password: password);
-                }
-                //g
 
-                // Create a User instance with its info
-                //final user = User(email: email, username: username, password: password);
+                    if (success) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const Admin()), // Navigate to LoginPage or another page
+                      );
+                    } else {
+                      final snackBar = SnackBar(
+                          content:
+                              Text('Registration failed, please try again.'));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  } catch (e) {
+                    final snackBar = SnackBar(
+                        content: Text('An error occurred, please try again.'));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                }
               },
-              child: const Text('Sign Up', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+              child: const Text('Sign Up',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
           ],
         ),
@@ -186,7 +190,5 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  void registerUser() async{
-
-  }
+  void registerUser() async {}
 }

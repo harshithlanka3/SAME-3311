@@ -1,14 +1,16 @@
 const User = require('../models/User');
 const ProfilePicture = require('../models/ProfilePicture');
 const multer = require('multer');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const bcrypt = require('bcrypt');
 
 
 
-const createToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1d' });
-};
+
+// const createToken = (userId) => {
+//   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1d' });
+// };
 
 // Register new user
 exports.register = async (req, res) => {
@@ -22,19 +24,21 @@ exports.register = async (req, res) => {
     }
 
     // Password validation regex
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}:"<>?|[\]\\;',./`~]).{8,}$/;
     if (!passwordRegex.test(password)) {
       return res.status(400).json({
         error: 'Password must be at least 8 characters long and include at least one uppercase letter, one digit, and one special character.'
       });
     }
 
+    // const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = new User({ username, email, password });
     await user.save();
 
-    const token = createToken(user._id);
-
-    res.status(201).send('User created successfully');
+    // const token = createToken(user._id);
+    
+    res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
     if (error.code === 11000) {
       res.status(400).json({ error: 'Username or email already exists.' });
@@ -53,13 +57,17 @@ exports.login = async (req, res) => {
       return res.status(401).json({ error: 'Login failed: User not found.' });
     }
 
-    const isMatch = await user.comparePassword(password);
+    // const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = password === user.password;
+
     if (!isMatch) {
       return res.status(401).json({ error: 'Login failed: Incorrect password.' });
     }
 
-    const token = createToken(user._id);
-    res.status(200).json({ token });
+    // Create a token upon successful login
+    // const token = createToken(user._id);
+    
+    res.status(200).json({ message: 'Login successful' });
   } catch (error) {
     res.status(500).json({ error: 'Internal server error during login.' });
   }
