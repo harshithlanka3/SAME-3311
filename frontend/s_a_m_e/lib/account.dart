@@ -12,11 +12,14 @@ class ManageAccountPage extends StatefulWidget {
 
 class _ManageAccountPageState extends State<ManageAccountPage> {
   late Future<UserClass?> account;
+  late Future<List<UserClass>> accounts;
 
   @override
   void initState() {
     super.initState();
     account = fetchUser();
+    accounts = FirebaseService().getAllUsers();
+    // testing getAllUsers()
   }
 
   Future<UserClass?> fetchUser() async {
@@ -42,7 +45,6 @@ class _ManageAccountPageState extends State<ManageAccountPage> {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (snapshot.hasData) {
-              // Display user information based on the fetched data
               return Column(
                 children: <Widget>[
                   Container(

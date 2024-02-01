@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class Symptom {
@@ -120,6 +121,30 @@ Future<UserClass?> getUser(String uid) async {
     } catch (e) {
       print('Error getting user data: $e');
       return null;
+    }
+  }
+
+  Future<List<UserClass>> getAllUsers() async {
+    try {
+      DataSnapshot snapshot = await _usersRef.get();
+
+      List<UserClass> users = [];
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          var user = UserClass(email: value['email'], role: value['role']/*, chiefComplaints: value['chiefComplaints']*/);
+          users.add(user);
+          // testing instances
+          print(user.email);
+        });
+      }
+
+      return users;
+    } catch (e) {
+      print('Error getting users: $e');
+      return [];
     }
   }
 }
