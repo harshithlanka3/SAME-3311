@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/add.dart';
 import 'package:s_a_m_e/login.dart';
-import 'package:s_a_m_e/signup.dart';
 import 'package:s_a_m_e/symptomlist.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class UserHome extends StatelessWidget {
   const UserHome({super.key});

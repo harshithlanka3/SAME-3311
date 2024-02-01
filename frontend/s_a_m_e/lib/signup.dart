@@ -1,14 +1,8 @@
-import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:s_a_m_e/admin.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/login.dart';
 import 'package:s_a_m_e/user_home.dart';
-import 'package:s_a_m_e/firebase_service.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -18,9 +12,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  //final _apiService = ApiService();
   final _userEmail = TextEditingController();
-  //final _username = TextEditingController();
   final _userPassword = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -36,13 +28,6 @@ class _SignUpPageState extends State<SignUpPage> {
     RegExp emailFormat = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
     return emailFormat.hasMatch(email);
   }
-
-  /*
-  bool isValidUserOrPass (String username) {
-    RegExp userFormat = RegExp(r'^[\w.-]+$');
-    return userFormat.hasMatch(username.trim());
-  }
-  */
 
   Future<void> registerUser(BuildContext context) async {
   try {

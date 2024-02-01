@@ -1,46 +1,9 @@
-import 'dart:convert';
-import 'dart:ffi';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/symptomlist.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase_service.dart';
-/*
-// pulls from the API
-class ApiService {
-  Future<List<ChiefComplaint>> fetchChiefComplaints() async {
-    final response =
-        await http.get(Uri.parse('http://localhost:3000/api/chiefComplaints'));
-    if (response.statusCode == 200) {
-      List jsonResponse = json.decode(response.body);
-      return jsonResponse.map((data) => ChiefComplaint.fromJson(data)).toList();
-    } else {
-      throw Exception('Failed to load chief complaints');
-    }
-  }
 
-  Future<http.Response> addSymptom(
-      String name, List<ChiefComplaint> selectedComplaints) async {
-    final url = Uri.parse(
-        'http://localhost:3000/api/symptoms'); // Adjust the endpoint as needed
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode({
-        'name': name,
-        'chiefComplaints': selectedComplaints.map((e) => e.id).toList(),
-      }),
-    );
-
-    return response;
-  }
-}
-*/
-// creating the actual page to add symptoms
 class SymptomCreationPage extends StatefulWidget {
   const SymptomCreationPage({super.key});
 
