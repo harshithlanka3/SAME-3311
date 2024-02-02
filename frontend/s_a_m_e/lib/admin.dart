@@ -3,12 +3,14 @@ import 'package:s_a_m_e/account.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/add.dart';
 import 'package:s_a_m_e/login.dart';
+import 'package:s_a_m_e/profilepicture.dart';
+import 'package:s_a_m_e/signup.dart';
 import 'package:s_a_m_e/symptomlist.dart';
 
 class Admin extends StatelessWidget {
   const Admin({super.key});
 
-  @override
+@override
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(

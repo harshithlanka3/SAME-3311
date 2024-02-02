@@ -3,6 +3,7 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/symptomlist.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase_service.dart';
+import 'package:s_a_m_e/profilepicture.dart';
 
 class SymptomCreationPage extends StatefulWidget {
   const SymptomCreationPage({super.key});
@@ -28,29 +29,35 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('S.A.M.E'),
+        // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
+        actions: [ProfilePicturePage()]
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: [
             const SizedBox(height: 20),
-            const Text('Add Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
-            const SizedBox(height: 20),
+            const Text('Add Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0)),
+            const SizedBox(height: 40),
             TextField(
               controller: _symptomNameController,
               decoration: const InputDecoration(
+                contentPadding: EdgeInsets.all(20.0),
                 labelText: 'Symptom Name',
                 labelStyle: TextStyle(color: navy),
+                filled: true,
+                fillColor: boxinsides,
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: navy),
+                  borderSide: BorderSide(color: boxinsides),
                   borderRadius: BorderRadius.all(Radius.circular(40.0))
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: navy),
+                  borderSide: BorderSide(color: boxinsides),
+                  borderRadius: BorderRadius.all(Radius.circular(40.0))
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             FutureBuilder<List<ChiefComplaint>>(
               future: _firebaseService.getAllChiefComplaints(),
               builder: (context, chiefComplaintsSnapshot) {
@@ -83,7 +90,6 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
                 }
               },
             ),
-
             const SizedBox(height: 20),
             ElevatedButton(
               style: const ButtonStyle(
@@ -134,5 +140,3 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
     );
   }
 }
-
-

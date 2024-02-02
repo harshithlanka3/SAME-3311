@@ -3,16 +3,17 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:s_a_m_e/admin.dart';
+import 'package:s_a_m_e/add.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/signup.dart';
 import 'package:s_a_m_e/user_home.dart';
 import 'package:s_a_m_e/firebase_service.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
+  const Login({Key? key}) : super(key: key);
 
   @override
-  _LoginState createState()  => _LoginState();
+  _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
@@ -20,6 +21,7 @@ class _LoginState extends State<Login> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  //final _apiService = ApiService(); // API service instance
 
   @override
   void dispose() {
@@ -175,13 +177,13 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // title: const Text('S.A.M.E'),
-      ),
+          // title: const Text('S.A.M.E'),
+          ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Align(
           alignment: Alignment.center,
-          child:  Column(
+          child: Column(
             children: <Widget>[
               const SizedBox(height: 15),
               const Image(
@@ -189,8 +191,8 @@ class _LoginState extends State<Login> {
                 image: AssetImage('assets/logo.png')
               ),
               const SizedBox(height: 20), 
-              const Text('Welcome!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0)),
-              const Text('Login with your credentials below.', style: TextStyle(fontSize: 14.0)),
+              const Text('Welcome back!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0)),
+              const Text('Login with your credentials below', style: TextStyle(fontSize: 14.0)),
               const SizedBox(height: 40),
               TextField(
                 controller: _emailController,
@@ -221,23 +223,21 @@ class _LoginState extends State<Login> {
                   filled: true,
                   fillColor: boxinsides,
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                    borderSide: BorderSide(color: boxinsides, width: 0)
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderSide: BorderSide(color: boxinsides, width: 0)),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                    borderSide: BorderSide(color: boxinsides, width: 0)
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderSide: BorderSide(color: boxinsides, width: 0)),
                 ),
               ),
               const SizedBox(height: 40),
-              RichText(text: TextSpan(
+              RichText(
+                  text: TextSpan(
                 style: const TextStyle(fontFamily: "PT Serif"),
                 children: <TextSpan>[
                   const TextSpan(
-                    text: "Don't have an account?  ",
-                    style: TextStyle(color: Colors.black)
-                  ),
+                      text: "Don't have an account?  ",
+                      style: TextStyle(color: Colors.black)),
                   TextSpan(
                     text: "Register here",
                     style: const TextStyle(color: blue, decoration: TextDecoration.underline),
