@@ -235,7 +235,7 @@ class _LoginState extends State<Login> {
                   child: ElevatedButton(
                       style: const ButtonStyle(
                         foregroundColor: MaterialStatePropertyAll<Color>(white),
-                        backgroundColor: MaterialStatePropertyAll<Color>(teal),
+                        backgroundColor: MaterialStatePropertyAll<Color>(navy),
                       ),
                       // make sure Terms & Conditions are read & approved
                       onPressed: _login,

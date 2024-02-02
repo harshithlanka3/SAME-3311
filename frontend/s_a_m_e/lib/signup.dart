@@ -169,62 +169,70 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                if (_userEmail.text.isEmpty ||
-                    _username.text.isEmpty ||
-                    _userPassword.text.isEmpty) {
-                  final snackBar = SnackBar(
-                    content: Text('Please fill out all fields to sign up.'),
-                    duration: Duration(seconds: 3),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                } else if (!isValidEmail(_userEmail.text)) {
-                  final snackBar = SnackBar(
-                    content: Text(
-                        'Invalid email format, please input a valid email'),
-                    duration: Duration(seconds: 3),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                } else if (!isValidPassword(_userPassword.text)) {
-                  final snackBar = SnackBar(
-                    content: Text(
-                        'Password must be at least 8 characters long and include at least one uppercase letter, one digit, and one special character.'),
-                    duration: Duration(seconds: 3),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                } else {
-                  try {
-                    final success = await _apiService.registerUser(
-                      email: _userEmail.text,
-                      username: _username.text,
-                      password: _userPassword.text,
+            const SizedBox(height: 40),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              child: ElevatedButton(
+                style: const ButtonStyle(
+                    foregroundColor: MaterialStatePropertyAll<Color>(white),
+                    backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                  ),
+                onPressed: () async {
+                  if (_userEmail.text.isEmpty ||
+                      _username.text.isEmpty ||
+                      _userPassword.text.isEmpty) {
+                    final snackBar = SnackBar(
+                      content: Text('Please fill out all fields to sign up.'),
+                      duration: Duration(seconds: 3),
                     );
-
-                    if (success) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const Admin()), // Navigate to LoginPage or another page
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else if (!isValidEmail(_userEmail.text)) {
+                    final snackBar = SnackBar(
+                      content: Text(
+                          'Invalid email format, please input a valid email'),
+                      duration: Duration(seconds: 3),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else if (!isValidPassword(_userPassword.text)) {
+                    final snackBar = SnackBar(
+                      content: Text(
+                          'Password must be at least 8 characters long and include at least one uppercase letter, one digit, and one special character.'),
+                      duration: Duration(seconds: 3),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else {
+                    try {
+                      final success = await _apiService.registerUser(
+                        email: _userEmail.text,
+                        username: _username.text,
+                        password: _userPassword.text,
                       );
-                    } else {
+
+                      if (success) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const Admin()), // Navigate to LoginPage or another page
+                        );
+                      } else {
+                        final snackBar = SnackBar(
+                            content:
+                                Text('Registration failed, please try again.'));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    } catch (e) {
                       final snackBar = SnackBar(
-                          content:
-                              Text('Registration failed, please try again.'));
+                          content: Text('An error occurred, please try again.'));
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
-                  } catch (e) {
-                    final snackBar = SnackBar(
-                        content: Text('An error occurred, please try again.'));
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
-                }
-              },
-              child: const Text('Sign Up',
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+                },
+                child: const Text('Sign Up',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
+              ),
             ),
             // debugging button to continue through flow
             const SizedBox(height: 20),
