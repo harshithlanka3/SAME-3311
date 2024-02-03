@@ -136,3 +136,9 @@ app.*.symbols
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
 !.vscode/settings.json
+
+# Ignore Firebase configuration files
+ios/Runner/GoogleService-Info.plist
+macos/Runner/GoogleService-Info.plist
+android/app/google-services.json
+web/firebase-config.js

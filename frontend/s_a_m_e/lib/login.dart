@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -6,45 +6,8 @@ import 'package:s_a_m_e/admin.dart';
 import 'package:s_a_m_e/add.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/signup.dart';
-import 'package:http/http.dart' as http;
-
-// create ApiService class to verify the logins from database
-
-// class ApiService {
-//   Future<User> getUsers() async {
-//     final url = Uri.parse('http://localhost:3000/api/user');
-//     final response = await http.get(url);
-//     if (response.statusCode == 200) {
-//       return User.fromJson(jsonDecode(response.body) as Map<String>)
-//     }
-//     //make request json file
-//     // fetch them all and then search through the list
-//     // will need to change this later
-//     // need specific backend function to get a certian object -- controller & route
-//   }
-// }
-
-class ApiService {
-  Future<bool> login(String username, String password) async {
-    final response = await http.post(
-      Uri.parse(
-          'http://localhost:3000/api/user/login'), // Replace with your actual API endpoint
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode({
-        'username': username,
-        'password': password,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      // Here you should handle and store the JWT token received in the response
-      return true;
-    }
-    return false;
-  }
-}
+import 'package:s_a_m_e/user_home.dart';
+import 'package:s_a_m_e/firebase_service.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -54,16 +17,57 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final _usernameController = TextEditingController();
+  late Future<UserClass> user;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _apiService = ApiService(); // API service instance
+  //final _apiService = ApiService(); // API service instance
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
+
+  Future<void> _signIn() async {
+  try {
+    UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
+
+    if (userCredential.user != null) {
+      String uid = userCredential.user!.uid;
+
+      UserClass? userData = await FirebaseService().getUser(uid);
+
+      if (userData != null) {
+        String role = userData.role;
+        print(role);
+
+        if (role == 'user') {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => UserHome()),
+          );
+        } else if (role == 'admin') {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => Admin()),
+          );
+        }
+      } else {
+        print('Error: User data not found in the database.');
+      }
+    } else {
+      print('Error: User is null after sign-in.');
+    }
+  } catch (e) {
+    print('Error during sign-in: $e');
+    // Handle exceptions
+  }
+}
+
+
 
   void _showDisclaimerDialog(BuildContext context) {
     bool checkboxValue = false;
@@ -75,30 +79,62 @@ class _LoginState extends State<Login> {
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
               title: const Text('Disclaimer:'),
-              content: Column(
-                children: <Widget>[
-                  Text(disclaimer),
-                  Row(
-                    children: <Widget>[
-                      Checkbox(
-                        value: checkboxValue,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            checkboxValue = value!;
-                          });
-                        },
+              backgroundColor: Colors.white,
+              content: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      userDisclaimer,
+                      style: TextStyle(
+                        fontFamily: "PT Serif",
+                        fontSize: 16.0,
+                        color: Colors.black,
                       ),
-                      const Text('I agree to the terms and conditions.'),
-                    ],
-                  ),
-                ],
+                    ),
+                    const SizedBox(height: 10), 
+                    Row(
+                      children: <Widget>[
+                        Checkbox(
+                          fillColor: MaterialStateProperty.resolveWith((states) {
+                            if (!states.contains(MaterialState.selected)) {
+                              return Colors.transparent;
+                            }
+                            return null;
+                          }),
+                          side: const BorderSide(color: blue, width: 2),
+                          value: checkboxValue,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              checkboxValue = value!;
+                            });
+                          },
+                          activeColor: blue,
+                          checkColor: Colors.white,
+                        ),
+                        Text(
+                          'I agree to the terms and conditions.',
+                          style: TextStyle(
+                            fontFamily: "PT Serif",
+                            fontSize: 14.0,
+                            color: Colors.black, 
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Close'),
+                  child: Text('Close',
+                      style: TextStyle(
+                        fontFamily: "PT Serif",
+                        fontSize: 16.0,
+                        color: Colors.black, 
+                      )),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -116,13 +152,18 @@ class _LoginState extends State<Login> {
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
                         timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
+                        backgroundColor: blue,
                         textColor: Colors.white,
                         fontSize: 16.0,
                       );
                     }
                   },
-                  child: Text('Submit'),
+                  child: Text('Submit',
+                      style: TextStyle(
+                        fontFamily: "PT Serif",
+                        fontSize: 16.0,
+                        color: Colors.black,
+                      )),
                 ),
               ],
             );
@@ -130,28 +171,6 @@ class _LoginState extends State<Login> {
         );
       },
     );
-  }
-
-  void _login() async {
-    String username = _usernameController.text.trim();
-    String password = _passwordController.text.trim();
-
-    if (username.isNotEmpty && password.isNotEmpty) {
-      bool loggedIn = await _apiService.login(username, password);
-      if (loggedIn) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const Admin()),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Username or password is incorrect.')),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields.')),
-      );
-    }
   }
 
   @override
@@ -176,23 +195,27 @@ class _LoginState extends State<Login> {
               const Text('Login with your credentials below', style: TextStyle(fontSize: 14.0)),
               const SizedBox(height: 40),
               TextField(
-                controller: _usernameController,
+                controller: _emailController,
                 decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.all(20.0),
-                    labelText: 'Username',
-                    labelStyle: TextStyle(color: navy),
-                    filled: true,
-                    fillColor: boxinsides,
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                        borderSide: BorderSide(color: boxinsides)),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                        borderSide: BorderSide(color: boxinsides))),
+                  contentPadding: EdgeInsets.all(20.0),
+                  labelText: 'Email',
+                  labelStyle: TextStyle(color: navy),
+                  filled: true,
+                  fillColor: boxinsides,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                    borderSide: BorderSide(color: boxinsides)
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                    borderSide: BorderSide(color: boxinsides)
+                  )
+                ),
               ),
               const SizedBox(height: 30),
               TextField(
                 controller: _passwordController,
+                obscureText: true,
                 decoration: const InputDecoration(
                   contentPadding: EdgeInsets.all(20.0),
                   labelText: 'Password',
@@ -216,33 +239,29 @@ class _LoginState extends State<Login> {
                       text: "Don't have an account?  ",
                       style: TextStyle(color: Colors.black)),
                   TextSpan(
-                      text: "Register here",
-                      style: const TextStyle(
-                          color: blue, decoration: TextDecoration.underline),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          print(
-                              "Go to register page"); // insert navigation to register page
-                          _showDisclaimerDialog(context);
-                        }),
+                    text: "Register here",
+                    style: const TextStyle(color: blue, decoration: TextDecoration.underline),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        print("Go to register page"); 
+                        _showDisclaimerDialog(context);
+                      } 
+                  ),
                 ],
               )),
-              // const Text("Don't have an account? Register here", style: TextStyle(fontSize: 14.0),),
               const SizedBox(height: 40),
               SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  child: ElevatedButton(
-                      style: const ButtonStyle(
-                        foregroundColor: MaterialStatePropertyAll<Color>(white),
-                        backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                      ),
-                      // make sure Terms & Conditions are read & approved
-                      onPressed: _login,
-                      child: const Text('Sign In',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 24.0)))),
-
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    child: ElevatedButton(
+                        style: const ButtonStyle(
+                          foregroundColor: MaterialStatePropertyAll<Color>(white),
+                          backgroundColor: MaterialStatePropertyAll<Color>(teal),
+                        ),
+                        onPressed: _signIn,
+                        child: const Text('Sign In',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 24.0)))),
               const SizedBox(height: 30),
               // const Text('Forgot password?'),
             ],

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/login.dart';
-import 'admin.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MainApp());
 }
 
@@ -30,7 +35,7 @@ class MainApp extends StatelessWidget {
                   fontSize: 48.0,
                   color: white,
                   fontWeight: FontWeight.bold))),
-      home: const Login(), // this changes where the app starts
+      home: const Login(),
     );
   }
 }
