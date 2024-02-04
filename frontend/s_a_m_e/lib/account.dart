@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase_service.dart';
+import 'package:s_a_m_e/login.dart';
 
 class ManageAccountPage extends StatefulWidget {
   const ManageAccountPage({super.key});
@@ -90,7 +91,15 @@ class _ManageAccountPageState extends State<ManageAccountPage> {
                         SizedBox(
                           width: 200,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).popUntil((route) => route.isFirst);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Login(),
+                                ),
+                              );
+                            },
                               style: const ButtonStyle(
                                 foregroundColor: MaterialStatePropertyAll<Color>(white),
                                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
