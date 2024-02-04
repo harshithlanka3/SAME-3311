@@ -45,7 +45,7 @@ class _SymptomsListPageState extends State<SymptomsListPage> {
                   itemBuilder: (context, index) {
                     return Column(
                       children: <Widget>[
-                        Container(
+                        Container( // where the UI starts
                           decoration: BoxDecoration(
                             border: Border.all(color: teal),
                             color: boxinsides,
