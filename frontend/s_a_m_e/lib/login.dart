@@ -232,7 +232,7 @@ class _LoginState extends State<Login> {
               ),
               const SizedBox(height: 40),
               RichText(
-                  text: TextSpan(
+                text: TextSpan(
                 style: const TextStyle(fontFamily: "PT Serif"),
                 children: <TextSpan>[
                   const TextSpan(

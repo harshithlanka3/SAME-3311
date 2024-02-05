@@ -2,6 +2,7 @@
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase_service.dart';
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/view_profile.dart';
 
 class ViewAccounts extends StatefulWidget {
   const ViewAccounts({super.key});
@@ -56,7 +57,15 @@ class _ViewAccountsState extends State<ViewAccounts> {
                           child: const Image(image: AssetImage('assets/profile_pic.png')),
                         ),
                         trailing: GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ProfilePage(
+                                name: "Full Name",
+                                username: "Username",
+                                email: snapshot.data![index].email,
+                                role: snapshot.data![index].role)
+                            ));
+                          },
                           child: Container(
                             padding: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
