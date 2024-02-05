@@ -7,6 +7,7 @@ import 'package:s_a_m_e/login.dart';
 import 'package:s_a_m_e/profilepicture.dart';
 import 'package:s_a_m_e/signup.dart';
 import 'package:s_a_m_e/symptomlist.dart';
+import 'package:s_a_m_e/view_accounts.dart';
 
 class Admin extends StatelessWidget {
   const Admin({super.key});
@@ -29,6 +30,12 @@ Widget build(BuildContext context) {
                   builder: (context) => const ManageAccountPage(),
                 ),
               );
+            },
+          ),
+          ListTile(
+            title: const Text('View all Users'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const ViewAccounts(),));
             },
           ),
           ListTile(
