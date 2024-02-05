@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account.dart';
+import 'package:s_a_m_e/adminrequest.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/add.dart';
 import 'package:s_a_m_e/login.dart';
@@ -83,6 +84,7 @@ Widget build(BuildContext context) {
                 );
               },
             ),
+
            
         const SizedBox(height: 10),
             ElevatedButton(
@@ -97,6 +99,22 @@ Widget build(BuildContext context) {
                 //   MaterialPageRoute(
                 //       builder: (context) => SymptomCreationPage()),
                 // );
+              },
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              style: const ButtonStyle(
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
+              child: const Text('Admin Requests', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AdminRequestPage(),
+                  ),
+                );
               },
             ),
           ],
