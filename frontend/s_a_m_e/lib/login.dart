@@ -158,7 +158,7 @@ class _LoginState extends State<Login> {
                       );
                     }
                   },
-                  child: Text('Submit',
+                  child: const Text('Submit',
                       style: TextStyle(
                         fontFamily: "PT Serif",
                         fontSize: 16.0,
