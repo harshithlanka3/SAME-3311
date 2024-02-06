@@ -21,22 +21,25 @@ class ChiefComplaint {
 }
 
 class UserClass {
+  final String id;
   final String email;
   String role;
   bool? activeRequest;
   String? requestReason;
 
   UserClass(
-      {required this.email,
+      {required this.id,
+      required this.email,
       required this.role,
-      this.activeRequest,
+      this.activeRequest = true,
       this.requestReason});
 
-  factory UserClass.fromJson(Map<String, dynamic> json) {
+  factory UserClass.fromJson(Map<String, dynamic> json, String id) {
     return UserClass(
+      id: id,
       email: json['email'],
       role: json['role'] ?? 'user',
-      activeRequest: json['activeRequest'],
+      activeRequest: true,
       requestReason: json['requestReason'],
     );
   }
@@ -119,7 +122,12 @@ class FirebaseService {
       if (snapshot.value != null) {
         Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
 
-        var user = UserClass(email: data['email'], role: data["role"]);
+        var user = UserClass(
+            id: uid,
+            email: data['email'],
+            role: data["role"],
+            activeRequest: data["activeRequest"],
+            requestReason: data["requestReason"]);
 
         return user;
       }
@@ -142,9 +150,12 @@ class FirebaseService {
 
         data.forEach((key, value) {
           var user = UserClass(
+              id: value['id'],
               email: value['email'],
-              role: value[
-                  'role'] /*, chiefComplaints: value['chiefComplaints']*/);
+              role:
+                  value['role'] /*, chiefComplaints: value['chiefComplaints']*/,
+              activeRequest: value['activeRequest'],
+              requestReason: value['requestReason']);
           users.add(user);
           // testing instances
           print(user.email);
@@ -155,6 +166,23 @@ class FirebaseService {
     } catch (e) {
       print('Error getting users: $e');
       return [];
+    }
+  }
+
+  // You can get the current instance's userId the same way we have in
+  // account.dart with the fetchUser function. Function also takes in
+  Future<bool> updateUserAdminRequest(
+      String userId, String requestReason) async {
+    try {
+      await _usersRef.child(userId).update({
+        'activeRequest': true,
+        'requestReason': requestReason,
+      });
+      print('User admin request updated successfully for userId: $userId');
+      return true;
+    } catch (e) {
+      print('Error updating user admin request for userId: $userId, error: $e');
+      return false;
     }
   }
 }
