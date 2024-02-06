@@ -157,17 +157,4 @@ class FirebaseService {
       return [];
     }
   }
-
-  Future<List<UserClass>> getUsersWithActiveRequests() async {
-    try {
-      List<UserClass> allUsers = await getAllUsers();
-      List<UserClass> usersWithActiveRequests =
-          allUsers.where((user) => user.activeRequest == true).toList();
-
-      return usersWithActiveRequests;
-    } catch (e) {
-      print('Error getting users with active requests: $e');
-      return [];
-    }
-  }
 }
