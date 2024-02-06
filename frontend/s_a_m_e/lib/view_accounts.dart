@@ -14,7 +14,7 @@ class _ViewAccountsState extends State<ViewAccounts> {
   final TextEditingController _searchController = TextEditingController();
   late Future<List<UserClass>> users;
   late List<UserClass> usersSearch;
-  late List<UserClass> displayedUsers = []; // Initialize with an empty list
+  late List<UserClass> displayedUsers = [];
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class _ViewAccountsState extends State<ViewAccounts> {
   Future<void> startAsyncInit() async {
     usersSearch = await FirebaseService().getAllUsers();
     setState(() {
-      displayedUsers = usersSearch; // Initialize displayedUsers with all users
+      displayedUsers = usersSearch; 
     });
   }
 
@@ -37,9 +37,9 @@ class _ViewAccountsState extends State<ViewAccounts> {
       for (var user in usersSearch) {
         String firstName = user.firstName;
         String lastName = user.lastName;
+        String fullName = "$firstName $lastName";
 
-        if (firstName.toLowerCase().contains(input.toLowerCase()) ||
-            lastName.toLowerCase().contains(input.toLowerCase())) {
+        if (fullName.toLowerCase().contains(input.toLowerCase())) {
           searchedUsers.add(user);
         }
       }
