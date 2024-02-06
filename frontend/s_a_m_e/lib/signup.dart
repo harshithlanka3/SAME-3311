@@ -13,13 +13,16 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _userEmail = TextEditingController();
+  final _userFirstName = TextEditingController();
+  final _userLastName = TextEditingController();
   final _userPassword = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void dispose() {
     _userEmail.dispose();
-    //_username.dispose();
+    _userFirstName.dispose();
+    _userLastName.dispose();
     _userPassword.dispose();
     super.dispose();
   }
@@ -58,6 +61,8 @@ class _SignUpPageState extends State<SignUpPage> {
     final userRef = FirebaseDatabase.instance.ref('users').child(uid);
     await userRef.set({
       'email': _userEmail.text,
+      'firstName': _userFirstName.text,
+      'lastName': _userLastName.text,
       'role': 'user',
     });
   }
@@ -83,6 +88,40 @@ class _SignUpPageState extends State<SignUpPage> {
                 decoration: const InputDecoration(
                   contentPadding: EdgeInsets.all(20.0),
                   labelText: 'Email',
+                  labelStyle: TextStyle(color: navy),
+                  filled: true,
+                  fillColor: boxinsides,
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderSide: BorderSide(color: boxinsides)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderSide: BorderSide(color: boxinsides)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _userFirstName,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.all(20.0),
+                  labelText: 'First Name',
+                  labelStyle: TextStyle(color: navy),
+                  filled: true,
+                  fillColor: boxinsides,
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderSide: BorderSide(color: boxinsides)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderSide: BorderSide(color: boxinsides)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _userLastName,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.all(20.0),
+                  labelText: 'Last Name',
                   labelStyle: TextStyle(color: navy),
                   filled: true,
                   fillColor: boxinsides,

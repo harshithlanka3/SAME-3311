@@ -22,22 +22,28 @@ class ChiefComplaint {
 
 class UserClass {
   final String email;
+  String firstName;
+  String lastName;
   String role;
-  bool? activeRequest;
-  String? requestReason;
+  //bool? activeRequest;
+  //String? requestReason;
 
   UserClass(
       {required this.email,
+      required this.firstName,
+      required this.lastName,
       required this.role,
-      this.activeRequest = true,
-      this.requestReason});
+      //this.activeRequest,
+     /*this.requestReason*/});
 
   factory UserClass.fromJson(Map<String, dynamic> json) {
     return UserClass(
       email: json['email'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
       role: json['role'] ?? 'user',
-      activeRequest: true,
-      requestReason: json['requestReason'],
+     // activeRequest: true,
+      //requestReason: json['requestReason'],
     );
   }
 }
@@ -118,16 +124,16 @@ class FirebaseService {
 
       if (snapshot.value != null) {
         Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
-
         var user = UserClass(
             email: data['email'],
+            firstName: data['firstName'],
+            lastName: data['lastName'],
             role: data["role"],
-            activeRequest: data["activeRequest"],
-            requestReason: data["requestReason"]);
-
+            //activeRequest: data["activeRequest"],
+            /*requestReason: data["requestReason"]*/);
+        
         return user;
       }
-
       return null;
     } catch (e) {
       print('Error getting user data: $e');
@@ -147,13 +153,14 @@ class FirebaseService {
         data.forEach((key, value) {
           var user = UserClass(
               email: value['email'],
-              role:
-                  value['role'] /*, chiefComplaints: value['chiefComplaints']*/,
-              activeRequest: value['activeRequest'],
-              requestReason: value['requestReason']);
+              firstName: value['firstName'],
+              lastName: value['lastName'],
+              role: value['role'],
+              //activeRequest: value['activeRequest'],
+              /*requestReason: value['requestReason']*/);
           users.add(user);
           // testing instances
-          print(user.email);
+          //print(user.email);
         });
       }
 
