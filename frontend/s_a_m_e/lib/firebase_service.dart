@@ -21,22 +21,19 @@ class ChiefComplaint {
 }
 
 class UserClass {
-  final String id;
   final String email;
   String role;
   bool? activeRequest;
   String? requestReason;
 
   UserClass(
-      {required this.id,
-      required this.email,
+      {required this.email,
       required this.role,
       this.activeRequest = true,
       this.requestReason});
 
-  factory UserClass.fromJson(Map<String, dynamic> json, String id) {
+  factory UserClass.fromJson(Map<String, dynamic> json) {
     return UserClass(
-      id: id,
       email: json['email'],
       role: json['role'] ?? 'user',
       activeRequest: true,
@@ -123,7 +120,6 @@ class FirebaseService {
         Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
 
         var user = UserClass(
-            id: uid,
             email: data['email'],
             role: data["role"],
             activeRequest: data["activeRequest"],
@@ -150,7 +146,6 @@ class FirebaseService {
 
         data.forEach((key, value) {
           var user = UserClass(
-              id: value['id'],
               email: value['email'],
               role:
                   value['role'] /*, chiefComplaints: value['chiefComplaints']*/,
@@ -169,19 +164,20 @@ class FirebaseService {
     }
   }
 
-  // You can get the current instance's userId the same way we have in
-  // account.dart with the fetchUser function. Function also takes in
-  Future<bool> updateUserAdminRequest(
+  Future<bool> updateUserRequestReason(
       String userId, String requestReason) async {
     try {
-      await _usersRef.child(userId).update({
-        'activeRequest': true,
+      DatabaseReference userRef = _usersRef.child(userId);
+
+      await userRef.update({
         'requestReason': requestReason,
+        'activeRequest': true,
       });
-      print('User admin request updated successfully for userId: $userId');
+
+      print('User requestReason updated successfully');
       return true;
     } catch (e) {
-      print('Error updating user admin request for userId: $userId, error: $e');
+      print('Error updating user requestReason: $e');
       return false;
     }
   }
