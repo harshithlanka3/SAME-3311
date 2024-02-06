@@ -30,30 +30,31 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> registerUser(BuildContext context) async {
-  try {
-    final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-      email: _userEmail.text,
-      password: _userPassword.text,
-    );
-    final String uid = userCredential.user!.uid;
-    await _storeUserData(uid);
-    print('User registered: $uid');
-  
-    Navigator.of(context).push(
+    try {
+      final UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: _userEmail.text,
+        password: _userPassword.text,
+      );
+      final String uid = userCredential.user!.uid;
+      await _storeUserData(uid);
+      print('User registered: $uid');
+
+      Navigator.of(context).push(
         MaterialPageRoute(builder: (_context) => UserHome()),
-    );
-  } catch (e) {
-    print('Error during user registration: $e');
+      );
+    } catch (e) {
+      print('Error during user registration: $e');
 
-    final snackBar = SnackBar(
-      content: Text('Failed to register user. Please try again. Error: $e'),
-      duration: Duration(seconds: 3),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      final snackBar = SnackBar(
+        content: Text('Failed to register user. Please try again. Error: $e'),
+        duration: Duration(seconds: 3),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
-}
 
-    Future<void> _storeUserData(String uid) async {
+  Future<void> _storeUserData(String uid) async {
     final userRef = FirebaseDatabase.instance.ref('users').child(uid);
     await userRef.set({
       'email': _userEmail.text,
@@ -73,7 +74,9 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(height: 20),
               const Text('Sign Up',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 30.0, color: navy)),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30.0,
+                      color: navy)),
               const SizedBox(height: 20),
               TextField(
                 controller: _userEmail,
@@ -128,7 +131,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     } else {
                       if (!isValidEmail(_userEmail.text)) {
                         const snackBar = SnackBar(
-                          content: Text('Invalid email format, please input a valid email'),
+                          content: Text(
+                              'Invalid email format, please input a valid email'),
                           duration: Duration(seconds: 3),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
