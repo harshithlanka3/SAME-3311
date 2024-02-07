@@ -33,7 +33,7 @@ Widget build(BuildContext context) {
             },
           ),
           ListTile(
-            title: const Text('View all Users'),
+            title: const Text('View All Users'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const ViewAccounts(),));
             },

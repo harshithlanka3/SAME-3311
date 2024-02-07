@@ -5,7 +5,6 @@ class ProfilePage extends StatelessWidget {
 
   // final String profilePic;
   final String name;
-  final String username;
   final String email;
   final String role;
 
@@ -13,7 +12,6 @@ class ProfilePage extends StatelessWidget {
     super.key,
     // required this.profilePic,
     required this.name,
-    required this.username,
     required this.email,
     required this.role,
   });
@@ -54,12 +52,6 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   const Text('Name: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   Text(name, style: TextStyle(fontSize: 16),)
-                ],),
-              const SizedBox(height: 30),
-              Row(
-                children: [
-                  const Text('Username: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text(username, style: TextStyle(fontSize: 16),)
                 ],),
               const SizedBox(height: 30),
               Row(
