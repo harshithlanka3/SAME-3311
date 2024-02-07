@@ -39,6 +39,12 @@ Widget build(BuildContext context) {
             },
           ),
           ListTile(
+            title: const Text('Admin Requests'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminRequestPage(),));
+            },
+          ),
+          ListTile(
             title: const Text('Sign Out'),
             onTap: () {
               Navigator.of(context).popUntil((route) => route.isFirst);
@@ -106,22 +112,6 @@ Widget build(BuildContext context) {
                 //   MaterialPageRoute(
                 //       builder: (context) => SymptomCreationPage()),
                 // );
-              },
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Admin Requests', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AdminRequestPage(),
-                  ),
-                );
               },
             ),
           ],
