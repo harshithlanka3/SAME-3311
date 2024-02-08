@@ -199,14 +199,16 @@ class FirebaseService {
         Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
 
         data.forEach((key, value) {
-          if (value['activeRequest']) {
+          // Adding a null check for 'activeRequest'
+          if (value['activeRequest'] != null && value['activeRequest']) {
             var user = UserClass(
               firstName: value['firstName'],
               lastName: value['lastName'],
               email: value['email'],
               role: value['role'],
-              activeRequest: value['activeRequest'],
-              requestReason: value['requestReason']);
+              activeRequest: value['activeRequest'] ?? false,
+              requestReason: value['requestReason'] ?? '',
+            );
             userRequests.add(user);
           }
         });
@@ -217,4 +219,5 @@ class FirebaseService {
       return [];
     }
   }
+
 }
