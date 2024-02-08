@@ -12,12 +12,23 @@ class AdminRequestPage extends StatefulWidget {
 }
 
 class _AdminRequestPageState extends State<AdminRequestPage> {
-  late Future<List<Symptom>> requests;
+  late Future<List<UserClass>> requests;
+  late List<String> userNames = [];
+  late List<String> userReasons = [];
 
   @override
   void initState() {
     super.initState();
-    requests = FirebaseService().getAllSymptoms();
+    requests = FirebaseService().getUserRequests();
+    getUserNames();
+  }
+
+  void getUserNames() async {
+    List<UserClass> users = await requests;
+    setState(() {
+      userNames = users.map((user) => "${user.firstName} ${user.lastName}").toList();
+      userReasons = users.map((user) => user.requestReason).toList();
+    });
   }
 
   @override
@@ -25,12 +36,11 @@ class _AdminRequestPageState extends State<AdminRequestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Admin Requests", style: TextStyle(fontSize: 36.0)),
-        // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
-        actions: [ProfilePicturePage()]
+        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: FutureBuilder<List<Symptom>>(
+        child: FutureBuilder<List<UserClass>>(
           future: requests,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -41,7 +51,7 @@ class _AdminRequestPageState extends State<AdminRequestPage> {
               return Scrollbar(
                 trackVisibility: true,
                 child: ListView.builder(
-                  itemCount: snapshot.data!.length,
+                  itemCount: userNames.length,
                   itemBuilder: (context, index) {
                     return Column(
                       children: <Widget>[
@@ -52,8 +62,8 @@ class _AdminRequestPageState extends State<AdminRequestPage> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: ListTile(
-                            title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                            // subtitle: const Text('Symptom Description'), 
+                            title: Text(userNames[index], style: const TextStyle(fontWeight: FontWeight.bold)),
+                            subtitle: Text(userReasons[index]), 
                           ),
                         ),
                         const SizedBox(height: 10),

@@ -3,15 +3,17 @@ import 'package:s_a_m_e/account.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/login.dart';
 import 'package:s_a_m_e/symptomlist.dart';
+import 'package:s_a_m_e/firebase_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserHome extends StatelessWidget {
   const UserHome({super.key});
 
   void _adminAccessQuestionnaire(BuildContext context) {
-    bool addSymptomsOption = false;
-    bool monitorOption = false;
-    bool promotionOption = false;
-    bool otherOption = false;
+    // bool addSymptomsOption = false;
+    // bool monitorOption = false;
+    // bool promotionOption = false;
+    // bool otherOption = false;
     final reasonForAdminAccess = TextEditingController();
 
     showDialog(
@@ -24,58 +26,58 @@ class UserHome extends StatelessWidget {
               content: Column(
                 children: <Widget>[
                   Text(adminAccesss),
-                  Row(
-                    children: <Widget>[
-                      Checkbox(
-                        value: addSymptomsOption,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            addSymptomsOption = value!;
-                          });
-                        },
-                      ),
-                      const Text('Add symptoms/diagnoses'),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Checkbox(
-                        value: monitorOption,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            monitorOption = value!;
-                          });
-                        },
-                      ),
-                      const Text('Monitor usage of application'),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Checkbox(
-                        value: promotionOption,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            promotionOption = value!;
-                          });
-                        },
-                      ),
-                      const Text('Promotion'),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Checkbox(
-                        value: otherOption,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            otherOption = value!;
-                          });
-                        },
-                      ),
-                      const Text('Other'),
-                    ],
-                  ),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Checkbox(
+                  //       value: addSymptomsOption,
+                  //       onChanged: (bool? value) {
+                  //         setState(() {
+                  //           addSymptomsOption = value!;
+                  //         });
+                  //       },
+                  //     ),
+                  //     const Text('Add symptoms/diagnoses'),
+                  //   ],
+                  // ),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Checkbox(
+                  //       value: monitorOption,
+                  //       onChanged: (bool? value) {
+                  //         setState(() {
+                  //           monitorOption = value!;
+                  //         });
+                  //       },
+                  //     ),
+                  //     const Text('Monitor usage of application'),
+                  //   ],
+                  // ),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Checkbox(
+                  //       value: promotionOption,
+                  //       onChanged: (bool? value) {
+                  //         setState(() {
+                  //           promotionOption = value!;
+                  //         });
+                  //       },
+                  //     ),
+                  //     const Text('Promotion'),
+                  //   ],
+                  // ),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Checkbox(
+                  //       value: otherOption,
+                  //       onChanged: (bool? value) {
+                  //         setState(() {
+                  //           otherOption = value!;
+                  //         });
+                  //       },
+                  //     ),
+                  //     const Text('Other'),
+                  //   ],
+                  // ),
                   const SizedBox(height: 16), // Add some spacing
                   TextField(
                     controller: reasonForAdminAccess,
@@ -95,7 +97,11 @@ class UserHome extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if ((addSymptomsOption || monitorOption || promotionOption || otherOption) && reasonForAdminAccess.text.isNotEmpty) {
+                    if (reasonForAdminAccess.text.isNotEmpty) {
+                      FirebaseAuth auth = FirebaseAuth.instance;
+                      User? user = auth.currentUser;
+                      String uid = user?.uid as String;
+                      FirebaseService().updateUserRequestReason(uid, reasonForAdminAccess.text);
                       Navigator.of(context).pop(); 
                       Navigator.push(
                         context,
@@ -221,4 +227,4 @@ Widget build(BuildContext context) {
 
 String userDisclaimer = "This application is for general informational purposes only and is not intended to be a substitute for professional medical advice. The information provided should not be considered as medical advice, and we do not guarantee its accuracy.\nOur application is a guideline, and individual cases may vary.\n\nWe are not liable for any loss or damage arising from the use of this information. Consult with qualified healthcare professionals for advice tailored to your specific circumstances.\n\nBy using this application, you agree to these terms. S.A.M.E. is not responsible for errors or omissions. Use this application responsibly and in accordance with applicable laws.\n";
 
-String adminAccesss = "You are requesting administrative access to the Software Aid for Medical Emergencies. Please give the reason for why you are requesting access. Upon submission, an administrator will review the request.";
+String adminAccesss = "You are requesting administrative access to the Software Aid for Medical Emergencies. Please give the reason for why you are requesting access. Upon submission, an administrator will review the request.\n\nPossible reasons for admin access requests could be to add symptoms/diagnoses, monitor the application, a promotion, etc.";

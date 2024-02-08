@@ -61,7 +61,7 @@ class _ManageAccountPageState extends State<ManageAccountPage> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        const Text('User Name', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
+                        Text('${snapshot.data!.firstName} ${snapshot.data!.lastName}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
                         Text('User Role: ${snapshot.data!.role}', style: const TextStyle(fontSize: 16.0)), 
                         const SizedBox(height: 20),
                         SizedBox(
@@ -79,8 +79,8 @@ class _ManageAccountPageState extends State<ManageAccountPage> {
                         const Divider(),
                         const SizedBox(height: 20),
 
-                        ProfileMenuWidget(title: "Full Name", icon: Icons.abc),
-                        ProfileMenuWidget(title: "Username", icon: Icons.account_circle),
+                        ProfileMenuWidget(title: snapshot.data!.firstName + " " + snapshot.data!.lastName, icon: Icons.abc),
+                        //ProfileMenuWidget(title: "Username", icon: Icons.account_circle),
                         ProfileMenuWidget(title: snapshot.data!.email, icon: Icons.email),
                         ProfileMenuWidget(title: "Password", icon: Icons.key),
 

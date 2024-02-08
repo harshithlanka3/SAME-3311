@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase_service.dart';
@@ -6,19 +7,24 @@ class ProfilePage extends StatelessWidget {
 
   // final String profilePic;
   final String name;
-  final String username;
   final String email;
   final String role;
 
   const ProfilePage({
-    super.key,
+    Key? key,
     // required this.profilePic,
     required this.name,
-    required this.username,
     required this.email,
     required this.role,
-  });
+  }) : super(key: key);
 
+  Future<UserClass?> changeRole() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String uid = user?.uid as String;
+    return FirebaseService().getUser(uid);
+  }
+  
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -59,12 +65,6 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(height: 30),
               Row(
                 children: [
-                  const Text('Username: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text(username, style: TextStyle(fontSize: 16),)
-                ],),
-              const SizedBox(height: 30),
-              Row(
-                children: [
                   const Text('Email: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   Text(email, style: TextStyle(fontSize: 16),)
                 ],),
@@ -84,7 +84,7 @@ class ProfilePage extends StatelessWidget {
                     backgroundColor: MaterialStatePropertyAll<Color>(navy),
                   ),
                   onPressed: () {
-                    // NEED TO IMPLEMENT EDITING USER
+                    _showRoleSelectionDialog(context);
                   },
                   child: const Text('Edit User Role', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0))
                 )
@@ -112,4 +112,39 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  void _showRoleSelectionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Select User Role'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: navy, 
+                  ),
+                  child: const Text('Admin', style: TextStyle(color: white, fontWeight: FontWeight.bold)),
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: navy, 
+                  ),
+                  child: const Text('User', style: TextStyle(color: white, fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

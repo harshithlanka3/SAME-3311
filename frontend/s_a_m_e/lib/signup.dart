@@ -13,13 +13,16 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _userEmail = TextEditingController();
+  final _userFirstName = TextEditingController();
+  final _userLastName = TextEditingController();
   final _userPassword = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void dispose() {
     _userEmail.dispose();
-    //_username.dispose();
+    _userFirstName.dispose();
+    _userLastName.dispose();
     _userPassword.dispose();
     super.dispose();
   }
@@ -30,33 +33,36 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> registerUser(BuildContext context) async {
-  try {
-    final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-      email: _userEmail.text,
-      password: _userPassword.text,
-    );
-    final String uid = userCredential.user!.uid;
-    await _storeUserData(uid);
-    print('User registered: $uid');
-  
-    Navigator.of(context).push(
+    try {
+      final UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: _userEmail.text,
+        password: _userPassword.text,
+      );
+      final String uid = userCredential.user!.uid;
+      await _storeUserData(uid);
+      print('User registered: $uid');
+
+      Navigator.of(context).push(
         MaterialPageRoute(builder: (_context) => UserHome()),
-    );
-  } catch (e) {
-    print('Error during user registration: $e');
+      );
+    } catch (e) {
+      print('Error during user registration: $e');
 
-    final snackBar = SnackBar(
-      content: Text('Failed to register user. Please try again. Error: $e'),
-      duration: Duration(seconds: 3),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      final snackBar = SnackBar(
+        content: Text('Failed to register user. Please try again. Error: $e'),
+        duration: Duration(seconds: 3),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
-}
 
-    Future<void> _storeUserData(String uid) async {
+  Future<void> _storeUserData(String uid) async {
     final userRef = FirebaseDatabase.instance.ref('users').child(uid);
     await userRef.set({
       'email': _userEmail.text,
+      'firstName': _userFirstName.text,
+      'lastName': _userLastName.text,
       'role': 'user',
     });
   }
@@ -73,13 +79,49 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(height: 20),
               const Text('Sign Up',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 30.0, color: navy)),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30.0,
+                      color: navy)),
               const SizedBox(height: 20),
               TextField(
                 controller: _userEmail,
                 decoration: const InputDecoration(
                   contentPadding: EdgeInsets.all(20.0),
                   labelText: 'Email',
+                  labelStyle: TextStyle(color: navy),
+                  filled: true,
+                  fillColor: boxinsides,
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderSide: BorderSide(color: boxinsides)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderSide: BorderSide(color: boxinsides)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _userFirstName,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.all(20.0),
+                  labelText: 'First Name',
+                  labelStyle: TextStyle(color: navy),
+                  filled: true,
+                  fillColor: boxinsides,
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderSide: BorderSide(color: boxinsides)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderSide: BorderSide(color: boxinsides)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _userLastName,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.all(20.0),
+                  labelText: 'Last Name',
                   labelStyle: TextStyle(color: navy),
                   filled: true,
                   fillColor: boxinsides,
@@ -128,7 +170,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     } else {
                       if (!isValidEmail(_userEmail.text)) {
                         const snackBar = SnackBar(
-                          content: Text('Invalid email format, please input a valid email'),
+                          content: Text(
+                              'Invalid email format, please input a valid email'),
                           duration: Duration(seconds: 3),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
