@@ -75,30 +75,19 @@ class _SignUpPageState extends State<SignUpPage> {
         padding: const EdgeInsets.all(15.0),
         child: SingleChildScrollView(
           child: Column(
-            children: [
+            children: <Widget>[
               const SizedBox(height: 20),
-              const Text('Sign Up',
+              const Image(
+                height: 220,
+                image: AssetImage('assets/logo.png')
+              ),
+              const SizedBox(height: 10), 
+              const Text('Register Now',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 30.0,
-                      color: navy)),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _userEmail,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.all(20.0),
-                  labelText: 'Email',
-                  labelStyle: TextStyle(color: navy),
-                  filled: true,
-                  fillColor: boxinsides,
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                      borderSide: BorderSide(color: boxinsides)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                      borderSide: BorderSide(color: boxinsides)),
-                ),
-              ),
+                      color: Colors.black)),
+              const Text('Enter your credentials below', style: TextStyle(fontSize: 14.0)),
               const SizedBox(height: 20),
               TextField(
                 controller: _userFirstName,
@@ -116,7 +105,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       borderSide: BorderSide(color: boxinsides)),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               TextField(
                 controller: _userLastName,
                 decoration: const InputDecoration(
@@ -133,7 +122,24 @@ class _SignUpPageState extends State<SignUpPage> {
                       borderSide: BorderSide(color: boxinsides)),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
+              TextField(
+                controller: _userEmail,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.all(20.0),
+                  labelText: 'Email',
+                  labelStyle: TextStyle(color: navy),
+                  filled: true,
+                  fillColor: boxinsides,
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderSide: BorderSide(color: boxinsides)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderSide: BorderSide(color: boxinsides)),
+                ),
+              ),
+              const SizedBox(height: 15),
               TextField(
                 controller: _userPassword,
                 obscureText: true,
@@ -151,14 +157,14 @@ class _SignUpPageState extends State<SignUpPage> {
                       borderSide: BorderSide(color: boxinsides, width: 0)),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 50,
                 child: ElevatedButton(
                   style: const ButtonStyle(
                     foregroundColor: MaterialStatePropertyAll<Color>(white),
-                    backgroundColor: MaterialStatePropertyAll<Color>(teal),
+                    backgroundColor: MaterialStatePropertyAll<Color>(navy),
                   ),
                   onPressed: () async {
                     if (_userEmail.text.isEmpty || _userPassword.text.isEmpty) {
