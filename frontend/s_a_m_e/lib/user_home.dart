@@ -23,6 +23,7 @@ class UserHome extends StatelessWidget {
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
               title: const Text('Request Admin Access'),
+              backgroundColor: white,
               content: Column(
                 children: <Widget>[
                   Text(adminAccesss),
@@ -81,9 +82,12 @@ class UserHome extends StatelessWidget {
                   const SizedBox(height: 16), // Add some spacing
                   TextField(
                     controller: reasonForAdminAccess,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Reason for Admin Access',
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderSide: BorderSide(color: navy)
+                      ),
                     ),
                   ),
                 ],
@@ -93,9 +97,10 @@ class UserHome extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Close'),
+                  child: const Text('Close', style: TextStyle(color: navy)),
                 ),
                 ElevatedButton(
+                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(navy)),
                   onPressed: () {
                     if (reasonForAdminAccess.text.isNotEmpty) {
                       FirebaseAuth auth = FirebaseAuth.instance;
@@ -114,7 +119,7 @@ class UserHome extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text('Error'),
+                            title: const Text('Error'),
                             content: Text('Please choose an option and give a reason.'),
                             actions: [
                               TextButton(
@@ -129,7 +134,7 @@ class UserHome extends StatelessWidget {
                       );
                     }
                   },
-                  child: Text('Submit'),
+                  child: const Text('Submit', style: TextStyle(color: white)),
                 ),
               ],
             );
@@ -146,6 +151,7 @@ Widget build(BuildContext context) {
       title: const Text('S.A.M.E'),
     ),
     drawer: Drawer(
+      backgroundColor: background,
       child: ListView(
         children: <Widget>[
           ListTile(

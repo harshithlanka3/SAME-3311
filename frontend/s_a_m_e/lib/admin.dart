@@ -19,6 +19,7 @@ Widget build(BuildContext context) {
       title: const Text('S.A.M.E'),
     ),
     drawer: Drawer(
+      backgroundColor: background,
       child: ListView(
         children: <Widget>[
           ListTile(
