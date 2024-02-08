@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
+import 'package:s_a_m_e/firebase_service.dart';
 
 class ProfilePage extends StatelessWidget {
 
@@ -98,7 +99,8 @@ class ProfilePage extends StatelessWidget {
                     backgroundColor: MaterialStatePropertyAll<Color>(navy),
                   ),
                   onPressed: () {
-                    // NEED TO IMPLEMENT DELETING USER
+                    FirebaseService().deleteUser(email);
+                    Navigator.pop(context, true); // true = update users when pop back (NOT YET IMPLEMENTED)
                   },
                   child: const Text('Delete User', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0))
                 )

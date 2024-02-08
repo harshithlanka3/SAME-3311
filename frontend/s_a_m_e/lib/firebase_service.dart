@@ -146,4 +146,28 @@ Future<UserClass?> getUser(String uid) async {
       return [];
     }
   }
+
+  Future deleteUser(String email) async {
+    try {
+      DataSnapshot snapshot = await _usersRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          if (value["email"] == email) {
+            print("User to be deleted:");
+            print(value);
+            _usersRef.child(key).remove();
+          }
+        });
+
+      }
+
+    } catch (e) {
+      print("Error with deleting user:");
+      print(e.toString());
+      return null;
+    }
+  }
 }
