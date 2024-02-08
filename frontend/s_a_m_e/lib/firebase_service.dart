@@ -25,16 +25,16 @@ class UserClass {
   String firstName;
   String lastName;
   String role;
-  //bool? activeRequest;
-  //String? requestReason;
+  bool activeRequest;
+  String requestReason;
 
   UserClass(
       {required this.email,
       required this.firstName,
       required this.lastName,
       required this.role,
-      //this.activeRequest,
-     /*this.requestReason*/});
+      this.activeRequest = false,
+      this.requestReason = ''});
 
   factory UserClass.fromJson(Map<String, dynamic> json) {
     return UserClass(
@@ -42,8 +42,8 @@ class UserClass {
       firstName: json['firstName'],
       lastName: json['lastName'],
       role: json['role'] ?? 'user',
-     // activeRequest: true,
-      //requestReason: json['requestReason'],
+      activeRequest: json['activeRequest'] ?? false,
+      requestReason: json['requestReason'] ?? ''
     );
   }
 }
@@ -129,8 +129,8 @@ class FirebaseService {
             firstName: data['firstName'],
             lastName: data['lastName'],
             role: data["role"],
-            //activeRequest: data["activeRequest"],
-            /*requestReason: data["requestReason"]*/);
+            activeRequest: data['activeRequest'] ?? false,
+            requestReason: data['requestReason'] ?? '');
         
         return user;
       }
@@ -156,8 +156,9 @@ class FirebaseService {
               firstName: value['firstName'],
               lastName: value['lastName'],
               role: value['role'],
-              //activeRequest: value['activeRequest'],
-              /*requestReason: value['requestReason']*/);
+              activeRequest: value['activeRequest'] ?? false,
+              requestReason: value['requestReason'] ?? '',
+              );
           users.add(user);
           // testing instances
           //print(user.email);
@@ -171,8 +172,7 @@ class FirebaseService {
     }
   }
 
-  Future<bool> updateUserRequestReason(
-      String userId, String requestReason) async {
+  Future<bool> updateUserRequestReason(String userId, String requestReason) async {
     try {
       DatabaseReference userRef = _usersRef.child(userId);
 
@@ -186,6 +186,35 @@ class FirebaseService {
     } catch (e) {
       print('Error updating user requestReason: $e');
       return false;
+    }
+  }
+
+  Future<List<UserClass>> getUserRequests() async {
+    try {
+      DataSnapshot snapshot = await _usersRef.get();
+
+      List<UserClass> userRequests = [];
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          if (value['activeRequest']) {
+            var user = UserClass(
+              firstName: value['firstName'],
+              lastName: value['lastName'],
+              email: value['email'],
+              role: value['role'],
+              activeRequest: value['activeRequest'],
+              requestReason: value['requestReason']);
+            userRequests.add(user);
+          }
+        });
+      }
+      return userRequests;
+    } catch (e) {
+      print('Error getting user requests: $e');
+      return [];
     }
   }
 }

@@ -12,12 +12,12 @@ class AdminRequestPage extends StatefulWidget {
 }
 
 class _AdminRequestPageState extends State<AdminRequestPage> {
-  late Future<List<Symptom>> requests;
+  late Future<List<UserClass>> requests;
 
   @override
   void initState() {
     super.initState();
-    requests = FirebaseService().getAllSymptoms();
+    requests = FirebaseService().getUserRequests();
   }
 
   @override
@@ -30,7 +30,7 @@ class _AdminRequestPageState extends State<AdminRequestPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: FutureBuilder<List<Symptom>>(
+        child: FutureBuilder<List<UserClass>>(
           future: requests,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -52,8 +52,8 @@ class _AdminRequestPageState extends State<AdminRequestPage> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: ListTile(
-                            title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                            // subtitle: const Text('Symptom Description'), 
+                            title: Text(snapshot.data![index].firstName, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            subtitle: const Text('Testing'), 
                           ),
                         ),
                         const SizedBox(height: 10),
