@@ -13,13 +13,13 @@ class AdminRequestPage extends StatefulWidget {
 
 class _AdminRequestPageState extends State<AdminRequestPage> {
   late Future<List<UserClass>> requests;
-  late List<String> userNames;
+  late List<String> userNames = [];
+  late List<String> userReasons = [];
 
   @override
   void initState() {
     super.initState();
     requests = FirebaseService().getUserRequests();
-    userNames = [];
     getUserNames();
   }
 
@@ -27,6 +27,7 @@ class _AdminRequestPageState extends State<AdminRequestPage> {
     List<UserClass> users = await requests;
     setState(() {
       userNames = users.map((user) => "${user.firstName} ${user.lastName}").toList();
+      userReasons = users.map((user) => user.requestReason).toList();
     });
   }
 
@@ -62,7 +63,7 @@ class _AdminRequestPageState extends State<AdminRequestPage> {
                           ),
                           child: ListTile(
                             title: Text(userNames[index], style: const TextStyle(fontWeight: FontWeight.bold)),
-                            subtitle: const Text('Testing'), 
+                            subtitle: Text(userReasons[index]), 
                           ),
                         ),
                         const SizedBox(height: 10),
