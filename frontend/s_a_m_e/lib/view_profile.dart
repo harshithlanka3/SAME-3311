@@ -100,7 +100,7 @@ class ProfilePage extends StatelessWidget {
                     backgroundColor: MaterialStatePropertyAll<Color>(navy),
                   ),
                   onPressed: () {
-                    confirmEditDialog(context, "delete", email);
+                    confirmEditDialog(context, "delete", email, ""); // "" bc no changing role for deleting user
                   },
                   child: const Text('Delete User', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0))
                 )
@@ -123,7 +123,7 @@ class ProfilePage extends StatelessWidget {
               children: <Widget>[
                 ElevatedButton(
                   onPressed: () {
-                    confirmEditDialog(context, "edit", ""); // "" to pass empty string for email
+                    confirmEditDialog(context, "edit", email, "admin");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: navy, 
@@ -133,7 +133,7 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
-                    confirmEditDialog(context, "edit", ""); // "" to pass empty string for email
+                    confirmEditDialog(context, "edit", email, "user");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: navy, 
@@ -149,7 +149,7 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-confirmEditDialog(BuildContext context, String decision, String email) {
+confirmEditDialog(BuildContext context, String decision, String email, String role) {
     bool checkboxValue = false;
     String confirmText = "";
     if (decision == "delete") {
@@ -229,6 +229,8 @@ confirmEditDialog(BuildContext context, String decision, String email) {
                     if (checkboxValue) {
                       if (decision == "delete") {
                         FirebaseService().deleteUser(email);
+                      } else if (decision == "edit") {
+                        FirebaseService().editUserRole(email, role);
                       }
                       Navigator.of(context).pop();
                     } else {
