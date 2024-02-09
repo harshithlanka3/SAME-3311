@@ -75,7 +75,7 @@ class _ViewAccountsState extends State<ViewAccounts> {
                     children: [
                       const SizedBox(height: 20),
                       const Text(
-                        'Search for a user below.',
+                        ' Search for a user below',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 24.0, color: Colors.black),
                       ),
@@ -89,11 +89,11 @@ class _ViewAccountsState extends State<ViewAccounts> {
                           filled: true,
                           fillColor: boxinsides,
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
                             borderSide: BorderSide(color: boxinsides),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
                             borderSide: BorderSide(color: boxinsides),
                           ),
                         ),
@@ -113,6 +113,8 @@ class _ViewAccountsState extends State<ViewAccounts> {
                         child: const Text('Search',
                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
                       ),
+                      const SizedBox(height: 10),
+                      const Divider(),
                       const SizedBox(height: 10),
                       ListView.builder(
                         shrinkWrap: true,
