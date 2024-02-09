@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:http/http.dart' as http;
 
 class Symptom {
   final String name;
@@ -180,22 +181,30 @@ class FirebaseService {
       if (snapshot.value != null) {
         Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
 
-        data.forEach((key, value) {
-        if (value["email"] == email) {
+        data.forEach((key, value) async {
+          if (value["email"] == email) {
             print("User to be deleted:");
             print(value);
             _usersRef.child(key).remove();
+            
+            final response = await http.delete(
+              Uri.parse('http://localhost:3000/users/$email'),
+            );
+            if (response.statusCode == 200) {
+              print('User deleted successfully from Firebase Auth');
+            } else {
+              print('Failed to delete user from Firebase Auth');
+            }
           }
         });
-
       }
-
     } catch (e) {
       print("Error with deleting user:");
       print(e.toString());
       return null;
     }
   }
+
 
 
   Future<bool> updateUserRequestReason(String userId, String requestReason) async {
@@ -245,5 +254,43 @@ class FirebaseService {
       return [];
     }
   }
+
+  Future<void> updateUserRole(String email, String newRole) async {
+  try {
+    DataSnapshot snapshot = await _usersRef.get();
+    
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      for (var entry in data.entries) {
+        var value = entry.value;
+        if (value["email"] == email) {
+          print("User to be changed:");
+          var response;
+          if (newRole == "admin") {
+          response = await http.put(
+            Uri.parse('http://localhost:3000/users/$email/admin')
+          );
+        } else {
+          response = await http.put(
+            Uri.parse('http://localhost:3000/users/$email/user')
+          );
+        }
+          if (response.statusCode == 200) {
+            print('User updated successfully');
+          } else {
+            print('Failed to update user. HTTP status code: ${response.statusCode}');
+            print('Response body: ${response.body}');
+          }
+          break;
+        }
+      }
+    }
+  } catch (e) {
+    print('Error updating user role: $e');
+  }
+}
+
+
 
 }

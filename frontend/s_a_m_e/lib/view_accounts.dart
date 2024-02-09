@@ -8,6 +8,7 @@ class ViewAccounts extends StatefulWidget {
 
   @override
   _ViewAccountsState createState() => _ViewAccountsState();
+  
 }
 
 class _ViewAccountsState extends State<ViewAccounts> {

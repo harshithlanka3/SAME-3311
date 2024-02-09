@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:s_a_m_e/colors.dart';
@@ -18,17 +17,9 @@ class ProfilePage extends StatelessWidget {
     required this.email,
     required this.role,
   }) : super(key: key);
-
-  Future<UserClass?> changeRole() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String uid = user?.uid as String;
-    return FirebaseService().getUser(uid);
-  }
   
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: const Text("User Profile", style: TextStyle(fontSize: 36.0)),
@@ -100,7 +91,7 @@ class ProfilePage extends StatelessWidget {
                     backgroundColor: MaterialStatePropertyAll<Color>(navy),
                   ),
                   onPressed: () {
-                    confirmEditDialog(context, "delete", email);
+                    confirmDeleteDialog(context, email);
                   },
                   child: const Text('Delete User', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0))
                 )
@@ -123,7 +114,7 @@ class ProfilePage extends StatelessWidget {
               children: <Widget>[
                 ElevatedButton(
                   onPressed: () {
-                    confirmEditDialog(context, "edit", ""); // "" to pass empty string for email
+                    confirmEditDialog(context, email, "admin", name); // "" to pass empty string for email
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: navy, 
@@ -133,7 +124,7 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
-                    confirmEditDialog(context, "edit", ""); // "" to pass empty string for email
+                    confirmEditDialog(context, email, "user", name); // "" to pass empty string for email
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: navy, 
@@ -149,114 +140,221 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-confirmEditDialog(BuildContext context, String decision, String email) {
-    bool checkboxValue = false;
-    String confirmText = "";
-    if (decision == "delete") {
-      confirmText = confirmDelete;
-    } else if (decision == "edit") {
-      confirmText = confirmEdit;
-    } else {
-      confirmText = "Are you sure you want to make these changes?";
-    }
+void confirmDeleteDialog(BuildContext context, String email) {
+  bool checkboxValue = false;
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return AlertDialog(
-              title: const Text('Confirm Edit:'),
-              backgroundColor: Colors.white,
-              content: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      confirmText,
-                      style: TextStyle(
-                        fontFamily: "PT Serif",
-                        fontSize: 16.0,
-                        color: Colors.black,
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return AlertDialog(
+            title: const Text('Confirm Deletion:'),
+            backgroundColor: Colors.white,
+            content: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    confirmDelete,
+                    style: const TextStyle(
+                      fontFamily: "PT Serif",
+                      fontSize: 16.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: <Widget>[
+                      Checkbox(
+                        fillColor: MaterialStateProperty.resolveWith((states) {
+                          if (!states.contains(MaterialState.selected)) {
+                            return Colors.transparent;
+                          }
+                          return null;
+                        }),
+                        side: const BorderSide(color: blue, width: 2),
+                        value: checkboxValue,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            checkboxValue = value!;
+                          });
+                        },
+                        activeColor: blue,
+                        checkColor: Colors.white,
                       ),
-                    ),
-                    const SizedBox(height: 10), 
-                    Row(
-                      children: <Widget>[
-                        Checkbox(
-                          fillColor: MaterialStateProperty.resolveWith((states) {
-                            if (!states.contains(MaterialState.selected)) {
-                              return Colors.transparent;
-                            }
-                            return null;
-                          }),
-                          side: const BorderSide(color: blue, width: 2),
-                          value: checkboxValue,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              checkboxValue = value!;
-                            });
-                          },
-                          activeColor: blue,
-                          checkColor: Colors.white,
+                      const Text(
+                        'Click here to confirm the deletion.',
+                        style: TextStyle(
+                          fontFamily: "PT Serif",
+                          fontSize: 14.0,
+                          color: Colors.black,
                         ),
-                        Text(
-                          'Click here to confirm the edit.',
-                          style: TextStyle(
-                            fontFamily: "PT Serif",
-                            fontSize: 14.0,
-                            color: Colors.black, 
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    fontFamily: "PT Serif",
+                    fontSize: 16.0,
+                    color: Colors.black,
+                  ),
                 ),
               ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
+              ElevatedButton(
+                onPressed: () {
+                  if (checkboxValue) {
+                    FirebaseService().deleteUser(email);
                     Navigator.of(context).pop();
-                  },
-                  child: Text('Cancel',
-                      style: TextStyle(
-                        fontFamily: "PT Serif",
-                        fontSize: 16.0,
-                        color: Colors.black, 
-                      )),
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: 'Please click the box to confirm your choice.',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: blue,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  }
+                },
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(
+                    fontFamily: "PT Serif",
+                    fontSize: 16.0,
+                    color: Colors.black,
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (checkboxValue) {
-                      if (decision == "delete") {
-                        FirebaseService().deleteUser(email);
-                      }
-                      Navigator.of(context).pop();
-                    } else {
-                      Fluttertoast.showToast(
-                        msg: 'Please click the box to confirm your choice.',
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: blue,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
-                    }
-                  },
-                  child: const Text('Confirm',
-                      style: TextStyle(
-                        fontFamily: "PT Serif",
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      )),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
+
+void confirmEditDialog(BuildContext context, String email, String role, String name) {
+  bool checkboxValue = false;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return AlertDialog(
+            title: const Text('Confirm Edit:'),
+            backgroundColor: Colors.white,
+            content: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    confirmEdit,
+                    style: const TextStyle(
+                      fontFamily: "PT Serif",
+                      fontSize: 16.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: <Widget>[
+                      Checkbox(
+                        fillColor: MaterialStateProperty.resolveWith((states) {
+                          if (!states.contains(MaterialState.selected)) {
+                            return Colors.transparent;
+                          }
+                          return null;
+                        }),
+                        side: const BorderSide(color: blue, width: 2),
+                        value: checkboxValue,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            checkboxValue = value!;
+                          });
+                        },
+                        activeColor: blue,
+                        checkColor: Colors.white,
+                      ),
+                      const Text(
+                        'Click here to confirm the edit.',
+                        style: TextStyle(
+                          fontFamily: "PT Serif",
+                          fontSize: 14.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    fontFamily: "PT Serif",
+                    fontSize: 16.0,
+                    color: Colors.black,
+                  ),
                 ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (checkboxValue) {
+                    _updateUserRole(context, email, role);
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: 'Please click the box to confirm your choice.',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: blue,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  }
+                },
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(
+                    fontFamily: "PT Serif",
+                    fontSize: 16.0,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
+
+Future<void> _updateUserRole(BuildContext context, String email, String newRole) async {
+  final firebaseService = FirebaseService();
+  await firebaseService.updateUserRole(email, newRole);
+}
 
 String confirmDelete = "Are you sure you want go through with these changes? Once you delete a user you cannot revert these changes.";
 String confirmEdit = "Are you sure you want go through with these changes? A user's role can be changed again later if needed.";
