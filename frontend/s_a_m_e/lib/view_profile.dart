@@ -100,7 +100,7 @@ class ProfilePage extends StatelessWidget {
                     backgroundColor: MaterialStatePropertyAll<Color>(navy),
                   ),
                   onPressed: () {
-                    confirmEditDialog(context, "delete");
+                    confirmEditDialog(context, "delete", email);
                   },
                   child: const Text('Delete User', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0))
                 )
@@ -123,7 +123,7 @@ class ProfilePage extends StatelessWidget {
               children: <Widget>[
                 ElevatedButton(
                   onPressed: () {
-                    confirmEditDialog(context, "edit");
+                    confirmEditDialog(context, "edit", ""); // "" to pass empty string for email
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: navy, 
@@ -133,7 +133,7 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
-                    confirmEditDialog(context, "edit");
+                    confirmEditDialog(context, "edit", ""); // "" to pass empty string for email
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: navy, 
@@ -149,7 +149,7 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-confirmEditDialog(BuildContext context, String decision) {
+confirmEditDialog(BuildContext context, String decision, String email) {
     bool checkboxValue = false;
     String confirmText = "";
     if (decision == "delete") {
@@ -227,6 +227,9 @@ confirmEditDialog(BuildContext context, String decision) {
                 ElevatedButton(
                   onPressed: () {
                     if (checkboxValue) {
+                      if (decision == "delete") {
+                        FirebaseService().deleteUser(email);
+                      }
                       Navigator.of(context).pop();
                     } else {
                       Fluttertoast.showToast(
