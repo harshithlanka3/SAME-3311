@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase_service.dart';
 
@@ -99,7 +100,7 @@ class ProfilePage extends StatelessWidget {
                     backgroundColor: MaterialStatePropertyAll<Color>(navy),
                   ),
                   onPressed: () {
-                    // NEED TO IMPLEMENT DELETING USER
+                    confirmEditDialog(context, "delete");
                   },
                   child: const Text('Delete User', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0))
                 )
@@ -122,7 +123,7 @@ class ProfilePage extends StatelessWidget {
               children: <Widget>[
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    confirmEditDialog(context, "edit");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: navy, 
@@ -132,7 +133,7 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    confirmEditDialog(context, "edit");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: navy, 
@@ -147,3 +148,112 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
+
+confirmEditDialog(BuildContext context, String decision) {
+    bool checkboxValue = false;
+    String confirmText = "";
+    if (decision == "delete") {
+      confirmText = confirmDelete;
+    } else if (decision == "edit") {
+      confirmText = confirmEdit;
+    } else {
+      confirmText = "Are you sure you want to make these changes?";
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: const Text('Confirm Edit:'),
+              backgroundColor: Colors.white,
+              content: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      confirmText,
+                      style: TextStyle(
+                        fontFamily: "PT Serif",
+                        fontSize: 16.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 10), 
+                    Row(
+                      children: <Widget>[
+                        Checkbox(
+                          fillColor: MaterialStateProperty.resolveWith((states) {
+                            if (!states.contains(MaterialState.selected)) {
+                              return Colors.transparent;
+                            }
+                            return null;
+                          }),
+                          side: const BorderSide(color: blue, width: 2),
+                          value: checkboxValue,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              checkboxValue = value!;
+                            });
+                          },
+                          activeColor: blue,
+                          checkColor: Colors.white,
+                        ),
+                        Text(
+                          'Click here to confirm the edit.',
+                          style: TextStyle(
+                            fontFamily: "PT Serif",
+                            fontSize: 14.0,
+                            color: Colors.black, 
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancel',
+                      style: TextStyle(
+                        fontFamily: "PT Serif",
+                        fontSize: 16.0,
+                        color: Colors.black, 
+                      )),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (checkboxValue) {
+                      Navigator.of(context).pop();
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: 'Please click the box to confirm your choice.',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: blue,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
+                  },
+                  child: const Text('Confirm',
+                      style: TextStyle(
+                        fontFamily: "PT Serif",
+                        fontSize: 16.0,
+                        color: Colors.black,
+                      )),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+String confirmDelete = "Are you sure you want go through with these changes? Once you delete a user you cannot revert these changes.";
+String confirmEdit = "Are you sure you want go through with these changes? A user's role can be changed again later if needed.";
