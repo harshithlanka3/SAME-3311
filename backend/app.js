@@ -23,11 +23,8 @@ const routes = require('./routes/index');
 app.use('/api', routes);
 */
 
-const { deleteUser, updateUserRoleAdmin, updateUserRoleUser } = require('./controllers/editUserController');
+const { deleteUser } = require('./controllers/editUserController');
 app.delete('/users/:email', deleteUser);
-
-app.put('/users/:email/admin', updateUserRoleAdmin);
-app.put('/users/:email/user', updateUserRoleUser);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

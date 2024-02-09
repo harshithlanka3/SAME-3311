@@ -353,7 +353,7 @@ void confirmEditDialog(BuildContext context, String email, String role, String n
 
 Future<void> _updateUserRole(BuildContext context, String email, String newRole) async {
   final firebaseService = FirebaseService();
-  await firebaseService.updateUserRole(email, newRole);
+  await firebaseService.editUserRole(email, newRole);
 }
 
 String confirmDelete = "Are you sure you want go through with these changes? Once you delete a user you cannot revert these changes.";

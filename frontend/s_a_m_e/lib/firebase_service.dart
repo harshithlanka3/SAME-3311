@@ -205,6 +205,35 @@ class FirebaseService {
     }
   }
 
+  Future editUserRole(String email, String role) async {
+    try {
+      DataSnapshot snapshot = await _usersRef.get();
+      
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+        if (value["email"] == email) {
+            print("User to be changed:");
+            print(value);
+            if (value["role"] == role) {
+              print("Not changing role as the user already is this role");
+              return ; 
+            }
+            _usersRef.child(key).update({
+              "role" : role
+            });
+          }
+        });
+
+      }
+
+    } catch (e) {
+      print("Error with editing user role:");
+      print(e.toString());
+      return null;
+    }
+  }
 
 
   Future<bool> updateUserRequestReason(String userId, String requestReason) async {
@@ -254,43 +283,5 @@ class FirebaseService {
       return [];
     }
   }
-
-  Future<void> updateUserRole(String email, String newRole) async {
-  try {
-    DataSnapshot snapshot = await _usersRef.get();
-    
-    if (snapshot.value != null) {
-      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
-
-      for (var entry in data.entries) {
-        var value = entry.value;
-        if (value["email"] == email) {
-          print("User to be changed:");
-          var response;
-          if (newRole == "admin") {
-          response = await http.put(
-            Uri.parse('http://localhost:3000/users/$email/admin')
-          );
-        } else {
-          response = await http.put(
-            Uri.parse('http://localhost:3000/users/$email/user')
-          );
-        }
-          if (response.statusCode == 200) {
-            print('User updated successfully');
-          } else {
-            print('Failed to update user. HTTP status code: ${response.statusCode}');
-            print('Response body: ${response.body}');
-          }
-          break;
-        }
-      }
-    }
-  } catch (e) {
-    print('Error updating user role: $e');
-  }
-}
-
-
 
 }
