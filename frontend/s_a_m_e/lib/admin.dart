@@ -4,8 +4,6 @@ import 'package:s_a_m_e/adminrequest.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/add.dart';
 import 'package:s_a_m_e/login.dart';
-import 'package:s_a_m_e/profilepicture.dart';
-import 'package:s_a_m_e/signup.dart';
 import 'package:s_a_m_e/symptomlist.dart';
 import 'package:s_a_m_e/view_accounts.dart';
 

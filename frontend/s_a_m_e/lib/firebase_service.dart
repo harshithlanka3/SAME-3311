@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:http/http.dart' as http;
 
 class Symptom {
   final String name;
@@ -180,16 +181,23 @@ class FirebaseService {
       if (snapshot.value != null) {
         Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
 
-        data.forEach((key, value) {
-        if (value["email"] == email) {
+        data.forEach((key, value) async {
+          if (value["email"] == email) {
             print("User to be deleted:");
             print(value);
             _usersRef.child(key).remove();
+            
+            final response = await http.delete(
+              Uri.parse('http://localhost:3000/users/$email'),
+            );
+            if (response.statusCode == 200) {
+              print('User deleted successfully from Firebase Auth');
+            } else {
+              print('Failed to delete user from Firebase Auth');
+            }
           }
         });
-
       }
-
     } catch (e) {
       print("Error with deleting user:");
       print(e.toString());
@@ -210,7 +218,7 @@ class FirebaseService {
             print(value);
             if (value["role"] == role) {
               print("Not changing role as the user already is this role");
-              return ; // skip updating role if they already have the selected role
+              return ; 
             }
             _usersRef.child(key).update({
               "role" : role
@@ -226,6 +234,7 @@ class FirebaseService {
       return null;
     }
   }
+
 
   Future<bool> updateUserRequestReason(String userId, String requestReason) async {
     try {

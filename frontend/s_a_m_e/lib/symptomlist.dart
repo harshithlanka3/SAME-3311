@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase_service.dart';
-import 'dart:convert';
 import 'package:s_a_m_e/profilepicture.dart';
 
 class SymptomsListPage extends StatefulWidget {
