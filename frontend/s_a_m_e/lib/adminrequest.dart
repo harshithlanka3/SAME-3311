@@ -12,6 +12,7 @@ class AdminRequestPage extends StatefulWidget {
 
 class _AdminRequestPageState extends State<AdminRequestPage> {
   late Future<List<UserClass>> requests;
+  late List<UserClass> users = [];
   late List<String> userNames = [];
   late List<String> userReasons = [];
 
@@ -47,26 +48,40 @@ class _AdminRequestPageState extends State<AdminRequestPage> {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (snapshot.hasData) {
+              users = snapshot.data!;
               return Scrollbar(
                 trackVisibility: true,
                 child: ListView.builder(
                   itemCount: userNames.length,
                   itemBuilder: (context, index) {
-                    return Column(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: teal),
-                            color: boxinsides,
-                            borderRadius: BorderRadius.circular(15),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AdminRequestDetailsPage(user: users[index]),
                           ),
-                          child: ListTile(
-                            title: Text(userNames[index], style: const TextStyle(fontWeight: FontWeight.bold)),
-                            subtitle: Text(userReasons[index]), 
+                        );
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: teal),
+                              color: boxinsides,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: ListTile(
+                              title: Text(
+                                "${users[index].firstName} ${users[index].lastName}",
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(users[index].requestReason),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                      ],
+                          const SizedBox(height: 10),
+                        ],
+                      ),
                     );
                   },
                 ),
@@ -75,6 +90,142 @@ class _AdminRequestPageState extends State<AdminRequestPage> {
               return const Center(child: Text('No admin requests'));
             }
           },
+        ),
+      ),
+    );
+  }
+}
+
+//testing code 
+class AdminRequestDetailsPage extends StatelessWidget {
+  final UserClass user;
+
+  const AdminRequestDetailsPage({Key? key, required this.user}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    bool approveSelected = false;
+    bool denySelected = false;
+    String? reasoning;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Review: " + "${user.firstName} ${user.lastName}",
+          style: TextStyle(fontSize: 23),
+          ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(25.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Request Reason:",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            Text(user.requestReason),
+            SizedBox(height: 20),
+
+            Text(
+              "Grant " +  "${user.firstName} ${user.lastName}" " Admin Status?",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 5),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ToggleButtons(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(8.0), // spave btween togggle buttons 
+                      child: Text('Approve'),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(20.0), // spave btween togggle buttons 
+                      child: Text('Deny'),
+                    ),
+                    // Text('Approve'),
+                    // Text('Deny'),
+                  ],
+                  isSelected: [approveSelected, denySelected],
+                  onPressed: (int index) {
+                    if (index == 0) {
+                      approveSelected = true;
+                      denySelected = false;
+                    } else {
+                      approveSelected = false;
+                      denySelected = true;
+                    }
+                  },
+                  color: Colors.teal,
+                  //backgroundColor: Colors.white,
+                  selectedColor: Colors.white,
+                  fillColor: Colors.teal,
+                  selectedBorderColor: teal,
+                  borderRadius: BorderRadius.circular(10),
+                  //spacing : 20,
+                ),
+              ],
+            ),
+            
+            SizedBox(height: 20),
+
+            Text(
+              "Reason:",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              selectionColor: teal,
+            ),
+            TextField(
+              onChanged: (value) {
+                reasoning = value;
+              },
+              decoration: InputDecoration(
+                labelText: "Enter reason",
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.teal),
+                  borderRadius: BorderRadius.circular(10)
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+
+            Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.teal),
+                  color: boxinsides,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Perform action on submit
+                  print('Reasoning: $reasoning');
+                  print('Approve Selected: $approveSelected');
+                  print('Deny Selected: $denySelected');
+                  // You can handle submit action here
+                },
+                child: Text(
+                  'Submit Admin Review', 
+                  style: TextStyle(
+                    color: Colors.teal
+                  ),
+                ),
+                //child: const Text("Admin Requests", style: TextStyle(fontSize: 36.0)),
+                
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.transparent,
+                  elevation: 0, // Remove button elevation
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+              ),
+              ),
+            ),
+          ],
         ),
       ),
     );
