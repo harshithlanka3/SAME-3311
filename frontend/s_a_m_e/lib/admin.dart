@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account.dart';
+import 'package:s_a_m_e/add_category.dart';
 import 'package:s_a_m_e/adminrequest.dart';
+import 'package:s_a_m_e/categorieslist.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/add.dart';
+import 'package:s_a_m_e/add_symptom.dart';
 import 'package:s_a_m_e/login.dart';
 import 'package:s_a_m_e/symptomlist.dart';
 import 'package:s_a_m_e/view_accounts.dart';
@@ -95,7 +97,25 @@ Widget build(BuildContext context) {
                   ),
                 );
               },
+              
             ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              style: const ButtonStyle(
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
+              child: const Text('Add Category', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CategoryCreationPage(),
+                  ),
+                );
+              },
+            ),
+            
 
            
         const SizedBox(height: 10),
@@ -104,13 +124,13 @@ Widget build(BuildContext context) {
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
-              child: const Text('Diagnosis List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              child: const Text('Categories List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) => SymptomCreationPage()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CategoriesListPage()),
+                );
               },
             ),
           ],

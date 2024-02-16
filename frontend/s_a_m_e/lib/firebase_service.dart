@@ -3,22 +3,30 @@ import 'package:http/http.dart' as http;
 
 class Symptom {
   final String name;
-  //final List<ChiefComplaint> chiefComplaints;
 
   Symptom({
     required this.name,
-    /*required this.chiefComplaints*/
   });
 
   Symptom.fromJson(Map<String, dynamic> json) : name = json['name'];
 }
 
-class ChiefComplaint {
+class Category {
   final String name;
+  final List<String> symptoms;
 
-  ChiefComplaint({required this.name});
+  Category({required this.name, required this.symptoms});
 
-  ChiefComplaint.fromJson(Map<String, dynamic> json) : name = json['name'];
+  Category.fromJson(Map<String, dynamic> json) : name = json['name'], symptoms = json['symptoms'];
+}
+
+class Diagnosis {
+  final String name;
+  final List<String> symptoms;
+
+  Diagnosis({required this.name, required this.symptoms});
+
+  Diagnosis.fromJson(Map<String, dynamic> json) : name = json['name'], symptoms = json['symptoms'];
 }
 
 class UserClass {
@@ -51,19 +59,20 @@ class UserClass {
 
 class FirebaseService {
   final _symptomsRef = FirebaseDatabase.instance.ref('data/symptoms');
-  final _chiefRef = FirebaseDatabase.instance.ref('data/chiefComplaints');
+  final _catRef = FirebaseDatabase.instance.ref('data/categories');
+  final _diagRef = FirebaseDatabase.instance.ref('data/diagnoses');
   final _usersRef = FirebaseDatabase.instance.ref('users/');
 
   Future<int> addSymptom(
-      String name, List<ChiefComplaint> chiefComplaints) async {
+      String name, List<Category> categories) async {
     try {
       DatabaseReference newSymptomRef = _symptomsRef.push();
 
       List<String> complaintNames =
-          chiefComplaints.map((complaint) => complaint.name).toList();
+          categories.map((complaint) => complaint.name).toList();
 
       await newSymptomRef
-          .set({'name': name, 'chiefComplaints': complaintNames});
+          .set({'name': name, 'categories': complaintNames, 'diagnoses': []});
       print('Data added successfully');
       return 200;
     } catch (e) {
@@ -72,11 +81,11 @@ class FirebaseService {
     }
   }
 
-  Future<List<Symptom>> getAllSymptoms() async {
+  Future<List<String>> getAllSymptoms() async {
     try {
       DataSnapshot snapshot = await _symptomsRef.get();
 
-      List<Symptom> symptomList = [];
+      List<String> symptomList = [];
 
       if (snapshot.value != null) {
         Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
@@ -84,8 +93,8 @@ class FirebaseService {
         data.forEach((key, value) {
           var symptom = Symptom(
               name: value[
-                  'name'] /*, chiefComplaints: value['chiefComplaints']*/);
-          symptomList.add(symptom);
+                  'name']);
+          symptomList.add(symptom.name);
         });
       }
       return symptomList;
@@ -95,29 +104,49 @@ class FirebaseService {
     }
   }
 
-  Future<List<ChiefComplaint>> getAllChiefComplaints() async {
+  Future<int> addCategory(
+      String name, List<String> symptoms) async {
     try {
-      DataSnapshot snapshot = await _chiefRef.get();
+      DatabaseReference newCatRef = _catRef.push();
 
-      List<ChiefComplaint> chiefComplaintsList = [];
-
-      if (snapshot.value != null) {
-        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
-
-        data.forEach((key, value) {
-          if (value is Map<dynamic, dynamic> && value.containsKey('name')) {
-            var chiefComplaint = ChiefComplaint(name: value['name']);
-            chiefComplaintsList.add(chiefComplaint);
-          }
-        });
-      }
-
-      return chiefComplaintsList;
+      await newCatRef
+          .set({'name': name, 'symptoms': symptoms, 'diagnoses': []});
+      print('Data added successfully');
+      return 200;
     } catch (e) {
-      print('Error getting data: $e');
-      return [];
+      print('Error adding data: $e');
+      return 400;
     }
   }
+
+  Future<List<Category>> getAllCategories() async {
+  try {
+    DataSnapshot snapshot = await _catRef.get();
+
+    List<Category> categoriesList = [];
+
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      data.forEach((key, value) {
+        if (value is Map<dynamic, dynamic> && value.containsKey('name') && value.containsKey('symptoms')) {
+          String name = value['name'];
+          List<String> symptoms = List<String>.from(value['symptoms']);
+
+          Category category = Category(name: name, symptoms: symptoms);
+          categoriesList.add(category);
+        }
+      });
+    }
+
+    return categoriesList;
+  } catch (e) {
+    print('Error getting data: $e');
+    return [];
+  }
+}
+
+  
 
   Future<UserClass?> getUser(String uid) async {
     try {
