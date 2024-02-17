@@ -13,6 +13,29 @@ The artifact chosen to be implemented is the admin symptom adding functionality 
 
 ## Release Notes
 ---
+### Version 0.2.0:
+#### New Features
+* Backend updated to use Firebase 
+* Sign-up and Sign-in Backend Updated to use Firebase
+* Admin: User-list functionality
+* Admin: View and approve admin requests
+* Admin: Delete user accounts
+* User: Create and update admin requests
+* Seperation of Admin and User pages
+* Admin privileges implemented
+* Chief complaints renamed to categories
+
+#### Bug Fixes
+* Fixed Profile Picture uploads to update on backend
+* Fixed UI Login Page
+* Fixed UI for Sign-Up Page
+
+#### Known Issues
+* 3rd Party API service needed to delete users from Firebase authentication
+* Implementing 'Lost Password' functionality
+* Implementing user login beyond app lifecycle
+* Profile Picture doesn't persist on UI beyond upload
+
 
 ### Version 0.1.0:
 #### New Features
