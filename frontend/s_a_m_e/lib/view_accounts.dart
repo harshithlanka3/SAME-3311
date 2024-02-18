@@ -31,6 +31,23 @@ class _ViewAccountsState extends State<ViewAccounts> {
     });
   }
 
+  // below method runs to properly display users if updated/deleted by admin
+  void refreshUsers(info) async {
+    usersSearch = await FirebaseService().getAllUsers();
+    if (info[1] == "delete") {
+      usersSearch.removeWhere((item) => item.email == info[0]);
+    } else {
+      for (var user in usersSearch) {
+        if (user.email == info[0]) {
+          user.role = info[1];
+        }
+      }
+    }
+    setState(() {
+      displayedUsers = usersSearch;
+    });
+  }
+
   Future<List<UserClass>> getSearchedUsers(String input) async {
     try {
       List<UserClass> searchedUsers = [];
@@ -143,7 +160,7 @@ class _ViewAccountsState extends State<ViewAccounts> {
                                             " " +
                                             displayedUsers[index].lastName,
                                         email: displayedUsers[index].email,
-                                        role: displayedUsers[index].role)));
+                                        role: displayedUsers[index].role))).then((info) => refreshUsers(info));
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(5),
