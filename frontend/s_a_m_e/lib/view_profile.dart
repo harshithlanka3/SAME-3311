@@ -214,8 +214,7 @@ void confirmDeleteDialog(BuildContext context, String email) {
                   if (checkboxValue) {
                     FirebaseService().deleteUser(email);
                     Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop([email, "delete"]); // passed in info for refreshUsers()
                   } else {
                     Fluttertoast.showToast(
                       msg: 'Please click the box to confirm your choice.',
@@ -320,8 +319,7 @@ void confirmEditDialog(BuildContext context, String email, String role, String n
                     _updateUserRole(context, email, role);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop([email, role]); // sending info for refreshUsers()
                   } else {
                     Fluttertoast.showToast(
                       msg: 'Please click the box to confirm your choice.',
