@@ -24,7 +24,7 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Categories", style: TextStyle(fontSize: 36.0)),
-        actions: const [ProfilePicturePage()],
+        // actions: const [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

@@ -25,7 +25,7 @@ class _SymptomsListPageState extends State<SymptomsListPage> {
       appBar: AppBar(
         title: const Text("Symptoms", style: TextStyle(fontSize: 36.0)),
         // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
-        actions: [ProfilePicturePage()]
+        // actions: [ProfilePicturePage()]
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

@@ -30,7 +30,7 @@ class _CategoryCreationPage extends State<CategoryCreationPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('S.A.M.E'),
-        actions: [ProfilePicturePage()]
+        // actions: [ProfilePicturePage()]
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
