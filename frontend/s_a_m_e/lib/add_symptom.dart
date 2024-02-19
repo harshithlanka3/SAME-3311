@@ -30,7 +30,7 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
       appBar: AppBar(
         title: const Text('S.A.M.E'),
         // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
-        actions: [ProfilePicturePage()]
+        // actions: [ProfilePicturePage()]
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

@@ -36,7 +36,7 @@ class _AdminRequestPageState extends State<AdminRequestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Admin Requests", style: TextStyle(fontSize: 36.0)),
-        actions: [ProfilePicturePage()],
+        // actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
