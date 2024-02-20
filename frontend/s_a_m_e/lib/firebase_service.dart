@@ -218,6 +218,69 @@ Future<void> addSymptomToCategory(String symptomName, String categoryName) async
 }
 
 
+Future<List<Category>> getCategoriesForSymptom(String symptomName) async {
+  try {
+    DatabaseEvent event = await _symptomsRef.orderByChild('name').equalTo(symptomName).once();
+    DataSnapshot snapshot = event.snapshot;
+
+    List<Category> categoriesList = [];
+
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      data.forEach((key, value) {
+        if (value is Map<dynamic, dynamic> && value.containsKey('categories')) {
+          List<dynamic> categoriesData = value['categories'] as List<dynamic>;
+          List<Category> categories = categoriesData.map((categoryData) {
+            if (categoryData is String) {
+              return Category(name: categoryData, symptoms: []);
+            } else if (categoryData is Map<dynamic, dynamic>) {
+              return Category(name: categoryData['name'], symptoms: []);
+            }
+            return Category(name: '', symptoms: []);
+          }).toList();
+          categoriesList.addAll(categories);
+        }
+      });
+    }
+
+    return categoriesList;
+  } catch (e) {
+    print('Error getting categories for symptom: $e');
+    return [];
+  }
+}
+
+
+
+
+
+Future<Category> getCategory(String categoryName) async {
+  try {
+    DataSnapshot snapshot = await _catRef.orderByChild('name').equalTo(categoryName).get();
+
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      for (var value in data.values) {
+        if (value is Map<dynamic, dynamic> && value.containsKey('symptoms')) {
+          List<String> symptoms = List<String>.from(value['symptoms']);
+
+          Category category = Category(name: categoryName, symptoms: symptoms);
+          return category;
+        }
+      }
+    }
+
+    throw Exception('Category not found');
+  } catch (e) {
+    print('Error getting category: $e');
+    rethrow;
+  }
+}
+
+
+
   Future<List<Category>> getAllCategories() async {
   try {
     DataSnapshot snapshot = await _catRef.get();
