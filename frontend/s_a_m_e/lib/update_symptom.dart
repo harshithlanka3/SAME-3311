@@ -8,9 +8,9 @@ class UpdateSymptomPage extends StatefulWidget {
 
 class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
   String selectedSymptom = '';
-  List<Category> categories = [];
   List<Category> categoriesToAdd = [];
   List<Category> categoriesToDelete = [];
+  Map<Category, bool> categoryCheckedState = {};
 
   @override
   void initState() {
@@ -27,32 +27,41 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
   }
 
   Future<void> fetchCategories(String symptomName) async {
-    // Fetch all categories
     List<Category> allCategories =
         await FirebaseService().getAllCategories();
 
-    // Fetch categories associated with the selected symptom
     List<Category> currentCategories =
         await FirebaseService().getCategoriesForSymptom(symptomName);
 
-    // Filter out categories that are not associated with the symptom for deletion
-    List<Category> categoriesForDeletion = allCategories
-        .where((category) => currentCategories.contains(category.name))
-        .toList();
+    List<Category> categoriesForAddition = [];
 
-    // Filter out categories that are associated with the symptom for addition
-    List<Category> categoriesForAddition = allCategories
-        .where((category) => !currentCategories.contains(category.name))
-        .toList();
-
+    for (Category category in allCategories) { 
+      if (!currentCategories.contains(category)) {
+        categoriesForAddition.add(category);
+      }
+    }
+  
     setState(() {
-      categoriesToDelete = categoriesForDeletion;
-      categories = categoriesForAddition;
+      categoriesToDelete = currentCategories;
+      categoriesToAdd = categoriesForAddition;
+      categoryCheckedState = Map.fromIterable(allCategories, 
+        key: (category) => category, value: (_) => false);
     });
   }
 
   Future<void> updateCategories() async {
-    for (Category category in categoriesToAdd) {
+    List<Category> categoriesSelectedAdd = [];
+    List<Category> categoriesSelectedDel = [];
+
+    categoryCheckedState.forEach((category, isChecked) {
+      if (isChecked && categoriesToAdd.contains(category)) {
+        categoriesSelectedAdd.add(category);
+      } else if (isChecked && categoriesToDelete.contains(category)) {
+        categoriesSelectedDel.add(category);
+      }
+    });
+
+    for (Category category in categoriesSelectedAdd) {
       await FirebaseService().addCategoryToSymptom(
         category.name,
         selectedSymptom,
@@ -60,15 +69,21 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
       await FirebaseService().addSymptomToCategory(selectedSymptom, category.name);
     }
 
+    for (Category category in categoriesSelectedDel) {
+      await FirebaseService().removeCategoryFromSymptom(
+        category.name,
+        selectedSymptom,
+      );
+      await FirebaseService().removeSymptomFromCategory(selectedSymptom, category.name);
+    }
+
     setState(() {
-      categoriesToAdd.clear();
-      categoriesToDelete.clear();
+      categoriesSelectedAdd.clear();
+      categoriesSelectedDel.clear();
     });
 
     fetchCategories(selectedSymptom);
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +91,7 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
       appBar: AppBar(
         title: Text(
           'Update Symptom',
-          style: TextStyle(fontSize: 20), // Adjust font size here
+          style: TextStyle(fontSize: 20), 
         ),
       ),
       body: Padding(
@@ -118,25 +133,18 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
               'Add Categories:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            Expanded(
+            Flexible(
               child: ListView.builder(
-                itemCount: categories.length,
+                itemCount: categoriesToAdd.length,
                 itemBuilder: (context, index) {
-                  final category = categories[index];
+                  final category = categoriesToAdd[index];
                   return ListTile(
                     title: Text(category.name),
                     trailing: Checkbox(
-                      value: categoriesToAdd.contains(category),
+                      value: categoryCheckedState[category],
                       onChanged: (bool? value) {
                         setState(() {
-                          if (value != null) {
-                            if (value) {
-                              categoriesToAdd.add(category);
-                              categoriesToDelete.remove(category);
-                            } else {
-                              categoriesToAdd.remove(category);
-                            }
-                          }
+                          categoryCheckedState[category] = value!;
                         });
                       },
                     ),
@@ -149,7 +157,7 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
               'Remove Categories:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            Expanded(
+            Flexible(
               child: ListView.builder(
                 itemCount: categoriesToDelete.length,
                 itemBuilder: (context, index) {
@@ -157,17 +165,10 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
                   return ListTile(
                     title: Text(category.name),
                     trailing: Checkbox(
-                      value: categoriesToDelete.contains(category),
+                      value: categoryCheckedState[category],
                       onChanged: (bool? value) {
                         setState(() {
-                          if (value != null) {
-                            if (value) {
-                              categoriesToDelete.add(category);
-                              categoriesToAdd.remove(category);
-                            } else {
-                              categoriesToDelete.remove(category);
-                            }
-                          }
+                          categoryCheckedState[category] = value!;
                         });
                       },
                     ),
