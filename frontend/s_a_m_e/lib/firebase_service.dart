@@ -176,6 +176,45 @@ class FirebaseService {
   }
 }
 
+Future<void> deleteCategory(String name) async {
+    try {
+      DataSnapshot snapshot = await _catRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) async {
+          if (value["name"] == name) {
+            print("Category to be deleted:");
+            print(value);
+            await _catRef.child(key).remove();
+            print('Symptom deleted successfully from Firebase');
+            await _symptomsRef.get().then((symptomSnapshot) {
+              if (symptomSnapshot.value != null) {
+                Map<dynamic, dynamic> symptomData =
+                    symptomSnapshot.value as Map<dynamic, dynamic>;
+                symptomData.forEach((symptomKey, symptomValue) async {
+                  if (symptomValue["categories"] != null &&
+                      symptomValue["categories"].contains(name)) {
+                    List<String> updatedCats =
+                        List<String>.from(symptomValue["categories"]);
+                    updatedCats.remove(name);
+                    await _symptomsRef
+                        .child(symptomKey)
+                        .update({"categories": updatedCats});
+                    print('Category removed from symptom: $symptomKey');
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    } catch (e) {
+      print("Error deleting symptom: $e");
+    }
+  }
+
 
 Future<void> addCategoryToSymptom(String categoryName, String symptomName) async {
   try {

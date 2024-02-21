@@ -5,6 +5,7 @@ import 'package:s_a_m_e/adminrequest.dart';
 import 'package:s_a_m_e/categorieslist.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/add_symptom.dart';
+import 'package:s_a_m_e/delete_category.dart';
 import 'package:s_a_m_e/delete_symptom.dart';
 import 'package:s_a_m_e/login.dart';
 import 'package:s_a_m_e/symptomlist.dart';
@@ -145,6 +146,23 @@ Widget build(BuildContext context) {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const CategoryCreationPage(),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 10),
+            ElevatedButton(
+              style: const ButtonStyle(
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
+              child: const Text('Delete Category', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CategoryDeletionPage(),
                   ),
                 );
               },
