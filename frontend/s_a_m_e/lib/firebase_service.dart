@@ -215,6 +215,38 @@ Future<void> deleteCategory(String name) async {
     }
   }
 
+Future<List<String>> getSymptomsForCat(String catName) async {
+  try {
+    DatabaseEvent event = await _catRef.orderByChild('name').equalTo(catName).once();
+    DataSnapshot snapshot = event.snapshot;
+
+    List<String> symptomsList = [];
+
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      data.forEach((key, value) {
+        if (value is Map<dynamic, dynamic> && value.containsKey('symptoms')) {
+          List<dynamic> symptomsData = value['symptoms'] as List<dynamic>;
+          List<String> symptoms = symptomsData.map((symptomData) {
+            if (symptomData is String) {
+              return symptomData;
+            } else if (symptomData is Map<dynamic, dynamic>) {
+              return symptomData['name'] as String;
+            }
+            return '';
+          }).toList();
+          symptomsList.addAll(symptoms);
+        }
+      });
+    }
+    return symptomsList;
+  } catch (e) {
+    print('Error getting symptoms for category: $e');
+    return [];
+  }
+}
+
 
 Future<void> addCategoryToSymptom(String categoryName, String symptomName) async {
   try {
