@@ -17,7 +17,7 @@ class Category {
 
   Category({required this.name, required this.symptoms});
 
-  Category.fromJson(Map<String, dynamic> json) : name = json['name'], symptoms = json['symptoms'];
+  Category.fromJson(Map<String, dynamic> json) : name = json['name'], symptoms = json['symptoms'] ?? [];
 
   @override
   bool operator ==(Object other) =>
@@ -188,22 +188,17 @@ Future<void> deleteCategory(String name) async {
             print("Category to be deleted:");
             print(value);
             await _catRef.child(key).remove();
-            print('Symptom deleted successfully from Firebase');
             await _symptomsRef.get().then((symptomSnapshot) {
               if (symptomSnapshot.value != null) {
                 Map<dynamic, dynamic> symptomData =
                     symptomSnapshot.value as Map<dynamic, dynamic>;
                 symptomData.forEach((symptomKey, symptomValue) async {
                   if (symptomValue["categories"] != null &&
-                      symptomValue["categories"].contains(name)) {
-                    List<String> updatedCats =
-                        List<String>.from(symptomValue["categories"]);
-                    updatedCats.remove(name);
-                    await _symptomsRef
-                        .child(symptomKey)
-                        .update({"categories": updatedCats});
+                    symptomValue["categories"].contains(name)) {
+                    await removeCategoryFromSymptom(name, symptomValue["name"]);
                     print('Category removed from symptom: $symptomKey');
                   }
+
                 });
               }
             });
@@ -281,20 +276,41 @@ Future<void> addSymptomToCategory(String symptomName, String categoryName) async
     if (snapshot.value != null) {
       Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
 
+      bool categoryFound = false; 
+
       data.forEach((key, value) async {
         if (value["name"] == categoryName) {
-          List<String> symptoms = List<String>.from(value["symptoms"]);
-          symptoms.add(symptomName);
-          await _catRef.child(key).update({"symptoms": symptoms});
-          print('Symptom added to category: $categoryName');
+          categoryFound = true; 
+
+          if (value["symptoms"] == null) {
+            await _catRef.child(key).update({"symptoms": [symptomName]});
+            print('Symptom added to category: $categoryName');
+          } else {
+            List<String> symptoms = List<String>.from(value["symptoms"]);
+            if (!symptoms.contains(symptomName)) {
+              symptoms.add(symptomName);
+              await _catRef.child(key).update({"symptoms": symptoms});
+              print('Symptom added to category: $categoryName');
+            } else {
+              print('Symptom already exists in category: $categoryName');
+            }
+          }
+          return;
         }
       });
+
+      if (!categoryFound) {
+        await _catRef.push().set({"name": categoryName, "symptoms": [symptomName]});
+        print('Symptom added to new category: $categoryName');
+      }
     }
   } catch (e) {
     print('Error adding symptom to category: $e');
   }
-
 }
+
+
+
 
   Future<void> removeCategoryFromSymptom(String categoryName, String symptomName) async {
     try {
@@ -308,6 +324,10 @@ Future<void> addSymptomToCategory(String symptomName, String categoryName) async
             List<String> categories = List<String>.from(value["categories"] ?? []);
             if (categories.contains(categoryName)) {
               categories.remove(categoryName);
+              if (categories.isEmpty) {
+                deleteSymptom(symptomName);
+                return;
+              }
               await _symptomsRef.child(key).update({"categories": categories});
               print('Category removed from symptom: $categoryName');
             } else {
@@ -412,10 +432,9 @@ Future<Category> getCategory(String categoryName) async {
       Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
       data.forEach((key, value) {
         if (value is Map<dynamic, dynamic> &&
-            value.containsKey('name') &&
-            value.containsKey('symptoms')) {
+            value.containsKey('name')) {
           String name = value['name'];
-          List<String> symptoms = List<String>.from(value['symptoms']);
+          List<String> symptoms = List<String>.from(value['symptoms'] ?? []);
 
           Category category = Category(name: name, symptoms: symptoms);
           categoriesList.add(category);
