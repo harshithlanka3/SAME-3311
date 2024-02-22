@@ -7,15 +7,14 @@ import 'package:s_a_m_e/firebase_service.dart';
 import 'package:s_a_m_e/profilepicture.dart';
 
 class CategoryCreationPage extends StatefulWidget {
-  const CategoryCreationPage({super.key});
+  const CategoryCreationPage({Key? key}) : super(key: key);
 
   @override
-  _CategoryCreationPage createState() => _CategoryCreationPage();
+  _CategoryCreationPageState createState() => _CategoryCreationPageState();
 }
 
-class _CategoryCreationPage extends State<CategoryCreationPage> {
-  //final _apiService = ApiService();
-  final _categoryNameController = TextEditingController();
+class _CategoryCreationPageState extends State<CategoryCreationPage> {
+  final TextEditingController _categoryNameController = TextEditingController();
   final FirebaseService _firebaseService = FirebaseService();
   List<String> _selectedSymptoms = [];
 
@@ -30,7 +29,6 @@ class _CategoryCreationPage extends State<CategoryCreationPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('S.A.M.E'),
-        // actions: [ProfilePicturePage()]
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -81,11 +79,13 @@ class _CategoryCreationPage extends State<CategoryCreationPage> {
                           .toList(),
                       title: const Text("Symptoms"),
                       onConfirm: (values) {
-                        _selectedSymptoms = values;
+                        setState(() {
+                          _selectedSymptoms = values;
+                        });
                       },
                     );
                   } else {
-                    return const Text('No symptoms available');
+                    return const SizedBox(); // Return an empty SizedBox if no symptoms available
                   }
                 }
               },
@@ -98,12 +98,10 @@ class _CategoryCreationPage extends State<CategoryCreationPage> {
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
               onPressed: () async {
-                if (_categoryNameController.text.isNotEmpty &&
-                    _selectedSymptoms.isNotEmpty) {
-                  final List<String> selectedSymptomNames = _selectedSymptoms.map((symptom) => symptom).toList();
+                if (_categoryNameController.text.isNotEmpty) {
                   final response = await _firebaseService.addCategory(
                     _categoryNameController.text,
-                    selectedSymptomNames, 
+                    _selectedSymptoms,
                   );
                   if (response == 200) {
                     ScaffoldMessenger.of(context).showSnackBar(
