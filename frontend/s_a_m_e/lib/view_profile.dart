@@ -319,7 +319,7 @@ void confirmEditDialog(BuildContext context, String email, String role, String n
                     _updateUserRole(context, email, role);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
-                    Navigator.of(context).pop([email, role]); // sending info for refreshUsers()
+                    Navigator.of(context).pop([email, role]); 
                   } else {
                     Fluttertoast.showToast(
                       msg: 'Please click the box to confirm your choice.',

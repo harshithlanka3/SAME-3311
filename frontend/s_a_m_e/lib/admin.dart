@@ -5,8 +5,10 @@ import 'package:s_a_m_e/adminrequest.dart';
 import 'package:s_a_m_e/categorieslist.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/add_symptom.dart';
+import 'package:s_a_m_e/delete_symptom.dart';
 import 'package:s_a_m_e/login.dart';
 import 'package:s_a_m_e/symptomlist.dart';
+import 'package:s_a_m_e/update_symptom.dart';
 import 'package:s_a_m_e/view_accounts.dart';
 
 class Admin extends StatelessWidget {
@@ -88,6 +90,38 @@ Widget build(BuildContext context) {
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
+              child: const Text('Delete Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SymptomDeletionPage(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              style: const ButtonStyle(
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
+              child: const Text('Update Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UpdateSymptomPage(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              style: const ButtonStyle(
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
               child: const Text('Symptoms List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
                 Navigator.push(
@@ -115,8 +149,6 @@ Widget build(BuildContext context) {
                 );
               },
             ),
-            
-
            
         const SizedBox(height: 10),
             ElevatedButton(
