@@ -687,10 +687,6 @@ Future<Category> getCategory(String categoryName) async {
     await newDiagnosisReference.set({'name': name, 'definition': definition, 'symptoms': symptoms});
     print('Data added successfully');
 
-    // for (Category category in categories) {
-    //   await addSymptomToCategory(name, category.name);
-    // }
-
     return 200;
   } catch (e) {
     print('Error adding data: $e');
