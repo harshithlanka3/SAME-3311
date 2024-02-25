@@ -7,6 +7,7 @@ import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/add_symptom.dart';
 import 'package:s_a_m_e/delete_category.dart';
 import 'package:s_a_m_e/delete_symptom.dart';
+import 'package:s_a_m_e/editDiagnoses.dart';
 import 'package:s_a_m_e/login.dart';
 import 'package:s_a_m_e/symptomlist.dart';
 import 'package:s_a_m_e/update_category.dart';
@@ -49,6 +50,12 @@ Widget build(BuildContext context) {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminRequestPage(),));
             },
           ),
+          // ListTile(
+          //   title: const Text('Edit Diagnosis'),
+          //   onTap: () {
+          //     Navigator.push(context, MaterialPageRoute(builder: (context) => const EditDiagnosisPage(),));
+          //   },
+          // ),
           ListTile(
             title: const Text('Sign Out'),
             onTap: () {
@@ -70,6 +77,25 @@ Widget build(BuildContext context) {
           children: <Widget>[
             const SizedBox(height: 25),
             const Text('Hello Admin User!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
+            const SizedBox(height: 10),
+            
+            const SizedBox(height: 10),
+            ElevatedButton(
+              style: const ButtonStyle(
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
+              child: const Text('Edit Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditDiagnosisPage(),
+                  ),
+                );
+              },
+            ),
+            //const SizedBox(height: 10),
             const SizedBox(height: 10),
             ElevatedButton(
               style: const ButtonStyle(
