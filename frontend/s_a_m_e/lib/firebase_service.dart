@@ -83,8 +83,8 @@ class UserClass {
 class FirebaseService {
   final _symptomsRef = FirebaseDatabase.instance.ref('data/symptoms');
   final _catRef = FirebaseDatabase.instance.ref('data/categories');
-  final _diagRef = FirebaseDatabase.instance.ref('data/diagnoses');
   final _usersRef = FirebaseDatabase.instance.ref('users/');
+  final _diagnosisRef = FirebaseDatabase.instance.ref('data/diagnoses');
 
   Future<int> addSymptom(
   String name, List<Category> categories) async {
@@ -679,8 +679,41 @@ Future<Category> getCategory(String categoryName) async {
   }
 
   //RAMYA
-  Future<int> addDiagnosis(String name, String def, List<String> symtoms) async {
+  Future<int> addDiagnosis(String name, String definition, List<String> symptoms) async {
+    try {
+    DatabaseReference newDiagnosisReference = _diagnosisRef.push();
+
+
+    await newDiagnosisReference.set({'name': name, 'definition': definition, 'symptoms': symptoms});
+    print('Data added successfully');
+
+    // for (Category category in categories) {
+    //   await addSymptomToCategory(name, category.name);
+    // }
+
     return 200;
+  } catch (e) {
+    print('Error adding data: $e');
+    return 400;
+  }
+  }
+
+  Future<bool> diagnosisNonExistent(String name) async {
+    try {
+
+      DatabaseEvent event = await _diagnosisRef.orderByChild('name').equalTo(name).once();
+      DataSnapshot snapshot = event.snapshot;
+      
+      if (snapshot.exists) {
+        // We're basically saying that it does exist so you cannot add the diagnosis
+        return false;
+      } else {
+        return true;
+      }
+    } catch (e) {
+      print("Error fetching data");
+    }
+    return false;
   }
   //RAMYA: for updating name and definiton -- later is symtom updates look to functions at bottom :)
   Future<void> updateDiagnosis(String name) async {}

@@ -11,12 +11,17 @@ class EditDiagnosisPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Diagnoses"),
+        title: const Text("S.A.M.E."),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(height: 20),
+            const Text(
+              'Update Diagnoses',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0),
+            ),
             ElevatedButton(
               style: const ButtonStyle(
                   foregroundColor: MaterialStatePropertyAll<Color>(white),
@@ -124,7 +129,7 @@ class _DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
               controller: _diagnosisDefinitionController,
               decoration: const InputDecoration(
                 contentPadding: EdgeInsets.all(20.0),
-                labelText: 'Diagnosis Name',
+                labelText: 'Diagnosis Definition',
                 labelStyle: TextStyle(color: navy),
                 filled: true,
                 fillColor: boxinsides,
@@ -192,9 +197,9 @@ class _DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                   backgroundColor: MaterialStatePropertyAll<Color>(navy),
                 ),
               onPressed: () async {
-                if (_diagnosisNameController.text.isNotEmpty &&
+                if ((_diagnosisNameController.text.isNotEmpty &&
                     _diagnosisDefinitionController.text.isNotEmpty &&
-                    _selectedSymptoms.isNotEmpty) {
+                    _selectedSymptoms.isNotEmpty) && await _firebaseService.diagnosisNonExistent(_diagnosisNameController.text)) {
                   final response = await _firebaseService.addDiagnosis(
                     _diagnosisNameController.text,
                     _diagnosisDefinitionController.text,
@@ -204,12 +209,24 @@ class _DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Diagnosis added successfully')),
                     );
+                    _diagnosisNameController.clear();
+                    _diagnosisDefinitionController.clear();
+
+
+
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Failed to add diagnosis')),
                     );
                   }
-                } else {
+                } else if (!await _firebaseService.diagnosisNonExistent(_diagnosisNameController.text)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Diagnosis already in database')),
+                  );
+                  
+
+                }
+                else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Please fill all the fields')),
                   );
