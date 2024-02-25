@@ -44,14 +44,26 @@ class UserClass {
   String role;
   bool activeRequest;
   String requestReason;
+  List<String> messages;
 
   UserClass(
-      {required this.email,
-      required this.firstName,
-      required this.lastName,
-      required this.role,
-      this.activeRequest = false,
-      this.requestReason = ''});
+    {
+    required this.email,
+    required this.firstName,
+    required this.lastName,
+    required this.role,
+    this.activeRequest = false,
+    this.requestReason = '',
+    List<String>? messages,
+  }) : messages = messages ?? [];
+      // {required this.email,
+      // required this.firstName,
+      // required this.lastName,
+      // required this.role,
+      // this.activeRequest = false,
+      // this.requestReason = ''}
+      
+      // );
 
   factory UserClass.fromJson(Map<String, dynamic> json) {
     return UserClass(
@@ -60,7 +72,10 @@ class UserClass {
       lastName: json['lastName'],
       role: json['role'] ?? 'user',
       activeRequest: json['activeRequest'] ?? false,
-      requestReason: json['requestReason'] ?? ''
+      requestReason: json['requestReason'] ?? '',
+      messages: json['messages'] != null
+          ? List<String>.from(json['messages'])
+          : [], // Parse messages from JSON
     );
   }
 }
@@ -461,7 +476,11 @@ Future<Category> getCategory(String categoryName) async {
             lastName: data['lastName'],
             role: data["role"],
             activeRequest: data['activeRequest'] ?? false,
-            requestReason: data['requestReason'] ?? '');
+            requestReason: data['requestReason'] ?? '',
+            messages: data['messages'] != null
+                ? List<String>.from(data['messages'])
+                : [],
+      );
         
         return user;
       }
@@ -471,6 +490,8 @@ Future<Category> getCategory(String categoryName) async {
       return null;
     }
   }
+
+
 
   Future<List<UserClass>> getAllUsers() async {
     try {
@@ -611,5 +632,76 @@ Future<Category> getCategory(String categoryName) async {
       return [];
     }
   }
+
+  Future<List<String>> getUserMessages(String userEmail) async {
+  try {
+    DataSnapshot snapshot = await _usersRef.child(userEmail).child('messages').get();
+
+    List<String> userMessages = [];
+
+    if (snapshot.value != null) {
+      final List<dynamic>? rawMessages = snapshot.value as List<dynamic>?;
+
+      if (rawMessages != null) {
+        userMessages = rawMessages.map((message) => message.toString()).toList();
+      }
+    }
+
+    return userMessages;
+  } catch (e) {
+    print('Error getting user messages: $e');
+    return [];
+  }
+}
+
+  Future sendMessageToUser(String email, List<String> msgList) async {
+    try {
+      DataSnapshot snapshot = await _usersRef.get();
+      
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+        if (value["email"] == email) {
+            _usersRef.child(key).update({
+              "role" : msgList
+            });
+          }
+        });
+
+      }
+
+    } catch (e) {
+      print("Error with editing user role:");
+      print(e.toString());
+      return null;
+    }
+  }
+
+  //RAMYA
+  Future<int> addDiagnosis(String name, String def, List<String> symtoms) async {
+    return 200;
+  }
+  //RAMYA: for updating name and definiton -- later is symtom updates look to functions at bottom :)
+  Future<void> updateDiagnosis(String name) async {}
+  //RAMYA
+  Future<void> deleteDiagnosis(String name) async {}
+  //RAMYA
+  Future<List<String>> getAllDiagnosis() async {
+    return ["hi", "bye"];
+  }
+  Future<List<String>> getSymptomsForDiagnosis(String diagnosisName) async {
+    return ["hi", "bye"];
+  }
+  Future<void> addSymptomToDiagnosis(String symptom, String selectedDiagnosis) async {}
+  Future<void> removeSymptomFromDiagnosis(String symptom, String selectedDiagnosis) async {}
+  Future<int> updateDiagnosisDef(String diagnosisname, String def) async {
+    return 200;
+  }
+
+  
+
+
+
 
 }
