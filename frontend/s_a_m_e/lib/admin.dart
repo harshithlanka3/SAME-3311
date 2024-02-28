@@ -86,7 +86,7 @@ Widget build(BuildContext context) {
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
-              child: const Text('Edit Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              child: const Text('Update Diagnoses List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
                 Navigator.push(
                   context,
