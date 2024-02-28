@@ -215,13 +215,13 @@ class AdminRequestDetailsPage extends StatelessWidget {
                 ),
                 //child: const Text("Admin Requests", style: TextStyle(fontSize: 36.0)),
                 
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.transparent,
-                  elevation: 0, // Remove button elevation
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
+                // style: ElevatedButton.styleFrom(
+                //   primary: Colors.transparent,
+                //   elevation: 0, // Remove button elevation
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(15),
+                //   ),
+                // ),
               ),
               ),
             ),
