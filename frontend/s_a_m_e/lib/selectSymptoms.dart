@@ -20,7 +20,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Select Symptoms"),
+        title: const Text("Select Symptoms", style: TextStyle(fontSize: 32.0)),
       ),
       body: ListView(
         children: [Text(widget.category.name), Text(widget.category.symptoms[0]), Text(widget.category.symptoms[1])],
