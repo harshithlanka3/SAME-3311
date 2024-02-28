@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/login.dart';
+import 'package:s_a_m_e/account/login.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'firebase/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

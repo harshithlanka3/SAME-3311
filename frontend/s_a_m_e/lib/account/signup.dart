@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/user_home.dart';
+import 'package:s_a_m_e/user/user_home.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});

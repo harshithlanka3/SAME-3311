@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:s_a_m_e/account.dart';
+import 'package:s_a_m_e/account/account.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/login.dart';
-import 'package:s_a_m_e/symptomlist.dart';
-import 'package:s_a_m_e/firebase_service.dart';
+import 'package:s_a_m_e/account/login.dart';
+import 'package:s_a_m_e/user/symptomlist.dart';
+import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:s_a_m_e/chooseCategory.dart';
+import 'package:s_a_m_e/userflow/chooseCategory.dart';
 
 class UserHome extends StatelessWidget {
   const UserHome({super.key});
