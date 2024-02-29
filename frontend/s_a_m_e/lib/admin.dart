@@ -3,6 +3,7 @@ import 'package:s_a_m_e/account.dart';
 import 'package:s_a_m_e/add_category.dart';
 import 'package:s_a_m_e/adminrequest.dart';
 import 'package:s_a_m_e/categorieslist.dart';
+import 'package:s_a_m_e/chooseCategory.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/add_symptom.dart';
 import 'package:s_a_m_e/delete_category.dart';
@@ -194,7 +195,7 @@ Widget build(BuildContext context) {
                 );
               },
             ),
-           const SizedBox(height: 10),
+            const SizedBox(height: 10),
             ElevatedButton(
               style: const ButtonStyle(
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
@@ -210,7 +211,7 @@ Widget build(BuildContext context) {
                 );
               },
             ),
-        const SizedBox(height: 10),
+            const SizedBox(height: 10),
             ElevatedButton(
               style: const ButtonStyle(
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
@@ -225,6 +226,21 @@ Widget build(BuildContext context) {
                 );
               },
             ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              style: const ButtonStyle(
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
+              child: const Text('Get Potential Diagnosis', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ChooseCategory()),
+                );
+              },
+            )
           ],
         ),
       ),

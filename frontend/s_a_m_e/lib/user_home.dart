@@ -5,6 +5,7 @@ import 'package:s_a_m_e/login.dart';
 import 'package:s_a_m_e/symptomlist.dart';
 import 'package:s_a_m_e/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:s_a_m_e/chooseCategory.dart';
 
 class UserHome extends StatelessWidget {
   const UserHome({super.key});
@@ -209,7 +210,7 @@ Widget build(BuildContext context) {
               },
             ),
            
-        const SizedBox(height: 10),
+            const SizedBox(height: 10),
             ElevatedButton(
               style: const ButtonStyle(
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
@@ -224,6 +225,21 @@ Widget build(BuildContext context) {
                 // );
               },
             ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              style: const ButtonStyle(
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
+              child: const Text('Get Potential Diagnosis', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ChooseCategory()),
+                );
+              },
+            )
           ],
         ),
       ),
