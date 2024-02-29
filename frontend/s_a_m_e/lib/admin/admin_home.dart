@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:s_a_m_e/account.dart';
-import 'package:s_a_m_e/add_category.dart';
-import 'package:s_a_m_e/adminrequest.dart';
-import 'package:s_a_m_e/categorieslist.dart';
-import 'package:s_a_m_e/chooseCategory.dart';
+import 'package:s_a_m_e/account/account.dart';
+import 'package:s_a_m_e/admin/add_category.dart';
+import 'package:s_a_m_e/admin/adminrequest.dart';
+import 'package:s_a_m_e/user/categorieslist.dart';
+import 'package:s_a_m_e/userflow/chooseCategory.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/add_symptom.dart';
-import 'package:s_a_m_e/delete_category.dart';
-import 'package:s_a_m_e/delete_symptom.dart';
-import 'package:s_a_m_e/editDiagnoses.dart';
-import 'package:s_a_m_e/login.dart';
-import 'package:s_a_m_e/symptomlist.dart';
-import 'package:s_a_m_e/update_category.dart';
-import 'package:s_a_m_e/update_symptom.dart';
-import 'package:s_a_m_e/view_accounts.dart';
+import 'package:s_a_m_e/admin/add_symptom.dart';
+import 'package:s_a_m_e/admin/delete_category.dart';
+import 'package:s_a_m_e/admin/delete_symptom.dart';
+import 'package:s_a_m_e/admin/editDiagnoses.dart';
+import 'package:s_a_m_e/account/login.dart';
+import 'package:s_a_m_e/user/symptomlist.dart';
+import 'package:s_a_m_e/admin/update_category.dart';
+import 'package:s_a_m_e/admin/update_symptom.dart';
+import 'package:s_a_m_e/admin/view_accounts.dart';
 
 class Admin extends StatelessWidget {
   const Admin({super.key});

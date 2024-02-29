@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/firebase_service.dart';
-import 'package:s_a_m_e/chooseCategory.dart';
+import 'package:s_a_m_e/firebase/firebase_service.dart';
+import 'package:s_a_m_e/userflow/chooseCategory.dart';
 
 class SelectSymptom extends StatefulWidget {
   const SelectSymptom({Key? key, required this.category}) : super(key: key);

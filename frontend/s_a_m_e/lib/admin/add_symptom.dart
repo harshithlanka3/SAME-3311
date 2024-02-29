@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:s_a_m_e/categorieslist.dart';
-import 'package:s_a_m_e/symptomlist.dart';
+import 'package:s_a_m_e/user/symptomlist.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/firebase_service.dart';
-import 'package:s_a_m_e/profilepicture.dart';
+import 'package:s_a_m_e/firebase/firebase_service.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 
-class CategoryCreationPage extends StatefulWidget {
-  const CategoryCreationPage({Key? key}) : super(key: key);
+class SymptomCreationPage extends StatefulWidget {
+  const SymptomCreationPage({super.key});
 
   @override
-  _CategoryCreationPageState createState() => _CategoryCreationPageState();
+  _SymptomCreationPageState createState() => _SymptomCreationPageState();
 }
 
-class _CategoryCreationPageState extends State<CategoryCreationPage> {
-  final TextEditingController _categoryNameController = TextEditingController();
+class _SymptomCreationPageState extends State<SymptomCreationPage> {
+  //final _apiService = ApiService();
+  final _symptomNameController = TextEditingController();
   final FirebaseService _firebaseService = FirebaseService();
-  List<String> _selectedSymptoms = [];
+  List<Category> _selectedComplaints = [];
 
   @override
   void dispose() {
-    _categoryNameController.dispose();
+    _symptomNameController.dispose();
     super.dispose();
   }
 
@@ -29,19 +29,21 @@ class _CategoryCreationPageState extends State<CategoryCreationPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('S.A.M.E'),
+        // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
+        // actions: [ProfilePicturePage()]
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: [
             const SizedBox(height: 20),
-            const Text('Add Category', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0)),
+            const Text('Add Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0)),
             const SizedBox(height: 40),
             TextField(
-              controller: _categoryNameController,
+              controller: _symptomNameController,
               decoration: const InputDecoration(
                 contentPadding: EdgeInsets.all(20.0),
-                labelText: 'Category Name',
+                labelText: 'Symptom Name',
                 labelStyle: TextStyle(color: navy),
                 filled: true,
                 fillColor: boxinsides,
@@ -56,61 +58,59 @@ class _CategoryCreationPageState extends State<CategoryCreationPage> {
               ),
             ),
             const SizedBox(height: 30),
-            FutureBuilder<List<String>>(
-              future: _firebaseService.getAllSymptoms(),
-              builder: (context, symptomsSnapshot) {
-                if (symptomsSnapshot.connectionState == ConnectionState.waiting) {
+            FutureBuilder<List<Category>>(
+              future: _firebaseService.getAllCategories(),
+              builder: (context, categoriesSnapshot) {
+                if (categoriesSnapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
-                } else if (symptomsSnapshot.hasError) {
-                  return Text('Error: ${symptomsSnapshot.error}');
+                } else if (categoriesSnapshot.hasError) {
+                  return Text('Error: ${categoriesSnapshot.error}');
                 } else {
-                  List<String>? symptoms = symptomsSnapshot.data;
+                  List<Category>? categories = categoriesSnapshot.data;
 
-                  if (symptoms != null && symptoms.isNotEmpty) {
-                    return MultiSelectDialogField<String>(
+                  if (categories != null && categories.isNotEmpty) {
+                    return MultiSelectDialogField<Category>(
                       backgroundColor: background,
                       cancelText: const Text('CANCEL', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
                       confirmText: const Text('SELECT', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
                       unselectedColor: navy,
                       selectedColor: navy,
-                      items: symptoms
-                          .map((symptom) => MultiSelectItem<String>(
-                              symptom, symptom))
+                      items: categories
+                          .map((complaint) => MultiSelectItem<Category>(
+                              complaint, complaint.name))
                           .toList(),
-                      title: const Text("Symptoms"),
+                      title: const Text("Categories"),
                       onConfirm: (values) {
-                        setState(() {
-                          _selectedSymptoms = values;
-                        });
+                        _selectedComplaints = values;
                       },
                     );
                   } else {
-                    return const SizedBox(); // Return an empty SizedBox if no symptoms available
+                    return const Text('No categories available');
                   }
                 }
               },
             ),
-
             const SizedBox(height: 20),
             ElevatedButton(
               style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
+                  foregroundColor: MaterialStatePropertyAll<Color>(white),
+                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                ),
               onPressed: () async {
-                if (_categoryNameController.text.isNotEmpty) {
-                  final response = await _firebaseService.addCategory(
-                    _categoryNameController.text,
-                    _selectedSymptoms,
+                if (_symptomNameController.text.isNotEmpty &&
+                    _selectedComplaints.isNotEmpty) {
+                  final response = await _firebaseService.addSymptom(
+                    _symptomNameController.text,
+                    _selectedComplaints,
                   );
                   if (response == 200) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Category added successfully')),
+                          content: Text('Symptom added successfully')),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Failed to add category')),
+                      const SnackBar(content: Text('Failed to add symptom')),
                     );
                   }
                 } else {
@@ -119,9 +119,8 @@ class _CategoryCreationPageState extends State<CategoryCreationPage> {
                   );
                 }
               },
-              child: const Text('Create Category', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+              child: const Text('Create Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
-
             const SizedBox(height: 20),
             ElevatedButton(
               style: const ButtonStyle(
@@ -130,10 +129,10 @@ class _CategoryCreationPageState extends State<CategoryCreationPage> {
                 ),
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const CategoriesListPage()),
+                  MaterialPageRoute(builder: (context) => const SymptomsListPage()),
                 );
               },
-              child: const Text('View All Categories', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+              child: const Text('View All Symptoms', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
           ],
         ),

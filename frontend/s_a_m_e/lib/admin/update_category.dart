@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:s_a_m_e/firebase_service.dart';
+import 'package:s_a_m_e/firebase/firebase_service.dart';
 
 class UpdateCatPage extends StatefulWidget {
   @override

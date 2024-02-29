@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/firebase_service.dart';
-import 'package:s_a_m_e/view_profile.dart';
+import 'package:s_a_m_e/firebase/firebase_service.dart';
+import 'package:s_a_m_e/account/view_profile.dart';
 
 class ViewAccounts extends StatefulWidget {
   const ViewAccounts({Key? key}) : super(key: key);
