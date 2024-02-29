@@ -15,6 +15,8 @@ class SelectSymptom extends StatefulWidget {
 class _SelectSymptomState extends State<SelectSymptom> {
 
   // not totally sure if this is how it works
+  // display category selected at the top
+  // use ListTile object to display all of the symptoms able to be selected
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +24,16 @@ class _SelectSymptomState extends State<SelectSymptom> {
       appBar: AppBar(
         title: const Text("Select Symptoms", style: TextStyle(fontSize: 32.0)),
       ),
-      body: ListView(
-        children: [Text(widget.category.name), Text(widget.category.symptoms[0]), Text(widget.category.symptoms[1])],
+      body: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          children: [
+            Text("Category: $widget.category.name"),
+            ListView(
+              children: [Text(widget.category.name), Text(widget.category.symptoms[0]), Text(widget.category.symptoms[1])],
+            )
+          ],
+        ),
       )
     );
   }
