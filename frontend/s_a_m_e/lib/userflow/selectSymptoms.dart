@@ -1,32 +1,28 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
-import 'package:s_a_m_e/userflow/chooseCategory.dart';
+import 'package:s_a_m_e/userflow/potentialDiagnosis.dart';
 
 class SelectSymptom extends StatefulWidget {
-  const SelectSymptom({Key? key, required this.category}) : super(key: key);
+  const SelectSymptom({super.key, required this.category});
 
   final Category category;
 
   @override
-  _SelectSymptomState createState() => _SelectSymptomState();
+  State<SelectSymptom> createState() => _SelectSymptomState();
 }
 
 class _SelectSymptomState extends State<SelectSymptom> {
 
-  List<bool> checked = [];
-  bool isChecked = false;
-  List<String> checkedItems = [];
   List<Map<String, dynamic>> checkedSymptoms = [];
 
   @override
   void initState() {
     super.initState();
     for (int i = 0; i < widget.category.symptoms.length; i++) {
-      checkedSymptoms.add({"name": widget.category.symptoms[i], "isChecked": false});
+      checkedSymptoms.add({"name": widget.category.symptoms[i], "isChecked": false}); // this doesn't work...
     }
+    print(checkedSymptoms);
   }
 
   @override
@@ -55,14 +51,16 @@ class _SelectSymptomState extends State<SelectSymptom> {
               height: 200,
               child: ListView.builder(
                 itemCount: widget.category.symptoms.length,
-                itemBuilder: (context, index) {
+                itemBuilder: (context, index)
+                {
                   if (widget.category.symptoms.isEmpty) {
                     return const Center(child: Text('No Symptoms Found'));
                   } else {
+                    print(checkedSymptoms);
                     return Column(
                       children: [
                         CheckboxListTile(
-                        value: isChecked,
+                        value: checkedSymptoms[index]["isChecked"],
                         title: Text(widget.category.symptoms[index]),
                         controlAffinity: ListTileControlAffinity.leading,
                         activeColor: navy,
@@ -71,18 +69,11 @@ class _SelectSymptomState extends State<SelectSymptom> {
                           borderRadius: BorderRadius.circular(15),
                           side: const BorderSide(color: teal)
                           ),
-                        onChanged: ((value) {
+                        onChanged: (value) {
                           setState(() {
-                            isChecked = value!;
-                            // if (value) {
-                            //   checkedItems.add(widget.category.symptoms[index]);
-                            // } else {
-                            //   if (checkedItems.contains(widget.category.symptoms[index])) {
-                            //     checkedItems.remove(widget.category.symptoms[index]);
-                            //   }
-                            // }
+                            checkedSymptoms[index]["isChecked"] = value!;
                           });
-                        }),
+                        },
                       ),
                       const SizedBox(height: 10,)
                       ],
@@ -102,11 +93,11 @@ class _SelectSymptomState extends State<SelectSymptom> {
         ),
         child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => Diagnoses()),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms,)),
+          );
         },
       )
     );
