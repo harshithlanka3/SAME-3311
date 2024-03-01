@@ -39,7 +39,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
               return Scrollbar(
                   trackVisibility: true,
                   child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 15.0,
                       crossAxisSpacing: 15.0,
