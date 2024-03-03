@@ -103,5 +103,4 @@ class _SelectSymptomState extends State<SelectSymptom> {
       )
     );
   }
-
 }

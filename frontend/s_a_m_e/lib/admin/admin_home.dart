@@ -88,12 +88,12 @@ Widget build(BuildContext context) {
               ),
               child: const Text('Update Diagnoses List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => const EditDiagnosisPage(),
-                //   ),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditDiagnosisPage(),
+                  ),
+                );
               },
             ),
             //const SizedBox(height: 10),
