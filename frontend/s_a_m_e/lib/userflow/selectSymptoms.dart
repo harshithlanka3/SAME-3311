@@ -48,7 +48,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
             const Divider(thickness: 2),
             const SizedBox(height: 5),
             SizedBox(
-              height: 200,
+              height: MediaQuery.of(context).size.height - 205,
               child: ListView.builder(
                 itemCount: widget.category.symptoms.length,
                 itemBuilder: (context, index)

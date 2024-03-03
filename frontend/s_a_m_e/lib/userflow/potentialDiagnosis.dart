@@ -64,7 +64,7 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
             const Divider(thickness: 2),
             const SizedBox(height: 5),
             SizedBox(
-              height: 200,
+              height: MediaQuery.of(context).size.height - 235,
               child: 
                 FutureBuilder<List<Diagnosis>>(
                 future: diagnoses,
@@ -89,7 +89,7 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
                                 ),
                                 child: ListTile(
                                   title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text(snapshot.data![index].definition), 
+                                  subtitle: Text(snapshot.data![index].definition, maxLines: 2, overflow: TextOverflow.ellipsis), 
                                 ),
                               ),
                               const SizedBox(height: 10),
