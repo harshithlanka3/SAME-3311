@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart'; 
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
-import 'package:s_a_m_e/account/profilepicture.dart';
+// import 'package:s_a_m_e/account/profilepicture.dart';
 
 class EditDiagnosisPage extends StatelessWidget {
   const EditDiagnosisPage({Key? key}) : super(key: key);
@@ -366,7 +366,7 @@ class _UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                   for (int i = 0; i < snapshot.data!.length; i++) {
                     diagnoses.add(snapshot.data![i].name);
                   }
-                  
+
                   print(diagnoses);
                   print(selectedDiagnosis);
                   return DropdownButton<String>(
@@ -531,7 +531,7 @@ class _DiagnosisDeletionPageState extends State<DiagnosisDeletionPage> {
                     diagnosis.add(snapshot.data![i].name);
                   }
                   // List<String>? diagnosis = snapshot.data;
-                  if (diagnosis != null && diagnosis.isNotEmpty) {
+                  if (diagnosis.isNotEmpty) {
                     return MultiSelectDialogField<String>(
                       backgroundColor: background,
                       cancelText: const Text(
