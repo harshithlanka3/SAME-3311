@@ -30,11 +30,12 @@ class Category {
 
 class Diagnosis {
   final String name;
+  final String definition;
   final List<String> symptoms;
 
-  Diagnosis({required this.name, required this.symptoms});
+  Diagnosis({required this.name, required this.symptoms, required this.definition});
 
-  Diagnosis.fromJson(Map<String, dynamic> json) : name = json['name'], symptoms = json['symptoms'];
+  Diagnosis.fromJson(Map<String, dynamic> json) : definition = json['definition'], name = json['name'], symptoms = json['symptoms'];
 }
 
 class UserClass {
@@ -715,10 +716,33 @@ Future<Category> getCategory(String categoryName) async {
   Future<void> updateDiagnosis(String name) async {}
   //RAMYA
   Future<void> deleteDiagnosis(String name) async {}
-  //RAMYA
-  Future<List<String>> getAllDiagnosis() async {
-    return ["hi", "bye"];
+  //RAMYA -- whoops Allison did this b/c I needed the method lol -- Need to fix Diagnosis List now though...
+  Future<List<Diagnosis>> getAllDiagnosis() async {
+    try {
+      DataSnapshot snapshot = await _diagnosisRef.get();
+      List<Diagnosis> diagnoses = [];
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          if (value is Map<dynamic, dynamic> && value.containsKey('name')) {
+            String name = value['name'];
+            String definition = value['definition'];
+            List<String> symptoms = List<String>.from(value['symptoms'] ?? []);
+
+            Diagnosis diagnosis = Diagnosis(name: name, symptoms: symptoms, definition: definition);
+            diagnoses.add(diagnosis);
+          }
+        });
+      }
+      return diagnoses;
+    } catch (e) {
+      print('Error getting diagnoses: $e');
+      return [];
+    }
   }
+
   Future<List<String>> getSymptomsForDiagnosis(String diagnosisName) async {
     return ["hi", "bye"];
   }

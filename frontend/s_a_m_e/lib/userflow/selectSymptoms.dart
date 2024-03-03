@@ -96,7 +96,8 @@ class _SelectSymptomState extends State<SelectSymptom> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms,)),
+                builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms, category:widget.category.name),
+            )
           );
         },
       )
