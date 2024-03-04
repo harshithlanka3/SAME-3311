@@ -98,7 +98,7 @@ class _CategoryCreationPageState extends State<CategoryCreationPage> {
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
               onPressed: () async {
-                if (_categoryNameController.text.isNotEmpty) {
+                if (_categoryNameController.text.isNotEmpty && await _firebaseService.categoryNonExistent(_categoryNameController.text)) {
                   final response = await _firebaseService.addCategory(
                     _categoryNameController.text,
                     _selectedSymptoms,
@@ -113,6 +113,11 @@ class _CategoryCreationPageState extends State<CategoryCreationPage> {
                       const SnackBar(content: Text('Failed to add category')),
                     );
                   }
+                } else if (!await _firebaseService.categoryNonExistent(_categoryNameController.text)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Category already in database')),
+                  );
+                  
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Please fill all the fields')),

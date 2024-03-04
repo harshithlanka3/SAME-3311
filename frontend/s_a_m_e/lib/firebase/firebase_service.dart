@@ -109,6 +109,32 @@ class FirebaseService {
   }
 }
 
+Future<bool> symptomNonExistent(String name) async {
+    try {
+      String lowerName = name.toLowerCase();
+      DataSnapshot snapshot = await _symptomsRef.get();
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      // We have to go through each one by one because if we use .equalTo() it is not case insensitive
+      if (snapshot.value != null) {
+        bool nonExistence = true;
+        data.forEach((key, value) async {
+          if (value['name'].toString().toLowerCase() == lowerName) {
+            // The value exists
+            nonExistence = false;
+          }
+        });
+        return nonExistence;
+      } else {
+        return true;
+      }
+  
+    } catch (e) {
+      print("Error fetching data");
+    }
+    return true;
+}
+
 
   Future<void> deleteSymptom(String name) async {
     try {
@@ -189,6 +215,32 @@ class FirebaseService {
     print('Error adding data: $e');
     return 400;
   }
+}
+
+Future<bool> categoryNonExistent(String name) async {
+    try {
+      String lowerName = name.toLowerCase();
+      DataSnapshot snapshot = await _catRef.get();
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      // We have to go through each one by one because if we use .equalTo() it is not case insensitive
+      if (snapshot.value != null) {
+        bool nonExistence = true;
+        data.forEach((key, value) async {
+          if (value['name'].toString().toLowerCase() == lowerName) {
+            // The value exists
+            nonExistence = false;
+          }
+        });
+        return nonExistence;
+      } else {
+        return true;
+      }
+  
+    } catch (e) {
+      print("Error fetching data");
+    }
+    return true;
 }
 
 Future<void> deleteCategory(String name) async {
@@ -696,20 +748,29 @@ Future<Category> getCategory(String categoryName) async {
 
   Future<bool> diagnosisNonExistent(String name) async {
     try {
+      String lowerName = name.toLowerCase();
+      DataSnapshot snapshot = await _diagnosisRef.get();
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
 
-      DatabaseEvent event = await _diagnosisRef.orderByChild('name').equalTo(name).once();
-      DataSnapshot snapshot = event.snapshot;
-      
-      if (snapshot.exists) {
-        // We're basically saying that it does exist so you cannot add the diagnosis
-        return false;
+      // We have to go through each one by one because if we use .equalTo() it is not case insensitive
+      if (snapshot.value != null) {
+        bool nonExistence = true;
+        data.forEach((key, value) async {
+          if (value['name'].toString().toLowerCase() == lowerName) {
+            // The value exists
+            nonExistence = false;
+          }
+        });
+        return nonExistence;
       } else {
         return true;
       }
+  
     } catch (e) {
       print("Error fetching data");
     }
-    return false;
+    return true;
+
   }
   //RAMYA: for updating name and definiton -- later is symtom updates look to functions at bottom :)
   Future<void> updateDiagnosis(String name) async {}
@@ -729,8 +790,5 @@ Future<Category> getCategory(String categoryName) async {
   }
 
   
-
-
-
 
 }

@@ -98,7 +98,7 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
                 ),
               onPressed: () async {
                 if (_symptomNameController.text.isNotEmpty &&
-                    _selectedComplaints.isNotEmpty) {
+                    _selectedComplaints.isNotEmpty && await _firebaseService.symptomNonExistent(_symptomNameController.text)) {
                   final response = await _firebaseService.addSymptom(
                     _symptomNameController.text,
                     _selectedComplaints,
@@ -113,6 +113,10 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
                       const SnackBar(content: Text('Failed to add symptom')),
                     );
                   }
+                } else if (!await _firebaseService.symptomNonExistent(_symptomNameController.text)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Symptom already in database')),
+                  );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Please fill all the fields')),
