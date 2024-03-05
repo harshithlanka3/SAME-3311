@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart'; 
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
-import 'package:s_a_m_e/account/profilepicture.dart';
+// import 'package:s_a_m_e/account/profilepicture.dart';
 
 class EditDiagnosisPage extends StatelessWidget {
   const EditDiagnosisPage({Key? key}) : super(key: key);
@@ -271,10 +271,10 @@ class _UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
   }
 
   Future<void> fetchDiagnoses() async {
-    List<String> diagnoses = await FirebaseService().getAllDiagnosis();
+    List<Diagnosis> diagnoses = await FirebaseService().getAllDiagnosis();
     print(diagnoses);
     setState(() {
-      selectedDiagnosis = diagnoses.isNotEmpty ? diagnoses[0] : '';
+      selectedDiagnosis = diagnoses.isNotEmpty ? diagnoses[0].name : '';
       print("hello");
       print(selectedDiagnosis);
       print("hello");
@@ -353,7 +353,7 @@ class _UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FutureBuilder<List<String>>(
+            FutureBuilder<List<Diagnosis>>(
               future: FirebaseService().getAllDiagnosis(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -361,7 +361,12 @@ class _UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-                  List<String> diagnoses = snapshot.data ?? [];
+
+                  List<String> diagnoses = [];
+                  for (int i = 0; i < snapshot.data!.length; i++) {
+                    diagnoses.add(snapshot.data![i].name);
+                  }
+
                   print(diagnoses);
                   print(selectedDiagnosis);
                   return DropdownButton<String>(
@@ -512,7 +517,7 @@ class _DiagnosisDeletionPageState extends State<DiagnosisDeletionPage> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0),
             ),
             const SizedBox(height: 40),
-            FutureBuilder<List<String>>(
+            FutureBuilder<List<Diagnosis>>(
               //RAMYA MAKE FIREBASE METHOD
               future: _firebaseService.getAllDiagnosis(),
               builder: (context, snapshot) {
@@ -521,9 +526,12 @@ class _DiagnosisDeletionPageState extends State<DiagnosisDeletionPage> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-                  List<String>? diagnosis = snapshot.data;
-
-                  if (diagnosis != null && diagnosis.isNotEmpty) {
+                  List<String> diagnosis = [];
+                  for (int i = 0; i < snapshot.data!.length; i++) {
+                    diagnosis.add(snapshot.data![i].name);
+                  }
+                  // List<String>? diagnosis = snapshot.data;
+                  if (diagnosis.isNotEmpty) {
                     return MultiSelectDialogField<String>(
                       backgroundColor: background,
                       cancelText: const Text(
