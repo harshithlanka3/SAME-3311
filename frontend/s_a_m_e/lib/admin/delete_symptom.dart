@@ -79,11 +79,16 @@ class _SymptomDeletionPageState extends State<SymptomDeletionPage> {
                   for (String symptom in _selectedSymptoms) {
                     await _firebaseService.deleteSymptom(symptom);
                   }
+                  
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Symptoms deleted successfully'),
                     ),
                   );
+                  setState(() {
+                      _selectedSymptoms.clear();
+                      
+                  });
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

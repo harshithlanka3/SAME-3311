@@ -774,9 +774,30 @@ Future<Category> getCategory(String categoryName) async {
 
   }
   //RAMYA: for updating name and definiton -- later is symtom updates look to functions at bottom :)
-  Future<void> updateDiagnosis(String name) async {}
+  Future<void> updateDiagnosis(String name) async {
+    
+  }
   //RAMYA
-  Future<void> deleteDiagnosis(String name) async {}
+  Future<void> deleteDiagnosis(String name) async {
+    try {
+      DataSnapshot snapshot = await _diagnosisRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) async {
+          if (value["name"] == name) {
+            print("Diagnosis to be deleted");
+            print(value);
+            await _diagnosisRef.child(key).remove();
+            print('Diagnosis deleted successfully from Firebase');
+          }
+        });
+      }
+    } catch (e) {
+      print("Error delteting diagnosis: $e");
+    }
+  }
   //RAMYA -- whoops Allison did this b/c I needed the method lol -- Need to fix Diagnosis List now though...
   Future<List<Diagnosis>> getAllDiagnosis() async {
     try {
