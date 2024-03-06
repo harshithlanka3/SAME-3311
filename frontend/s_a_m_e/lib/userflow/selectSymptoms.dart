@@ -6,7 +6,7 @@ import 'package:s_a_m_e/userflow/potentialDiagnosis.dart';
 class SelectSymptom extends StatefulWidget {
   const SelectSymptom({super.key, required this.category});
 
-  final Category category;
+  final Category category; // won't need this -- turning categories into same page accordions
 
   @override
   State<SelectSymptom> createState() => _SelectSymptomState();
