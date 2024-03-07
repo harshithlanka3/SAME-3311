@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/userflow/potentialDiagnosis.dart';
-import 'package:accordion/accordion.dart';
-import 'package:accordion/controllers.dart';
 
 class SelectSymptom extends StatefulWidget {
   const SelectSymptom({super.key});
@@ -79,29 +77,17 @@ class _SelectSymptomState extends State<SelectSymptom> {
                         } else {
                           return Column(
                             children: [
-                              Accordion(
-                                headerBackgroundColor: navy,
-                                headerBorderColor: navy,
-                                headerBorderColorOpened: Colors.transparent,
-                                headerBackgroundColorOpened: navy,
-                                contentBorderColor: navy,
-                                contentBorderWidth: 2,
-                                contentHorizontalPadding: 20,
-                                scaleWhenAnimating: true,
-                                openAndCloseAnimation: true,
-                                paddingListBottom: 0,
-                                headerPadding:
-                                    const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
-                                sectionOpeningHapticFeedback: SectionHapticFeedback.none,
-                                sectionClosingHapticFeedback: SectionHapticFeedback.none,
+                              ExpansionTile(
+                                collapsedBackgroundColor: navy,
+                                collapsedIconColor: white,
+                                collapsedTextColor: white,
+                                collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                backgroundColor: boxinsides,
+                                title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold),),
                                 children: [
-                                  AccordionSection(
-                                    isOpen: false,
-                                    contentVerticalPadding: 10,
-                                    paddingBetweenClosedSections: 10,
-                                    header: Text(snapshot.data![index].name, style: headerStyle),
-                                    content: SizedBox(
-                                      height: snapshot.data![index].symptoms.length * 20,
+                                  SizedBox(
+                                      height: snapshot.data![index].symptoms.length * 42,
                                       child: ListView.builder(
                                       itemCount: snapshot.data![index].symptoms.length,
                                       itemBuilder: (context, index2) {
@@ -111,6 +97,8 @@ class _SelectSymptomState extends State<SelectSymptom> {
                                           return Column(
                                             children: [
                                               CheckboxListTile(
+                                                visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
+                                                controlAffinity: ListTileControlAffinity.leading,
                                                 title: Text(snapshot.data![index].symptoms[index2]),
                                                 // contentPadding: const EdgeInsets.all(5),
                                                 activeColor: teal,
@@ -127,10 +115,10 @@ class _SelectSymptomState extends State<SelectSymptom> {
                                         }
                                       }
                                     ),
-                                    )
-                                  ),
-                                ]
-                              )
+                                  )
+                                ],
+                              ),
+                              const SizedBox(height: 10),
                             ],
                           );
                         }
