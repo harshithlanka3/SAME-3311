@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
-import 'package:s_a_m_e/userflow/potentialDiagnosis.dart';
 
 class SelectSymptom extends StatefulWidget {
   const SelectSymptom({super.key});
@@ -14,35 +12,26 @@ class SelectSymptom extends StatefulWidget {
 class _SelectSymptomState extends State<SelectSymptom> {
 
   late Future<List<Category>> categories;
-  List<Category> categoriesList = [];
+  late Future<List<String>> symptoms;
 
-  // can make the list of isChecked a list of all the symptoms (one symptom to a category?)
-
-  List<Map<String, dynamic>> checkedSymptoms = [];
-  bool isChecked = false;
-
-  static const headerStyle = TextStyle(
-      color: Color(0xffffffff), fontSize: 18, fontWeight: FontWeight.bold);
-
-  static const contentStyle = TextStyle(
-      color: Color(0xff999999), fontSize: 14, fontWeight: FontWeight.normal);
-
-  void categoryList() async {
-    categoriesList = await categories;
-  }
+  List<String> result = [];
+  Map<String, Map<String, dynamic>> checkedSymptoms = {};
 
   @override
   void initState() {
     super.initState();
     categories = FirebaseService().getAllCategories();
-    categoryList();
+    getSymptoms();
+  }
 
-    if (categoriesList.length > 0){
-      for (int i = 0; i < categoriesList.length; i++) {
-        checkedSymptoms.add({"name": categoriesList[i].name, "isChecked": false}); // this doesn't work...
-      }
-      print(checkedSymptoms);
+  void getSymptoms() async {
+    result = await FirebaseService().getAllSymptoms();
+    print(result);
+    for (int i = 0; i < result.length; i++) {
+      Map<String, dynamic> tempDict = {"isChecked": false};
+      checkedSymptoms[result[i]] = tempDict;
     }
+    print(checkedSymptoms);
   }
 
   @override
@@ -63,16 +52,16 @@ class _SelectSymptomState extends State<SelectSymptom> {
             } else if (snapshot.hasData) {
               return Column(
                 children: [
-                  const Text("Select symptoms from the categories below"),
+                  const Text("Select symptoms from the categories below", style: TextStyle(fontSize: 18),),
                   const SizedBox(height: 10),
                   const Divider(thickness: 2),
                   const SizedBox(height: 5),
                   SizedBox(
                     height: 600,
                     child: ListView.builder(
-                      itemCount: categoriesList.length,
+                      itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        if (categoriesList.isEmpty) {
+                        if (snapshot.data!.isEmpty) {
                           return const Center(child: Text('No Symptoms Found'));
                         } else {
                           return Column(
@@ -97,15 +86,15 @@ class _SelectSymptomState extends State<SelectSymptom> {
                                           return Column(
                                             children: [
                                               CheckboxListTile(
-                                                visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
+                                                visualDensity: const VisualDensity(horizontal: -4.0, vertical: -4.0),
                                                 controlAffinity: ListTileControlAffinity.leading,
-                                                title: Text(snapshot.data![index].symptoms[index2]),
+                                                title: Text(snapshot.data![index].symptoms[index2]), // this gets symptom name
                                                 // contentPadding: const EdgeInsets.all(5),
                                                 activeColor: teal,
-                                                value: isChecked,
+                                                value: checkedSymptoms[snapshot.data![index].symptoms[index2]]!["isChecked"],
                                                 onChanged: (bool? value) {
                                                   setState(() {
-                                                    isChecked = value!;
+                                                    checkedSymptoms[snapshot.data![index].symptoms[index2]]!["isChecked"] = value!;
                                                   });
                                                 }
                                               )
@@ -132,50 +121,12 @@ class _SelectSymptomState extends State<SelectSymptom> {
             }
           }
         )
-        
-        
-            // SizedBox(
-            //   height: 400,
-            //   child: ListView.builder(
-            //     itemCount: widget.category.symptoms.length,
-            //     itemBuilder: (context, index)
-            //     {
-            //       if (widget.category.symptoms.isEmpty) {
-            //         return const Center(child: Text('No Symptoms Found'));
-            //       } else {
-            //         print(checkedSymptoms);
-            //         return Column(
-            //           children: [
-            //             CheckboxListTile(
-            //             value: checkedSymptoms[index]["isChecked"],
-            //             title: Text(widget.category.symptoms[index]),
-            //             controlAffinity: ListTileControlAffinity.leading,
-            //             activeColor: navy,
-            //             tileColor: boxinsides,
-            //             shape: RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.circular(15),
-            //               side: const BorderSide(color: teal)
-            //               ),
-            //             onChanged: (value) {
-            //               setState(() {
-            //                 checkedSymptoms[index]["isChecked"] = value!;
-            //               });
-            //             },
-            //           ),
-            //           const SizedBox(height: 10,)
-            //           ],
-            //         );
-            //       }   
-            //     }
-            //   ),
-            // )
-
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ElevatedButton(
         style: const ButtonStyle(
           foregroundColor: MaterialStatePropertyAll<Color>(white),
-          backgroundColor: MaterialStatePropertyAll<Color>(navy),
+          backgroundColor: MaterialStatePropertyAll<Color>(navy), // idk what color to make this
         ),
         child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {

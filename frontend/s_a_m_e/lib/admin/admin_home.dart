@@ -3,7 +3,6 @@ import 'package:s_a_m_e/account/account.dart';
 import 'package:s_a_m_e/admin/add_category.dart';
 import 'package:s_a_m_e/admin/adminrequest.dart';
 import 'package:s_a_m_e/user/categorieslist.dart';
-import 'package:s_a_m_e/userflow/chooseCategory.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/admin/add_symptom.dart';
 import 'package:s_a_m_e/admin/delete_category.dart';
@@ -14,6 +13,7 @@ import 'package:s_a_m_e/user/symptomlist.dart';
 import 'package:s_a_m_e/admin/update_category.dart';
 import 'package:s_a_m_e/admin/update_symptom.dart';
 import 'package:s_a_m_e/admin/view_accounts.dart';
+import 'package:s_a_m_e/userflow/selectSymptoms.dart';
 
 class Admin extends StatelessWidget {
   const Admin({super.key});
@@ -237,7 +237,7 @@ Widget build(BuildContext context) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ChooseCategory()),
+                      builder: (context) => const SelectSymptom()),
                 );
               },
             )

@@ -211,7 +211,10 @@ class _DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                     );
                     _diagnosisNameController.clear();
                     _diagnosisDefinitionController.clear();
-
+                    setState(() {
+                      _selectedSymptoms.clear();
+                      
+                    });
 
 
                   } else {
@@ -513,7 +516,7 @@ class _DiagnosisDeletionPageState extends State<DiagnosisDeletionPage> {
           children: [
             const SizedBox(height: 20),
             const Text(
-              'Delete Symptom',
+              'Delete Diagnosis',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0),
             ),
             const SizedBox(height: 40),
@@ -553,7 +556,7 @@ class _DiagnosisDeletionPageState extends State<DiagnosisDeletionPage> {
                       },
                     );
                   } else {
-                    return const Text('No symptoms available');
+                    return const Text('No diagnoses available');
                   }
                 }
               },
@@ -575,6 +578,10 @@ class _DiagnosisDeletionPageState extends State<DiagnosisDeletionPage> {
                       content: Text('Diagnosis deleted successfully'),
                     ),
                   );
+                  setState(() {
+                      _selectedDiagnosis.clear();
+                  });
+                  
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -584,7 +591,7 @@ class _DiagnosisDeletionPageState extends State<DiagnosisDeletionPage> {
                 }
               },
               child: const Text(
-                'Delete Symptoms',
+                'Delete Diagnoses',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
               ),
             ),
