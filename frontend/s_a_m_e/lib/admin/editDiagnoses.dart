@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart'; 
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import 'package:s_a_m_e/admin/diagnosislist.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
 
 class EditDiagnosisPage extends StatelessWidget {
-  const EditDiagnosisPage({Key? key}) : super(key: key);
+  final FirebaseService _firebaseService = FirebaseService();
+  EditDiagnosisPage({Key? key}) : super(key: key);
 
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,13 +19,55 @@ class EditDiagnosisPage extends StatelessWidget {
       ),
       body: Center(
         child: Column(
+          
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
             const Text(
-              'Update Diagnoses',
+              'Diagnoses',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0),
             ),
+            //Displaying list of symptoms
+            Expanded (
+            child: FutureBuilder<List<Diagnosis>>(
+              future: _firebaseService.getAllDiagnosis(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (snapshot.hasData) {
+                  return Scrollbar(
+                    trackVisibility: true,
+                    child: ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: <Widget>[
+                            Container( // where the UI starts
+                              decoration: BoxDecoration(
+                                border: Border.all(color: teal),
+                                color: boxinsides,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: ListTile(
+                                title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                subtitle: Text(snapshot.data![index].definition, maxLines: 2, overflow: TextOverflow.ellipsis), 
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                          ],
+                        );
+                      },
+                    ),
+                  );
+                } else {
+                  return const Center(child: Text('No diagnoses found'));
+                }
+              },
+            ),
+            ),    
+
             ElevatedButton(
               style: const ButtonStyle(
                   foregroundColor: MaterialStatePropertyAll<Color>(white),
