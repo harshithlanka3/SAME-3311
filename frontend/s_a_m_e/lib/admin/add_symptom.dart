@@ -103,11 +103,18 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
                     _symptomNameController.text,
                     _selectedComplaints,
                   );
+                  
                   if (response == 200) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                           content: Text('Symptom added successfully')),
                     );
+                    _symptomNameController.clear();
+                    setState(() {
+                      _selectedComplaints.clear();
+                      
+                    });
+                  
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Failed to add symptom')),
