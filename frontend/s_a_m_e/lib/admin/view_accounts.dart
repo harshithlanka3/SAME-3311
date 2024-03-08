@@ -156,9 +156,7 @@ class _ViewAccountsState extends State<ViewAccounts> {
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => ProfilePage(
-                                        name: displayedUsers[index].firstName +
-                                            " " +
-                                            displayedUsers[index].lastName,
+                                        name: "${displayedUsers[index].firstName} ${displayedUsers[index].lastName}",
                                         email: displayedUsers[index].email,
                                         role: displayedUsers[index].role))).then((info) => refreshUsers(info));
                               },

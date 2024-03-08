@@ -103,7 +103,7 @@ class _UpdateCatPageState extends State<UpdateCatPage> {
               future: FirebaseService().getAllCategories(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
@@ -128,8 +128,8 @@ class _UpdateCatPageState extends State<UpdateCatPage> {
                 }
               },
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Add Symptoms:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -152,8 +152,8 @@ class _UpdateCatPageState extends State<UpdateCatPage> {
                 },
               ),
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Remove Categories:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -183,7 +183,7 @@ class _UpdateCatPageState extends State<UpdateCatPage> {
         onPressed: () {
           updateSymptoms();
         },
-        child: Icon(Icons.check),
+        child: const Icon(Icons.check),
       ),
     );
   }

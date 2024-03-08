@@ -53,7 +53,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             'SEARCH BY SYMPTOM NAME HERE',
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

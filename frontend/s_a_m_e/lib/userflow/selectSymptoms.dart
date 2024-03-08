@@ -27,12 +27,10 @@ class _SelectSymptomState extends State<SelectSymptom> {
 
   void getSymptoms() async {
     result = await FirebaseService().getAllSymptoms();
-    print(result);
     for (int i = 0; i < result.length; i++) {
       Map<String, dynamic> tempDict = {"isChecked": false};
       checkedSymptoms[result[i]] = tempDict;
     }
-    print(checkedSymptoms);
   }
 
   @override

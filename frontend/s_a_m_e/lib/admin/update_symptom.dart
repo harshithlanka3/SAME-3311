@@ -89,7 +89,7 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Update Symptom',
           style: TextStyle(fontSize: 20), 
         ),
@@ -103,7 +103,7 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
               future: FirebaseService().getAllSymptoms(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
@@ -128,8 +128,8 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
                 }
               },
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Add Categories:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -152,8 +152,8 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
                 },
               ),
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Remove Categories:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -183,7 +183,7 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
         onPressed: () {
           updateCategories();
         },
-        child: Icon(Icons.check),
+        child: const Icon(Icons.check),
       ),
     );
   }

@@ -123,13 +123,13 @@ class UserHome extends StatelessWidget {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: const Text('Error'),
-                            content: Text('Please choose an option and give a reason.'),
+                            content: const Text('Please choose an option and give a reason.'),
                             actions: [
                               TextButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("OK"),
+                                child: const Text("OK"),
                               ),
                             ],
                           );
