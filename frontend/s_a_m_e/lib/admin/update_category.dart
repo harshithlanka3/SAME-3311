@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 
 class UpdateCatPage extends StatefulWidget {
@@ -140,17 +141,16 @@ class UpdateCatPageState extends State<UpdateCatPage> {
                 itemCount: symptomsToAdd.length,
                 itemBuilder: (context, index) {
                   final symptom = symptomsToAdd[index];
-                  return ListTile(
+                  return CheckboxListTile(
                     title: Text(symptom),
-                    trailing: Checkbox(
-                      value: symptomsCheckedState[symptom],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          symptomsCheckedState[symptom] = value!;
-                        });
-                      },
-                    ),
-                  );
+                    activeColor: navy,
+                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    value: symptomsCheckedState[symptom],
+                    onChanged: (bool? value) {
+                      setState(() {
+                        symptomsCheckedState[symptom] = value!;
+                      });
+                    });
                 },
               ),
             ),
@@ -164,16 +164,16 @@ class UpdateCatPageState extends State<UpdateCatPage> {
                 itemCount: symptomsToDelete.length,
                 itemBuilder: (context, index) {
                   final symptom = symptomsToDelete[index];
-                  return ListTile(
+                  return CheckboxListTile(
                     title: Text(symptom),
-                    trailing: Checkbox(
-                      value: symptomsCheckedState[symptom],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          symptomsCheckedState[symptom] = value!;
-                        });
-                      },
-                    ),
+                    activeColor: navy,
+                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    value: symptomsCheckedState[symptom],
+                    onChanged: (bool? value) {
+                      setState(() {
+                        symptomsCheckedState[symptom] = value!;
+                      });
+                    },
                   );
                 },
               ),
