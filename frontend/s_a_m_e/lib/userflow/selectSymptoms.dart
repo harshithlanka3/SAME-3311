@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import 'package:s_a_m_e/userflow/potentialDiagnosis.dart';
 
 class SelectSymptom extends StatefulWidget {
   const SelectSymptom({super.key});
@@ -66,7 +67,12 @@ class _SelectSymptomState extends State<SelectSymptom> {
                         } else {
                           return Column(
                             children: [
-                              ExpansionTile(
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(color: teal),
+                                ),
+                                child: ExpansionTile(
                                 collapsedBackgroundColor: navy,
                                 collapsedIconColor: white,
                                 collapsedTextColor: white,
@@ -107,6 +113,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
                                   )
                                 ],
                               ),
+                              ),
                               const SizedBox(height: 10),
                             ],
                           );
@@ -130,12 +137,12 @@ class _SelectSymptomState extends State<SelectSymptom> {
         ),
         child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms, category:widget.category.name),
-          //   )
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms),
+            )
+          );
         },
       )
     );
