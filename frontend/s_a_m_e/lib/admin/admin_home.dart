@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/account.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/admin/add_category.dart';
 import 'package:s_a_m_e/admin/adminrequest.dart';
 import 'package:s_a_m_e/user/categorieslist.dart';
@@ -23,6 +24,7 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       title: const Text('S.A.M.E'),
+      actions: [ProfilePicturePage()]
     ),
     drawer: Drawer(
       backgroundColor: background,

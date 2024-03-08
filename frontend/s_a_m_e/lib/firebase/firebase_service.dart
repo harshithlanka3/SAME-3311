@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 class Symptom {
   final String name;
@@ -637,6 +640,22 @@ Future<Category> getCategory(String categoryName) async {
     }
   }
 
+
+  Future<String> uploadUserProfilePicture(String email, XFile file) async {
+    try {
+      Reference referenceRoot = FirebaseStorage.instance.ref();
+      Reference referenceDirPictures = referenceRoot.child("images/profilephotos");
+      Reference referenceImageToUpload = referenceDirPictures.child(email);
+
+      await referenceImageToUpload.putFile(File(file.path));
+      String pictureURL = await referenceImageToUpload.getDownloadURL();
+      return pictureURL;
+    } catch(e) {
+      print("Error with uploading user profile picture:");
+      print(e.toString());
+      return "failure";
+    }
+  }
 
   Future<bool> updateUserRequestReason(String userId, String requestReason) async {
     try {

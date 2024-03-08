@@ -171,7 +171,7 @@ class _SearchSymptomState extends State<SearchSymptom> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptomsNames,)),
+                builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptomsNames,category: "Mock Category")), //Unsure why category was left blank here
           );
         },
         child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
