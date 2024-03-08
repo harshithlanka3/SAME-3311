@@ -7,11 +7,11 @@ class ViewAccounts extends StatefulWidget {
   const ViewAccounts({Key? key}) : super(key: key);
 
   @override
-  _ViewAccountsState createState() => _ViewAccountsState();
+  ViewAccountsState createState() => ViewAccountsState();
   
 }
 
-class _ViewAccountsState extends State<ViewAccounts> {
+class ViewAccountsState extends State<ViewAccounts> {
   final TextEditingController _searchController = TextEditingController();
   late Future<List<UserClass>> users;
   late List<UserClass> usersSearch;

@@ -7,10 +7,10 @@ class CategoriesListPage extends StatefulWidget {
   const CategoriesListPage({Key? key}) : super(key: key);
 
   @override
-  _CategoriesListPageState createState() => _CategoriesListPageState();
+  CategoriesListPageState createState() => CategoriesListPageState();
 }
 
-class _CategoriesListPageState extends State<CategoriesListPage> {
+class CategoriesListPageState extends State<CategoriesListPage> {
   late Future<List<Category>> categories;
 
   @override

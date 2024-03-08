@@ -6,10 +6,10 @@ class DiagnosisListPage extends StatefulWidget {
   const DiagnosisListPage({super.key});
 
   @override
-  _DiagnosisListPageState createState() => _DiagnosisListPageState();
+  DiagnosisListPageState createState() => DiagnosisListPageState();
 }
 
-class _DiagnosisListPageState extends State<DiagnosisListPage> {
+class DiagnosisListPageState extends State<DiagnosisListPage> {
   late Future<List<Diagnosis>> diagnosis;
 
   @override

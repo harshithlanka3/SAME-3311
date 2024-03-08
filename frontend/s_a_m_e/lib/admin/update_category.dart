@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 
 class UpdateCatPage extends StatefulWidget {
+  const UpdateCatPage({super.key});
+
   @override
-  _UpdateCatPageState createState() => _UpdateCatPageState();
+  UpdateCatPageState createState() => UpdateCatPageState();
 }
 
-class _UpdateCatPageState extends State<UpdateCatPage> {
+class UpdateCatPageState extends State<UpdateCatPage> {
   String selectedCat = '';
   List<String> symptomsToAdd = [];
   List<String> symptomsToDelete = [];
@@ -89,7 +91,7 @@ class _UpdateCatPageState extends State<UpdateCatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Update Category',
           style: TextStyle(fontSize: 20), 
         ),

@@ -9,10 +9,10 @@ class CategoryCreationPage extends StatefulWidget {
   const CategoryCreationPage({Key? key}) : super(key: key);
 
   @override
-  _CategoryCreationPageState createState() => _CategoryCreationPageState();
+  CategoryCreationPageState createState() => CategoryCreationPageState();
 }
 
-class _CategoryCreationPageState extends State<CategoryCreationPage> {
+class CategoryCreationPageState extends State<CategoryCreationPage> {
   final TextEditingController _categoryNameController = TextEditingController();
   final FirebaseService _firebaseService = FirebaseService();
   List<String> _selectedSymptoms = [];

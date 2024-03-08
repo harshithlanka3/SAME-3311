@@ -9,10 +9,10 @@ class SymptomCreationPage extends StatefulWidget {
   const SymptomCreationPage({super.key});
 
   @override
-  _SymptomCreationPageState createState() => _SymptomCreationPageState();
+  SymptomCreationPageState createState() => SymptomCreationPageState();
 }
 
-class _SymptomCreationPageState extends State<SymptomCreationPage> {
+class SymptomCreationPageState extends State<SymptomCreationPage> {
   //final _apiService = ApiService();
   final _symptomNameController = TextEditingController();
   final FirebaseService _firebaseService = FirebaseService();

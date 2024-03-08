@@ -7,10 +7,10 @@ class AdminRequestPage extends StatefulWidget {
   const AdminRequestPage({super.key});
 
   @override
-  _AdminRequestPageState createState() => _AdminRequestPageState();
+  AdminRequestPageState createState() => AdminRequestPageState();
 }
 
-class _AdminRequestPageState extends State<AdminRequestPage> {
+class AdminRequestPageState extends State<AdminRequestPage> {
   late Future<List<UserClass>> requests;
   late List<UserClass> users = [];
   late List<String> userNames = [];
@@ -111,7 +111,7 @@ class AdminRequestDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Review: " + "${user.firstName} ${user.lastName}",
+          "Review: ${user.firstName} ${user.lastName}",
           style: const TextStyle(fontSize: 23),
           ),
       ),
@@ -128,7 +128,7 @@ class AdminRequestDetailsPage extends StatelessWidget {
             const SizedBox(height: 20),
 
             Text(
-              "Grant " +  "${user.firstName} ${user.lastName}" " Admin Status?",
+              "Grant ${user.firstName} ${user.lastName} Admin Status?",
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),

@@ -7,10 +7,10 @@ class SearchSymptom extends StatefulWidget {
   const SearchSymptom({Key? key}) : super(key: key);
 
   @override
-  _SearchSymptomState createState() => _SearchSymptomState();
+  SearchSymptomState createState() => SearchSymptomState();
 }
 
-class _SearchSymptomState extends State<SearchSymptom> {
+class SearchSymptomState extends State<SearchSymptom> {
   late Future<List<String>> symptoms;
   final TextEditingController _searchController = TextEditingController();
   late List<String> symptomsSearch;

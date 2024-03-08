@@ -8,10 +8,10 @@ class SymptomDeletionPage extends StatefulWidget {
   const SymptomDeletionPage({super.key});
 
   @override
-  _SymptomDeletionPageState createState() => _SymptomDeletionPageState();
+  SymptomDeletionPageState createState() => SymptomDeletionPageState();
 }
 
-class _SymptomDeletionPageState extends State<SymptomDeletionPage> {
+class SymptomDeletionPageState extends State<SymptomDeletionPage> {
   final FirebaseService _firebaseService = FirebaseService();
   List<String> _selectedSymptoms = [];
 

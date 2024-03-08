@@ -7,10 +7,10 @@ class ChooseCategory extends StatefulWidget {
   const ChooseCategory({Key? key}) : super(key: key);
 
   @override
-  _ChooseCategoryState createState() => _ChooseCategoryState();
+  ChooseCategoryState createState() => ChooseCategoryState();
 }
 
-class _ChooseCategoryState extends State<ChooseCategory> {
+class ChooseCategoryState extends State<ChooseCategory> {
   late Future<List<Category>> categories;
 
   @override
@@ -43,7 +43,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SearchSymptom()),
+                          MaterialPageRoute(builder: (context) => const SearchSymptom()),
                         );
                       },
                       child: Container(

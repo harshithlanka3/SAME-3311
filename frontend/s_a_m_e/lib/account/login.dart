@@ -12,10 +12,10 @@ class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
   @override
-  _LoginState createState() => _LoginState();
+  LoginState createState() => LoginState();
 }
 
-class _LoginState extends State<Login> {
+class LoginState extends State<Login> {
   late Future<UserClass> user;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final _emailController = TextEditingController();

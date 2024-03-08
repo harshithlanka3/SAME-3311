@@ -5,7 +5,7 @@ import 'package:s_a_m_e/account/login.dart';
 import 'package:s_a_m_e/user/symptomlist.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:s_a_m_e/userflow/selectSymptoms.dart';
+import 'package:s_a_m_e/userflow/select_symptoms.dart';
 import 'package:s_a_m_e/admin/diagnosislist.dart';
 
 
@@ -222,7 +222,7 @@ Widget build(BuildContext context) {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DiagnosisListPage()),
+                  MaterialPageRoute(builder: (context) => const DiagnosisListPage()),
                 );
               },
             ),

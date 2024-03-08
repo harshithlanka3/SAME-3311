@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 
 class UpdateSymptomPage extends StatefulWidget {
+  const UpdateSymptomPage({super.key});
+
   @override
-  _UpdateSymptomPageState createState() => _UpdateSymptomPageState();
+  UpdateSymptomPageState createState() => UpdateSymptomPageState();
 }
 
-class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
+class UpdateSymptomPageState extends State<UpdateSymptomPage> {
   String selectedSymptom = '';
   List<Category> categoriesToAdd = [];
   List<Category> categoriesToDelete = [];
