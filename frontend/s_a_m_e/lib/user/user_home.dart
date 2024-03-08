@@ -6,6 +6,8 @@ import 'package:s_a_m_e/user/symptomlist.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:s_a_m_e/userflow/selectSymptoms.dart';
+import 'package:s_a_m_e/admin/diagnosislist.dart';
+
 
 class UserHome extends StatelessWidget {
   const UserHome({super.key});
@@ -218,11 +220,10 @@ Widget build(BuildContext context) {
               ),
               child: const Text('Diagnosis List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) => SymptomCreationPage()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DiagnosisListPage()),
+                );
               },
             ),
             const SizedBox(height: 10),

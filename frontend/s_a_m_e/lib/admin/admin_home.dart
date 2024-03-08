@@ -91,7 +91,7 @@ Widget build(BuildContext context) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const EditDiagnosisPage(),
+                    builder: (context) => EditDiagnosisPage(),
                   ),
                 );
               },
