@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
-import 'package:s_a_m_e/userflow/potentialDiagnosis.dart';
+// import 'package:s_a_m_e/userflow/potentialDiagnosis.dart';
 
 class SearchSymptom extends StatefulWidget {
   const SearchSymptom({Key? key}) : super(key: key);

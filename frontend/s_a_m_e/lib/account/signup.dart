@@ -51,7 +51,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
       final snackBar = SnackBar(
         content: Text('Failed to register user. Please try again. Error: $e'),
-        duration: Duration(seconds: 3),
+        duration: const Duration(seconds: 3),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }

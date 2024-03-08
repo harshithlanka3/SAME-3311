@@ -79,10 +79,10 @@ class _ManageAccountPageState extends State<ManageAccountPage> {
                         const Divider(),
                         const SizedBox(height: 20),
 
-                        ProfileMenuWidget(title: snapshot.data!.firstName + " " + snapshot.data!.lastName, icon: Icons.abc),
+                        ProfileMenuWidget(title: "${snapshot.data!.firstName} ${snapshot.data!.lastName}", icon: Icons.abc),
                         //ProfileMenuWidget(title: "Username", icon: Icons.account_circle),
                         ProfileMenuWidget(title: snapshot.data!.email, icon: Icons.email),
-                        ProfileMenuWidget(title: "Password", icon: Icons.key),
+                        const ProfileMenuWidget(title: "Password", icon: Icons.key),
 
                         const SizedBox(height: 20),
                         const Divider(),

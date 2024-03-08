@@ -47,11 +47,11 @@ class _LoginState extends State<Login> {
 
         if (role == 'user') {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => UserHome()),
+            MaterialPageRoute(builder: (context) => const UserHome()),
           );
         } else if (role == 'admin') {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => Admin()),
+            MaterialPageRoute(builder: (context) => const Admin()),
           );
         }
       } else {
@@ -84,7 +84,7 @@ class _LoginState extends State<Login> {
                   children: <Widget>[
                     Text(
                       userDisclaimer,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: "PT Serif",
                         fontSize: 16.0,
                         color: Colors.black,
@@ -110,7 +110,7 @@ class _LoginState extends State<Login> {
                           activeColor: blue,
                           checkColor: Colors.white,
                         ),
-                        Text(
+                        const Text(
                           'I agree to the terms and conditions.',
                           style: TextStyle(
                             fontFamily: "PT Serif",
@@ -128,7 +128,7 @@ class _LoginState extends State<Login> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Close',
+                  child: const Text('Close',
                       style: TextStyle(
                         fontFamily: "PT Serif",
                         fontSize: 16.0,
@@ -242,7 +242,6 @@ class _LoginState extends State<Login> {
                     style: const TextStyle(color: blue, decoration: TextDecoration.underline),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        print("Go to register page"); 
                         _showDisclaimerDialog(context);
                       } 
                   ),
