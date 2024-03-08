@@ -93,7 +93,7 @@ class UpdateCatPageState extends State<UpdateCatPage> {
       appBar: AppBar(
         title: const Text(
           'Update Category',
-          style: TextStyle(fontSize: 20), 
+          style: TextStyle(fontSize: 32), 
         ),
       ),
       body: Padding(

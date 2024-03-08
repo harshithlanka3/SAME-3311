@@ -93,7 +93,7 @@ class UpdateSymptomPageState extends State<UpdateSymptomPage> {
       appBar: AppBar(
         title: const Text(
           'Update Symptom',
-          style: TextStyle(fontSize: 20), 
+          style: TextStyle(fontSize: 32), 
         ),
       ),
       body: Padding(

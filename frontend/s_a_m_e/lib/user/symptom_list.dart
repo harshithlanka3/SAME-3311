@@ -23,7 +23,7 @@ class SymptomsListPageState extends State<SymptomsListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Symptoms", style: TextStyle(fontSize: 36.0)),
+        title: const Text("Symptoms List", style: TextStyle(fontSize: 36.0)),
         // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
         // actions: [ProfilePicturePage()]
       ),
