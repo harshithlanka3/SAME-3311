@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/user/symptomlist.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
@@ -29,8 +30,7 @@ class _SymptomCreationPageState extends State<SymptomCreationPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('S.A.M.E'),
-        // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
-        // actions: [ProfilePicturePage()]
+        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

@@ -46,6 +46,7 @@ class UserClass {
   String firstName;
   String lastName;
   String role;
+  String? profilePicture;
   bool activeRequest;
   String requestReason;
   List<String> messages;
@@ -56,6 +57,7 @@ class UserClass {
     required this.firstName,
     required this.lastName,
     required this.role,
+    this.profilePicture,
     this.activeRequest = false,
     this.requestReason = '',
     List<String>? messages,
@@ -75,6 +77,7 @@ class UserClass {
       firstName: json['firstName'],
       lastName: json['lastName'],
       role: json['role'] ?? 'user',
+      profilePicture: json['profilePicture'],
       activeRequest: json['activeRequest'] ?? false,
       requestReason: json['requestReason'] ?? '',
       messages: json['messages'] != null
@@ -531,6 +534,7 @@ Future<Category> getCategory(String categoryName) async {
             firstName: data['firstName'],
             lastName: data['lastName'],
             role: data["role"],
+            profilePicture: data['profilePicture'],
             activeRequest: data['activeRequest'] ?? false,
             requestReason: data['requestReason'] ?? '',
             messages: data['messages'] != null
@@ -564,6 +568,7 @@ Future<Category> getCategory(String categoryName) async {
               firstName: value['firstName'],
               lastName: value['lastName'],
               role: value['role'],
+              profilePicture: value['profilePicture'],
               activeRequest: value['activeRequest'] ?? false,
               requestReason: value['requestReason'] ?? '',
               );
@@ -649,11 +654,36 @@ Future<Category> getCategory(String categoryName) async {
 
       await referenceImageToUpload.putFile(File(file.path));
       String pictureURL = await referenceImageToUpload.getDownloadURL();
+      updateUserProfilePicture(email, pictureURL);
       return pictureURL;
     } catch(e) {
       print("Error with uploading user profile picture:");
       print(e.toString());
       return "failure";
+    }
+  }
+
+  Future updateUserProfilePicture(String email, String pictureURL) async {
+    try {
+      DataSnapshot snapshot = await _usersRef.get();
+      
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+        if (value["email"] == email) {
+            _usersRef.child(key).update({
+              "profilePicture" : pictureURL
+            });
+          }
+        });
+
+      }
+
+    } catch (e) {
+      print("Error with updating profile picture:");
+      print(e.toString());
+      return null;
     }
   }
 
@@ -691,6 +721,7 @@ Future<Category> getCategory(String categoryName) async {
               lastName: value['lastName'],
               email: value['email'],
               role: value['role'],
+              profilePicture: value['profilePicture'],
               activeRequest: value['activeRequest'] ?? false,
               requestReason: value['requestReason'] ?? '',
             );

@@ -24,7 +24,7 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       title: const Text('S.A.M.E'),
-      actions: [ProfilePicturePage()]
+      actions: [ProfilePicturePage()],
     ),
     drawer: Drawer(
       backgroundColor: background,
