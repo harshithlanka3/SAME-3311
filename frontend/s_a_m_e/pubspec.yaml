@@ -47,7 +47,6 @@ dependencies:
   # The below dependency makes it so users can upload images for their profile pictures
   image_picker: ^0.8.3
   firebase_storage: ^11.6.9
-  path_provider: ^2.1.2
   accordion: ^2.6.0
 
 dev_dependencies:
