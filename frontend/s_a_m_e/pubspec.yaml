@@ -46,6 +46,7 @@ dependencies:
 
   # The below dependency makes it so users can upload images for their profile pictures
   image_picker: ^0.8.3
+  accordion: ^2.6.0
 
 dev_dependencies:
   flutter_test:

@@ -7,11 +7,11 @@ class ViewAccounts extends StatefulWidget {
   const ViewAccounts({Key? key}) : super(key: key);
 
   @override
-  _ViewAccountsState createState() => _ViewAccountsState();
+  ViewAccountsState createState() => ViewAccountsState();
   
 }
 
-class _ViewAccountsState extends State<ViewAccounts> {
+class ViewAccountsState extends State<ViewAccounts> {
   final TextEditingController _searchController = TextEditingController();
   late Future<List<UserClass>> users;
   late List<UserClass> usersSearch;
@@ -156,9 +156,7 @@ class _ViewAccountsState extends State<ViewAccounts> {
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => ProfilePage(
-                                        name: displayedUsers[index].firstName +
-                                            " " +
-                                            displayedUsers[index].lastName,
+                                        name: "${displayedUsers[index].firstName} ${displayedUsers[index].lastName}",
                                         email: displayedUsers[index].email,
                                         role: displayedUsers[index].role))).then((info) => refreshUsers(info));
                               },

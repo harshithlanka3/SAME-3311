@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 
 class UpdateCatPage extends StatefulWidget {
+  const UpdateCatPage({super.key});
+
   @override
-  _UpdateCatPageState createState() => _UpdateCatPageState();
+  UpdateCatPageState createState() => UpdateCatPageState();
 }
 
-class _UpdateCatPageState extends State<UpdateCatPage> {
+class UpdateCatPageState extends State<UpdateCatPage> {
   String selectedCat = '';
   List<String> symptomsToAdd = [];
   List<String> symptomsToDelete = [];
@@ -89,9 +92,9 @@ class _UpdateCatPageState extends State<UpdateCatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Update Category',
-          style: TextStyle(fontSize: 20), 
+          style: TextStyle(fontSize: 32), 
         ),
       ),
       body: Padding(
@@ -103,7 +106,7 @@ class _UpdateCatPageState extends State<UpdateCatPage> {
               future: FirebaseService().getAllCategories(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
@@ -128,8 +131,8 @@ class _UpdateCatPageState extends State<UpdateCatPage> {
                 }
               },
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Add Symptoms:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -138,22 +141,21 @@ class _UpdateCatPageState extends State<UpdateCatPage> {
                 itemCount: symptomsToAdd.length,
                 itemBuilder: (context, index) {
                   final symptom = symptomsToAdd[index];
-                  return ListTile(
+                  return CheckboxListTile(
                     title: Text(symptom),
-                    trailing: Checkbox(
-                      value: symptomsCheckedState[symptom],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          symptomsCheckedState[symptom] = value!;
-                        });
-                      },
-                    ),
-                  );
+                    activeColor: navy,
+                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    value: symptomsCheckedState[symptom],
+                    onChanged: (bool? value) {
+                      setState(() {
+                        symptomsCheckedState[symptom] = value!;
+                      });
+                    });
                 },
               ),
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Remove Categories:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -162,16 +164,16 @@ class _UpdateCatPageState extends State<UpdateCatPage> {
                 itemCount: symptomsToDelete.length,
                 itemBuilder: (context, index) {
                   final symptom = symptomsToDelete[index];
-                  return ListTile(
+                  return CheckboxListTile(
                     title: Text(symptom),
-                    trailing: Checkbox(
-                      value: symptomsCheckedState[symptom],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          symptomsCheckedState[symptom] = value!;
-                        });
-                      },
-                    ),
+                    activeColor: navy,
+                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    value: symptomsCheckedState[symptom],
+                    onChanged: (bool? value) {
+                      setState(() {
+                        symptomsCheckedState[symptom] = value!;
+                      });
+                    },
                   );
                 },
               ),
@@ -183,7 +185,7 @@ class _UpdateCatPageState extends State<UpdateCatPage> {
         onPressed: () {
           updateSymptoms();
         },
-        child: Icon(Icons.check),
+        child: const Icon(Icons.check),
       ),
     );
   }

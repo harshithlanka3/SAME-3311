@@ -8,10 +8,10 @@ class CategoryDeletionPage extends StatefulWidget {
   const CategoryDeletionPage({super.key});
 
   @override
-  _CategoryDeletionPageState createState() => _CategoryDeletionPageState();
+  CategoryDeletionPageState createState() => CategoryDeletionPageState();
 }
 
-class _CategoryDeletionPageState extends State<CategoryDeletionPage> {
+class CategoryDeletionPageState extends State<CategoryDeletionPage> {
   final FirebaseService _firebaseService = FirebaseService();
   List<String> _selectedCategories = [];
 

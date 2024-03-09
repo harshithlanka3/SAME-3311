@@ -8,10 +8,10 @@ class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  SignUpPageState createState() => SignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class SignUpPageState extends State<SignUpPage> {
   final _userEmail = TextEditingController();
   final _userFirstName = TextEditingController();
   final _userLastName = TextEditingController();
@@ -51,7 +51,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
       final snackBar = SnackBar(
         content: Text('Failed to register user. Please try again. Error: $e'),
-        duration: Duration(seconds: 3),
+        duration: const Duration(seconds: 3),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }

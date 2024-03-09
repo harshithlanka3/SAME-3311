@@ -1,35 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
-// import 'package:s_a_m_e/account/profilepicture.dart';
 
-class CategoriesListPage extends StatefulWidget {
-  const CategoriesListPage({Key? key}) : super(key: key);
+class DiagnosisListPage extends StatefulWidget {
+  const DiagnosisListPage({super.key});
 
   @override
-  _CategoriesListPageState createState() => _CategoriesListPageState();
+  DiagnosisListPageState createState() => DiagnosisListPageState();
 }
 
-class _CategoriesListPageState extends State<CategoriesListPage> {
-  late Future<List<Category>> categories;
+class DiagnosisListPageState extends State<DiagnosisListPage> {
+  late Future<List<Diagnosis>> diagnosis;
 
   @override
   void initState() {
     super.initState();
-    categories = FirebaseService().getAllCategories();
+    diagnosis = FirebaseService().getAllDiagnosis();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Categories", style: TextStyle(fontSize: 36.0)),
-        // actions: const [ProfilePicturePage()],
+        title: const Text("Diagnoses List", style: TextStyle(fontSize: 36.0)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: FutureBuilder<List<Category>>(
-          future: categories,
+        child: 
+          
+          FutureBuilder<List<Diagnosis>>(
+          future: diagnosis,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -41,23 +41,17 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
                 child: ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    Category category = snapshot.data![index];
-                    List<String> symptoms = category.symptoms.cast<String>();
-                    
                     return Column(
                       children: <Widget>[
-                        Container(
+                        Container( // where the UI starts
                           decoration: BoxDecoration(
                             border: Border.all(color: teal),
                             color: boxinsides,
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: ListTile(
-                            title: Text(category.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: symptoms.map((symptom) => Text(symptom)).toList(),
-                            ),
+                            title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            subtitle: Text(snapshot.data![index].definition, maxLines: 2, overflow: TextOverflow.ellipsis), 
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -67,7 +61,7 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
                 ),
               );
             } else {
-              return const Center(child: Text('No categories found'));
+              return const Center(child: Text('No diagnoses found'));
             }
           },
         ),
