@@ -471,16 +471,16 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                 itemCount: symptomsToAdd.length,
                 itemBuilder: (context, index) {
                   final symptom = symptomsToAdd[index];
-                  return ListTile(
+                  return CheckboxListTile(
                     title: Text(symptom),
-                    trailing: Checkbox(
-                      value: symptomCheckedState[symptom] ?? false,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          symptomCheckedState[symptom] = value ?? false;
-                        });
-                      },
-                    ),
+                    activeColor: navy,
+                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    value: symptomCheckedState[symptom] ?? false,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        symptomCheckedState[symptom] = value ?? false;
+                      });
+                    },
                   );
                 },
               ),
@@ -495,16 +495,16 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                 itemCount: symptomsToDelete.length,
                 itemBuilder: (context, index) {
                   final symptom = symptomsToDelete[index];
-                  return ListTile(
+                  return CheckboxListTile(
                     title: Text(symptom),
-                    trailing: Checkbox(
-                      value: symptomCheckedState[symptom] ?? false,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          symptomCheckedState[symptom] = value ?? false;
-                        });
-                      },
-                    ),
+                    activeColor: navy,
+                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    value: symptomCheckedState[symptom] ?? false,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        symptomCheckedState[symptom] = value ?? false;
+                      });
+                    },
                   );
                 },
               ),
