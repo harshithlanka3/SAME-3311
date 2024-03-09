@@ -11,10 +11,10 @@ class ProfilePicturePage extends StatefulWidget {
   const ProfilePicturePage({super.key});
 
   @override
-  _ProfilePicturePageState createState() => _ProfilePicturePageState();
+  ProfilePicturePageState createState() => ProfilePicturePageState();
 }
 
-class _ProfilePicturePageState extends State<ProfilePicturePage> {
+class ProfilePicturePageState extends State<ProfilePicturePage> {
   Uint8List? _image;
 
   @override

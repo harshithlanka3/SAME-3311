@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 
 class UpdateSymptomPage extends StatefulWidget {
+  const UpdateSymptomPage({super.key});
+
   @override
-  _UpdateSymptomPageState createState() => _UpdateSymptomPageState();
+  UpdateSymptomPageState createState() => UpdateSymptomPageState();
 }
 
-class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
+class UpdateSymptomPageState extends State<UpdateSymptomPage> {
   String selectedSymptom = '';
   List<Category> categoriesToAdd = [];
   List<Category> categoriesToDelete = [];
@@ -89,9 +92,9 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Update Symptom',
-          style: TextStyle(fontSize: 20), 
+          style: TextStyle(fontSize: 32), 
         ),
       ),
       body: Padding(
@@ -103,7 +106,7 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
               future: FirebaseService().getAllSymptoms(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
@@ -128,8 +131,8 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
                 }
               },
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Add Categories:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -138,22 +141,22 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
                 itemCount: categoriesToAdd.length,
                 itemBuilder: (context, index) {
                   final category = categoriesToAdd[index];
-                  return ListTile(
+                  return CheckboxListTile(
                     title: Text(category.name),
-                    trailing: Checkbox(
-                      value: categoryCheckedState[category],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          categoryCheckedState[category] = value!;
-                        });
-                      },
-                    ),
+                    activeColor: navy,
+                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    value: categoryCheckedState[category],
+                    onChanged: (bool? value) {
+                      setState(() {
+                        categoryCheckedState[category] = value!;
+                      });
+                    },
                   );
                 },
               ),
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Remove Categories:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -162,16 +165,16 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
                 itemCount: categoriesToDelete.length,
                 itemBuilder: (context, index) {
                   final category = categoriesToDelete[index];
-                  return ListTile(
+                  return CheckboxListTile(
                     title: Text(category.name),
-                    trailing: Checkbox(
-                      value: categoryCheckedState[category],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          categoryCheckedState[category] = value!;
-                        });
-                      },
-                    ),
+                    activeColor: navy,
+                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    value: categoryCheckedState[category],
+                    onChanged: (bool? value) {
+                      setState(() {
+                        categoryCheckedState[category] = value!;
+                      });
+                    },
                   );
                 },
               ),
@@ -183,7 +186,7 @@ class _UpdateSymptomPageState extends State<UpdateSymptomPage> {
         onPressed: () {
           updateCategories();
         },
-        child: Icon(Icons.check),
+        child: const Icon(Icons.check),
       ),
     );
   }
