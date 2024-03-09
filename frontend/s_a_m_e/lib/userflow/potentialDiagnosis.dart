@@ -4,10 +4,9 @@ import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 
 class PotentialDiagnosis extends StatefulWidget {
-  const PotentialDiagnosis({super.key, required this.selectedSymptoms, required this.category});
+  const PotentialDiagnosis({super.key, required this.selectedSymptoms});
 
-  final String category;
-  final List<Map<String, dynamic>> selectedSymptoms;
+  final Map<String, Map<String, dynamic>> selectedSymptoms;
 
   @override
   State<PotentialDiagnosis> createState() => _PotentialDiagnosisState();
@@ -22,12 +21,14 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < widget.selectedSymptoms.length; i++) {
-      if (widget.selectedSymptoms[i]["isChecked"] == true) {
-        checkedSymptoms.add(widget.selectedSymptoms[i]["name"]);
-        symptoms += "${widget.selectedSymptoms[i]["name"]}, ";
+
+    widget.selectedSymptoms.forEach((key, value) {
+      if (value["isChecked"] == true) {
+        checkedSymptoms.add(key);
+        symptoms += "$key, ";
       }
-    }
+    });
+
     symptoms = symptoms.substring(0, symptoms.length - 2);
     diagnoses = FirebaseService().getAllDiagnosis();
   }
@@ -45,17 +46,7 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
           children: [
             RichText(
               text: TextSpan(
-                style: const TextStyle(fontSize: 20, color: Colors.black, fontFamily: "PT Serif"),
-                children: <TextSpan>[
-                  const TextSpan(text: "Category", style: TextStyle(fontWeight: FontWeight.bold)),
-                  TextSpan(text: ": ${widget.category}")
-                ]
-              ),
-            ),
-            const SizedBox(height: 5),
-            RichText(
-              text: TextSpan(
-                style: const TextStyle(fontSize: 20, color: Colors.black, fontFamily: "PT Serif"),
+                style: const TextStyle(fontSize: 16, color: Colors.black, fontFamily: "PT Serif"),
                 children: <TextSpan>[
                   const TextSpan(text: "Symptoms", style: TextStyle(fontWeight: FontWeight.bold)),
                   TextSpan(text: ": $symptoms")

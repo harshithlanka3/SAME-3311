@@ -84,12 +84,12 @@ class _ChooseCategoryState extends State<ChooseCategory> {
                             ),
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SelectSymptom(category: snapshot.data![index]),
-                                  ),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => SelectSymptom(category: snapshot.data![index]),
+                                //   ),
+                                // );
                               },
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: Colors.transparent,

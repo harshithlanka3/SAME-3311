@@ -5,9 +5,7 @@ import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/userflow/potentialDiagnosis.dart';
 
 class SelectSymptom extends StatefulWidget {
-  const SelectSymptom({super.key, required this.category});
-
-  final Category category;
+  const SelectSymptom({super.key});
 
   @override
   State<SelectSymptom> createState() => _SelectSymptomState();
@@ -15,13 +13,25 @@ class SelectSymptom extends StatefulWidget {
 
 class _SelectSymptomState extends State<SelectSymptom> {
 
-  List<Map<String, dynamic>> checkedSymptoms = [];
+  late Future<List<Category>> categories;
+  late Future<List<String>> symptoms;
+
+  List<String> result = [];
+  Map<String, Map<String, dynamic>> checkedSymptoms = {};
 
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < widget.category.symptoms.length; i++) {
-      checkedSymptoms.add({"name": widget.category.symptoms[i], "isChecked": false}); // this doesn't work...
+    categories = FirebaseService().getAllCategories();
+    getSymptoms();
+  }
+
+  void getSymptoms() async {
+    result = await FirebaseService().getAllSymptoms();
+    print(result);
+    for (int i = 0; i < result.length; i++) {
+      Map<String, dynamic> tempDict = {"isChecked": false};
+      checkedSymptoms[result[i]] = tempDict;
     }
     print(checkedSymptoms);
   }
@@ -35,70 +45,104 @@ class _SelectSymptomState extends State<SelectSymptom> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
-        child: Column(
-          children: [
-            RichText(
-              text: TextSpan(
-                style: const TextStyle(fontSize: 20, color: Colors.black, fontFamily: "PT Serif"),
-                children: <TextSpan>[
-                  const TextSpan(text: "Category", style: TextStyle(fontWeight: FontWeight.bold)),
-                  TextSpan(text: ": ${widget.category.name}")
-                ]
-              )
-            ),
-            const SizedBox(height: 10),
-            const Divider(thickness: 2),
-            const SizedBox(height: 5),
-            SizedBox(
-              height: MediaQuery.of(context).size.height - 205,
-              child: ListView.builder(
-                itemCount: widget.category.symptoms.length,
-                itemBuilder: (context, index)
-                {
-                  if (widget.category.symptoms.isEmpty) {
-                    return const Center(child: Text('No Symptoms Found'));
-                  } else {
-                    print(checkedSymptoms);
-                    return Column(
-                      children: [
-                        CheckboxListTile(
-                        value: checkedSymptoms[index]["isChecked"],
-                        title: Text(widget.category.symptoms[index]),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        activeColor: navy,
-                        tileColor: boxinsides,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          side: const BorderSide(color: teal)
-                          ),
-                        onChanged: (value) {
-                          setState(() {
-                            checkedSymptoms[index]["isChecked"] = value!;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 10,)
-                      ],
-                    );
-                  }   
-                }
-              ),
-            )
-          ],
+        child: FutureBuilder(
+          future: categories,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (snapshot.hasData) {
+              return Column(
+                children: [
+                  const Text("Select symptoms from the categories below", style: TextStyle(fontSize: 18),),
+                  const SizedBox(height: 10),
+                  const Divider(thickness: 2),
+                  const SizedBox(height: 5),
+                  SizedBox(
+                    height: 600,
+                    child: ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        if (snapshot.data!.isEmpty) {
+                          return const Center(child: Text('No Symptoms Found'));
+                        } else {
+                          return Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(color: teal),
+                                ),
+                                child: ExpansionTile(
+                                collapsedBackgroundColor: navy,
+                                collapsedIconColor: white,
+                                collapsedTextColor: white,
+                                collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                backgroundColor: boxinsides,
+                                title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold),),
+                                children: [
+                                  SizedBox(
+                                      height: snapshot.data![index].symptoms.length * 42,
+                                      child: ListView.builder(
+                                      itemCount: snapshot.data![index].symptoms.length,
+                                      itemBuilder: (context, index2) {
+                                        if (snapshot.data![index].symptoms.isEmpty) {
+                                          return const Center(child: Text('No Symptoms Found'));
+                                        } else {
+                                          return Column(
+                                            children: [
+                                              CheckboxListTile(
+                                                visualDensity: const VisualDensity(horizontal: -4.0, vertical: -4.0),
+                                                controlAffinity: ListTileControlAffinity.leading,
+                                                title: Text(snapshot.data![index].symptoms[index2]), // this gets symptom name
+                                                // contentPadding: const EdgeInsets.all(5),
+                                                activeColor: teal,
+                                                value: checkedSymptoms[snapshot.data![index].symptoms[index2]]!["isChecked"],
+                                                onChanged: (bool? value) {
+                                                  setState(() {
+                                                    checkedSymptoms[snapshot.data![index].symptoms[index2]]!["isChecked"] = value!;
+                                                  });
+                                                }
+                                              )
+                                              // Text(snapshot.data![index].symptoms[index2])
+                                            ],
+                                          );
+                                        }
+                                      }
+                                    ),
+                                  )
+                                ],
+                              ),
+                              ),
+                              const SizedBox(height: 10),
+                            ],
+                          );
+                        }
+                      }
+                    ),
+                  )
+                ],
+              );
+            } else {
+              return const Center(child: Text('No symptoms found'));
+            }
+          }
         )
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ElevatedButton(
         style: const ButtonStyle(
           foregroundColor: MaterialStatePropertyAll<Color>(white),
-          backgroundColor: MaterialStatePropertyAll<Color>(navy),
+          backgroundColor: MaterialStatePropertyAll<Color>(navy), // idk what color to make this
         ),
         child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms, category:widget.category.name),
+                builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms),
             )
           );
         },
