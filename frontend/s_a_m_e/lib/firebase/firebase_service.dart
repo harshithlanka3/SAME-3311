@@ -826,14 +826,94 @@ Future<Category> getCategory(String categoryName) async {
   }
 
   Future<List<String>> getSymptomsForDiagnosis(String diagnosisName) async {
-    return ["hi", "bye"];
+  try {
+    DataSnapshot snapshot = await _diagnosisRef.get();
+
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      for (var value in data.values) {
+        if (value["name"] == diagnosisName) {
+          List<String> symptoms = List<String>.from(value["symptoms"] ?? []);
+          return symptoms;
+        }
+      }
+    }
+  } catch (e) {
+    print('Error getting symptoms: $e');
   }
-  Future<void> addSymptomToDiagnosis(String symptom, String selectedDiagnosis) async {}
-  Future<void> removeSymptomFromDiagnosis(String symptom, String selectedDiagnosis) async {}
+  return [];
+}
+
+  Future<void> addSymptomToDiagnosis(String symptom, String selectedDiagnosis) async {
+    try {
+    DataSnapshot snapshot = await _diagnosisRef.get();
+
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      data.forEach((key, value) async {
+        if (value["name"] == selectedDiagnosis) {
+          List<String> symptoms = List<String>.from(value["symptoms"] ?? []);
+          if (!symptoms.contains(symptom)) {
+            symptoms.add(symptom);
+            await _diagnosisRef.child(key).update({"symptoms": symptoms});
+            print('Symptom added');
+          } 
+        }
+      });
+    }
+    } catch (e) {
+      print('Error adding symptom to diagnosis: $e');
+    }
+  }
+  Future<void> removeSymptomFromDiagnosis(String symptom, String selectedDiagnosis) async {
+    try {
+    DataSnapshot snapshot = await _diagnosisRef.get();
+
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      data.forEach((key, value) async {
+        if (value["name"] == selectedDiagnosis) {
+          List<String> symptoms = List<String>.from(value["symptoms"] ?? []);
+          if (symptoms.contains(symptom)) {
+            symptoms.remove(symptom);
+            await _diagnosisRef.child(key).update({"symptoms": symptoms});
+            print('Symptom removed');
+          } 
+        }
+      });
+    }
+    } catch (e) {
+      print('Error removing symptom from diagnosis: $e');
+    }
+  }
+
   Future<int> updateDiagnosisDef(String diagnosisname, String def) async {
+    try {
+    DataSnapshot snapshot = await _diagnosisRef.get();
+
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      data.forEach((key, value) async {
+        if (value["name"] == diagnosisname) {
+          
+          await _diagnosisRef.child(key).update({"definition": def});
+          print("Definition updated");
+          
+        }
+      });
+      return 200;
+    }
+    } catch (e) {
+      print('Error removing symptom from diagnosis: $e');
+      return 400;
+    }
     return 200;
   }
-
-  
-
 }
+
+
+
