@@ -162,17 +162,17 @@ class _SearchSymptomState extends State<SearchSymptom> {
           backgroundColor: MaterialStateProperty.all<Color>(navy),
         ),
         onPressed: () {
-          List<Map<String, dynamic>> checkedSymptomsNames = [];
-          for (var symptom in checkedSymptomNames) {
-            if (symptom["isChecked"]) {
-              checkedSymptomsNames.add(symptom);
-            }
-          }
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptomsNames,category: "Mock Category")), //Unsure why category was left blank here
-          );
+          // List<Map<String, dynamic>> checkedSymptomsNames = [];
+          // for (var symptom in checkedSymptomNames) {
+          //   if (symptom["isChecked"]) {
+          //     checkedSymptomsNames.add(symptom);
+          //   }
+          // }
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //       builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptomsNames,)),
+          // );
         },
         child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
       ),
