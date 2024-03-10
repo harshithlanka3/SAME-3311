@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import 'package:s_a_m_e/user/user_home.dart';
 import 'package:s_a_m_e/userflow/potential_diagnosis.dart';
 
 class SelectSymptom extends StatefulWidget {
@@ -14,6 +17,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
 
   late Future<List<Category>> categories;
   late Future<List<String>> symptoms;
+  late Future<UserClass?> account;
 
   List<String> result = [];
   Map<String, Map<String, dynamic>> checkedSymptoms = {};
@@ -22,7 +26,14 @@ class _SelectSymptomState extends State<SelectSymptom> {
   void initState() {
     super.initState();
     categories = FirebaseService().getAllCategories();
-    getSymptoms();
+    getSymptoms();account = fetchUser();
+  }
+
+  Future<UserClass?> fetchUser() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String uid = user?.uid as String;
+    return FirebaseService().getUser(uid);
   }
 
   void getSymptoms() async {
@@ -144,7 +155,74 @@ class _SelectSymptomState extends State<SelectSymptom> {
             )
           );
         },
-      )
+      ),bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FutureBuilder<UserClass?>(
+              future: account,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (snapshot.hasData) {
+                  final UserClass? user = snapshot.data; 
+                  return IconButton(
+                    icon: Icon(Icons.home),
+                    onPressed: () {
+                      if (user!.role == "admin") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Admin()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const UserHome()),
+                        );
+                      }
+                    },
+                  );
+                } else {
+                  return const SizedBox(); 
+                }
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
+
+class ProfileMenuWidget extends StatelessWidget {
+  const ProfileMenuWidget({
+    super.key,
+    required this.title,
+    required this.icon,
+  });
+
+  final String title;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: boxinsides,
+        ),
+        child: Icon(icon, color: navy,),
+      ),
+      title: Text(title),
+    );
+  }
+}
+
+
+
+

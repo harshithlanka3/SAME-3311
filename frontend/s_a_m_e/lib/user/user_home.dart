@@ -7,7 +7,7 @@ import 'package:s_a_m_e/user/symptom_list.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:s_a_m_e/userflow/select_symptoms.dart';
-import 'package:s_a_m_e/admin/diagnosis_list.dart';
+import 'package:s_a_m_e/user/diagnosis_list.dart';
 
 
 class UserHome extends StatelessWidget {
