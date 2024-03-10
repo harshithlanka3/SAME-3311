@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/userflow/search_symptom.dart';
-import 'package:s_a_m_e/userflow/selectSymptoms.dart';
 
 class ChooseCategory extends StatefulWidget {
   const ChooseCategory({Key? key}) : super(key: key);
 
   @override
-  _ChooseCategoryState createState() => _ChooseCategoryState();
+  ChooseCategoryState createState() => ChooseCategoryState();
 }
 
-class _ChooseCategoryState extends State<ChooseCategory> {
+class ChooseCategoryState extends State<ChooseCategory> {
   late Future<List<Category>> categories;
 
   @override
@@ -25,6 +25,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Choose Category", style: TextStyle(fontSize: 32.0)),
+        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -44,7 +45,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SearchSymptom()),
+                          MaterialPageRoute(builder: (context) => const SearchSymptom()),
                         );
                       },
                       child: Container(
@@ -54,7 +55,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             'SEARCH BY SYMPTOM NAME HERE',
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

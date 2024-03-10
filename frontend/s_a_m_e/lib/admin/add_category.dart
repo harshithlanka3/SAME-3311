@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:s_a_m_e/user/categorieslist.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
+import 'package:s_a_m_e/user/categories_list.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
@@ -9,10 +10,10 @@ class CategoryCreationPage extends StatefulWidget {
   const CategoryCreationPage({Key? key}) : super(key: key);
 
   @override
-  _CategoryCreationPageState createState() => _CategoryCreationPageState();
+  CategoryCreationPageState createState() => CategoryCreationPageState();
 }
 
-class _CategoryCreationPageState extends State<CategoryCreationPage> {
+class CategoryCreationPageState extends State<CategoryCreationPage> {
   final TextEditingController _categoryNameController = TextEditingController();
   final FirebaseService _firebaseService = FirebaseService();
   List<String> _selectedSymptoms = [];
@@ -28,6 +29,7 @@ class _CategoryCreationPageState extends State<CategoryCreationPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('S.A.M.E'),
+        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

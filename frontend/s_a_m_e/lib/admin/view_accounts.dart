@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/account/view_profile.dart';
@@ -7,11 +8,11 @@ class ViewAccounts extends StatefulWidget {
   const ViewAccounts({Key? key}) : super(key: key);
 
   @override
-  _ViewAccountsState createState() => _ViewAccountsState();
+  ViewAccountsState createState() => ViewAccountsState();
   
 }
 
-class _ViewAccountsState extends State<ViewAccounts> {
+class ViewAccountsState extends State<ViewAccounts> {
   final TextEditingController _searchController = TextEditingController();
   late Future<List<UserClass>> users;
   late List<UserClass> usersSearch;
@@ -73,6 +74,7 @@ class _ViewAccountsState extends State<ViewAccounts> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("All Users", style: TextStyle(fontSize: 36.0)),
+        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -156,9 +158,7 @@ class _ViewAccountsState extends State<ViewAccounts> {
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => ProfilePage(
-                                        name: displayedUsers[index].firstName +
-                                            " " +
-                                            displayedUsers[index].lastName,
+                                        name: "${displayedUsers[index].firstName} ${displayedUsers[index].lastName}",
                                         email: displayedUsers[index].email,
                                         role: displayedUsers[index].role))).then((info) => refreshUsers(info));
                               },

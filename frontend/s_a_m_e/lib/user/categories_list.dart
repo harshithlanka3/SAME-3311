@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
@@ -7,10 +8,10 @@ class CategoriesListPage extends StatefulWidget {
   const CategoriesListPage({Key? key}) : super(key: key);
 
   @override
-  _CategoriesListPageState createState() => _CategoriesListPageState();
+  CategoriesListPageState createState() => CategoriesListPageState();
 }
 
-class _CategoriesListPageState extends State<CategoriesListPage> {
+class CategoriesListPageState extends State<CategoriesListPage> {
   late Future<List<Category>> categories;
 
   @override
@@ -23,8 +24,8 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Categories", style: TextStyle(fontSize: 36.0)),
-        // actions: const [ProfilePicturePage()],
+        title: const Text("Categories List", style: TextStyle(fontSize: 36.0)),
+        actions: const [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
@@ -7,10 +8,10 @@ class AdminRequestPage extends StatefulWidget {
   const AdminRequestPage({super.key});
 
   @override
-  _AdminRequestPageState createState() => _AdminRequestPageState();
+  AdminRequestPageState createState() => AdminRequestPageState();
 }
 
-class _AdminRequestPageState extends State<AdminRequestPage> {
+class AdminRequestPageState extends State<AdminRequestPage> {
   late Future<List<UserClass>> requests;
   late List<UserClass> users = [];
   late List<String> userNames = [];
@@ -36,7 +37,7 @@ class _AdminRequestPageState extends State<AdminRequestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Admin Requests", style: TextStyle(fontSize: 36.0)),
-        // actions: [ProfilePicturePage()],
+        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -111,8 +112,8 @@ class AdminRequestDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Review: " + "${user.firstName} ${user.lastName}",
-          style: TextStyle(fontSize: 23),
+          "Review: ${user.firstName} ${user.lastName}",
+          style: const TextStyle(fontSize: 23),
           ),
       ),
       body: Padding(
@@ -120,36 +121,24 @@ class AdminRequestDetailsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               "Request Reason:",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Text(user.requestReason),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             Text(
-              "Grant " +  "${user.firstName} ${user.lastName}" " Admin Status?",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              "Grant ${user.firstName} ${user.lastName} Admin Status?",
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ToggleButtons(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8.0), // spave btween togggle buttons 
-                      child: Text('Approve'),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(20.0), // spave btween togggle buttons 
-                      child: Text('Deny'),
-                    ),
-                    // Text('Approve'),
-                    // Text('Deny'),
-                  ],
                   isSelected: [approveSelected, denySelected],
                   onPressed: (int index) {
                     if (index == 0) {
@@ -167,13 +156,25 @@ class AdminRequestDetailsPage extends StatelessWidget {
                   selectedBorderColor: teal,
                   borderRadius: BorderRadius.circular(10),
                   //spacing : 20,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.all(8.0), // spave btween togggle buttons 
+                      child: Text('Approve'),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(20.0), // spave btween togggle buttons 
+                      child: Text('Deny'),
+                    ),
+                    // Text('Approve'),
+                    // Text('Deny'),
+                  ],
                 ),
               ],
             ),
             
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-            Text(
+            const Text(
               "Reason:",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               selectionColor: teal,
@@ -185,12 +186,12 @@ class AdminRequestDetailsPage extends StatelessWidget {
               decoration: InputDecoration(
                 labelText: "Enter reason",
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.teal),
+                  borderSide: const BorderSide(color: Colors.teal),
                   borderRadius: BorderRadius.circular(10)
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             Center(
               child: Container(
@@ -207,7 +208,7 @@ class AdminRequestDetailsPage extends StatelessWidget {
                   print('Deny Selected: $denySelected');
                   // You can handle submit action here
                 },
-                child: Text(
+                child: const Text(
                   'Submit Admin Review', 
                   style: TextStyle(
                     color: Colors.teal

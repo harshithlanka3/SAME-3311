@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 
@@ -38,7 +39,7 @@ class ProfilePage extends StatelessWidget {
                   height: 120,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: const Image(image: AssetImage('assets/profile_pic.png')), // ??
+                    child: ProfilePicturePage(),
                   ),
                 )
               ),
@@ -52,19 +53,19 @@ class ProfilePage extends StatelessWidget {
               Row(
                 children: [
                   const Text('Name: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text(name, style: TextStyle(fontSize: 16),)
+                  Text(name, style: const TextStyle(fontSize: 16),)
                 ],),
               const SizedBox(height: 30),
               Row(
                 children: [
                   const Text('Email: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text(email, style: TextStyle(fontSize: 16),)
+                  Text(email, style: const TextStyle(fontSize: 16),)
                 ],),
               const SizedBox(height: 30),
               Row(
                 children: [
                   const Text('Role: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text(role, style: TextStyle(fontSize: 16),)
+                  Text(role, style: const TextStyle(fontSize: 16),)
                 ],),
               const SizedBox(height: 50),
               SizedBox(

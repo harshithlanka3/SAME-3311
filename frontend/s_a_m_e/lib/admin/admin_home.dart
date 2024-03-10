@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/account.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/admin/add_category.dart';
 import 'package:s_a_m_e/admin/adminrequest.dart';
-import 'package:s_a_m_e/user/categorieslist.dart';
+import 'package:s_a_m_e/user/categories_list.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/admin/add_symptom.dart';
 import 'package:s_a_m_e/admin/delete_category.dart';
 import 'package:s_a_m_e/admin/delete_symptom.dart';
-import 'package:s_a_m_e/admin/editDiagnoses.dart';
+import 'package:s_a_m_e/admin/edit_diagnoses.dart';
 import 'package:s_a_m_e/account/login.dart';
-import 'package:s_a_m_e/user/symptomlist.dart';
+import 'package:s_a_m_e/user/symptom_list.dart';
 import 'package:s_a_m_e/admin/update_category.dart';
 import 'package:s_a_m_e/admin/update_symptom.dart';
 import 'package:s_a_m_e/admin/view_accounts.dart';
-import 'package:s_a_m_e/userflow/selectSymptoms.dart';
+import 'package:s_a_m_e/userflow/select_symptoms.dart';
 
 class Admin extends StatelessWidget {
   const Admin({super.key});
@@ -23,6 +24,7 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       title: const Text('S.A.M.E'),
+      actions: [ProfilePicturePage()],
     ),
     drawer: Drawer(
       backgroundColor: background,
@@ -222,7 +224,7 @@ Widget build(BuildContext context) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CategoriesListPage()),
+                      builder: (context) => const CategoriesListPage()),
                 );
               },
             ),

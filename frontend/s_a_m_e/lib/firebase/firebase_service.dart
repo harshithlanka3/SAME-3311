@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 class Symptom {
   final String name;
@@ -43,6 +46,7 @@ class UserClass {
   String firstName;
   String lastName;
   String role;
+  String? profilePicture;
   bool activeRequest;
   String requestReason;
   List<String> messages;
@@ -53,6 +57,7 @@ class UserClass {
     required this.firstName,
     required this.lastName,
     required this.role,
+    this.profilePicture,
     this.activeRequest = false,
     this.requestReason = '',
     List<String>? messages,
@@ -72,6 +77,7 @@ class UserClass {
       firstName: json['firstName'],
       lastName: json['lastName'],
       role: json['role'] ?? 'user',
+      profilePicture: json['profilePicture'],
       activeRequest: json['activeRequest'] ?? false,
       requestReason: json['requestReason'] ?? '',
       messages: json['messages'] != null
@@ -528,6 +534,7 @@ Future<Category> getCategory(String categoryName) async {
             firstName: data['firstName'],
             lastName: data['lastName'],
             role: data["role"],
+            profilePicture: data['profilePicture'],
             activeRequest: data['activeRequest'] ?? false,
             requestReason: data['requestReason'] ?? '',
             messages: data['messages'] != null
@@ -561,6 +568,7 @@ Future<Category> getCategory(String categoryName) async {
               firstName: value['firstName'],
               lastName: value['lastName'],
               role: value['role'],
+              profilePicture: value['profilePicture'],
               activeRequest: value['activeRequest'] ?? false,
               requestReason: value['requestReason'] ?? '',
               );
@@ -638,6 +646,47 @@ Future<Category> getCategory(String categoryName) async {
   }
 
 
+  Future<String> uploadUserProfilePicture(String email, XFile file) async {
+    try {
+      Reference referenceRoot = FirebaseStorage.instance.ref();
+      Reference referenceDirPictures = referenceRoot.child("images/profilephotos");
+      Reference referenceImageToUpload = referenceDirPictures.child(email);
+
+      await referenceImageToUpload.putFile(File(file.path));
+      String pictureURL = await referenceImageToUpload.getDownloadURL();
+      updateUserProfilePicture(email, pictureURL);
+      return pictureURL;
+    } catch(e) {
+      print("Error with uploading user profile picture:");
+      print(e.toString());
+      return "failure";
+    }
+  }
+
+  Future updateUserProfilePicture(String email, String pictureURL) async {
+    try {
+      DataSnapshot snapshot = await _usersRef.get();
+      
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+        if (value["email"] == email) {
+            _usersRef.child(key).update({
+              "profilePicture" : pictureURL
+            });
+          }
+        });
+
+      }
+
+    } catch (e) {
+      print("Error with updating profile picture:");
+      print(e.toString());
+      return null;
+    }
+  }
+
   Future<bool> updateUserRequestReason(String userId, String requestReason) async {
     try {
       DatabaseReference userRef = _usersRef.child(userId);
@@ -672,6 +721,7 @@ Future<Category> getCategory(String categoryName) async {
               lastName: value['lastName'],
               email: value['email'],
               role: value['role'],
+              profilePicture: value['profilePicture'],
               activeRequest: value['activeRequest'] ?? false,
               requestReason: value['requestReason'] ?? '',
             );
@@ -826,14 +876,94 @@ Future<Category> getCategory(String categoryName) async {
   }
 
   Future<List<String>> getSymptomsForDiagnosis(String diagnosisName) async {
-    return ["hi", "bye"];
+  try {
+    DataSnapshot snapshot = await _diagnosisRef.get();
+
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      for (var value in data.values) {
+        if (value["name"] == diagnosisName) {
+          List<String> symptoms = List<String>.from(value["symptoms"] ?? []);
+          return symptoms;
+        }
+      }
+    }
+  } catch (e) {
+    print('Error getting symptoms: $e');
   }
-  Future<void> addSymptomToDiagnosis(String symptom, String selectedDiagnosis) async {}
-  Future<void> removeSymptomFromDiagnosis(String symptom, String selectedDiagnosis) async {}
+  return [];
+}
+
+  Future<void> addSymptomToDiagnosis(String symptom, String selectedDiagnosis) async {
+    try {
+    DataSnapshot snapshot = await _diagnosisRef.get();
+
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      data.forEach((key, value) async {
+        if (value["name"] == selectedDiagnosis) {
+          List<String> symptoms = List<String>.from(value["symptoms"] ?? []);
+          if (!symptoms.contains(symptom)) {
+            symptoms.add(symptom);
+            await _diagnosisRef.child(key).update({"symptoms": symptoms});
+            print('Symptom added');
+          } 
+        }
+      });
+    }
+    } catch (e) {
+      print('Error adding symptom to diagnosis: $e');
+    }
+  }
+  Future<void> removeSymptomFromDiagnosis(String symptom, String selectedDiagnosis) async {
+    try {
+    DataSnapshot snapshot = await _diagnosisRef.get();
+
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      data.forEach((key, value) async {
+        if (value["name"] == selectedDiagnosis) {
+          List<String> symptoms = List<String>.from(value["symptoms"] ?? []);
+          if (symptoms.contains(symptom)) {
+            symptoms.remove(symptom);
+            await _diagnosisRef.child(key).update({"symptoms": symptoms});
+            print('Symptom removed');
+          } 
+        }
+      });
+    }
+    } catch (e) {
+      print('Error removing symptom from diagnosis: $e');
+    }
+  }
+
   Future<int> updateDiagnosisDef(String diagnosisname, String def) async {
+    try {
+    DataSnapshot snapshot = await _diagnosisRef.get();
+
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      data.forEach((key, value) async {
+        if (value["name"] == diagnosisname) {
+          
+          await _diagnosisRef.child(key).update({"definition": def});
+          print("Definition updated");
+          
+        }
+      });
+      return 200;
+    }
+    } catch (e) {
+      print('Error removing symptom from diagnosis: $e');
+      return 400;
+    }
     return 200;
   }
-
-  
-
 }
+
+
+

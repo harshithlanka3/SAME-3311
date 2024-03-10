@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
@@ -7,10 +8,10 @@ class SymptomsListPage extends StatefulWidget {
   const SymptomsListPage({super.key});
 
   @override
-  _SymptomsListPageState createState() => _SymptomsListPageState();
+  SymptomsListPageState createState() => SymptomsListPageState();
 }
 
-class _SymptomsListPageState extends State<SymptomsListPage> {
+class SymptomsListPageState extends State<SymptomsListPage> {
   late Future<List<String>> symptoms;
 
   @override
@@ -23,9 +24,8 @@ class _SymptomsListPageState extends State<SymptomsListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Symptoms", style: TextStyle(fontSize: 36.0)),
-        // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
-        // actions: [ProfilePicturePage()]
+        title: const Text("Symptoms List", style: TextStyle(fontSize: 36.0)),
+        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

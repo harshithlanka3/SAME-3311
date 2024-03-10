@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/account.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/account/login.dart';
-import 'package:s_a_m_e/user/symptomlist.dart';
+import 'package:s_a_m_e/user/symptom_list.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:s_a_m_e/userflow/selectSymptoms.dart';
-import 'package:s_a_m_e/admin/diagnosislist.dart';
+import 'package:s_a_m_e/userflow/select_symptoms.dart';
+import 'package:s_a_m_e/admin/diagnosis_list.dart';
 
 
 class UserHome extends StatelessWidget {
@@ -123,13 +124,13 @@ class UserHome extends StatelessWidget {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: const Text('Error'),
-                            content: Text('Please choose an option and give a reason.'),
+                            content: const Text('Please choose an option and give a reason.'),
                             actions: [
                               TextButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("OK"),
+                                child: const Text("OK", style: TextStyle(color: navy),),
                               ),
                             ],
                           );
@@ -152,6 +153,7 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       title: const Text('S.A.M.E'),
+      actions: [ProfilePicturePage()],
     ),
     drawer: Drawer(
       backgroundColor: background,
@@ -222,7 +224,7 @@ Widget build(BuildContext context) {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DiagnosisListPage()),
+                  MaterialPageRoute(builder: (context) => const DiagnosisListPage()),
                 );
               },
             ),

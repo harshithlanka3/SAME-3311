@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
@@ -8,10 +9,10 @@ class SymptomDeletionPage extends StatefulWidget {
   const SymptomDeletionPage({super.key});
 
   @override
-  _SymptomDeletionPageState createState() => _SymptomDeletionPageState();
+  SymptomDeletionPageState createState() => SymptomDeletionPageState();
 }
 
-class _SymptomDeletionPageState extends State<SymptomDeletionPage> {
+class SymptomDeletionPageState extends State<SymptomDeletionPage> {
   final FirebaseService _firebaseService = FirebaseService();
   List<String> _selectedSymptoms = [];
 
@@ -20,6 +21,7 @@ class _SymptomDeletionPageState extends State<SymptomDeletionPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('S.A.M.E'),
+        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
