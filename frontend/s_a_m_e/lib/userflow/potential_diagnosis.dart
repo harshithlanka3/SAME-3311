@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import 'package:s_a_m_e/userflow/diagnosis_page.dart';
 
 class PotentialDiagnosis extends StatefulWidget {
   const PotentialDiagnosis({super.key, required this.selectedSymptoms});
@@ -54,8 +57,8 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
             const SizedBox(height: 10),
             const Divider(thickness: 2),
             const SizedBox(height: 5),
-            SizedBox(
-              height: MediaQuery.of(context).size.height - 235,
+            Expanded(
+              // height: MediaQuery.of(context).size.height - 235,
               child: 
                 FutureBuilder<List<Diagnosis>>(
                 future: diagnoses,
@@ -80,7 +83,27 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
                                 ),
                                 child: ListTile(
                                   title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text(snapshot.data![index].definition, maxLines: 2, overflow: TextOverflow.ellipsis), 
+                                  subtitle: Text(snapshot.data![index].definition, maxLines: 2, overflow: TextOverflow.ellipsis),
+                                  trailing: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DiagnosisPage(diagnosis: snapshot.data![index]),
+                                        )
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(20),
+                                          border: Border.all(
+                                            color: navy,
+                                            width: 1.0,
+                                          )),
+                                      child: const Icon(Icons.arrow_forward_ios_outlined, color: navy),
+                                    ),
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 10),

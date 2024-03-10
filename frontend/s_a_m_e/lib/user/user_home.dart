@@ -129,7 +129,7 @@ class UserHome extends StatelessWidget {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: const Text("OK"),
+                                child: const Text("OK", style: TextStyle(color: navy),),
                               ),
                             ],
                           );

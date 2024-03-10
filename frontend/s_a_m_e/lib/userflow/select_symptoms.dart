@@ -33,6 +33,17 @@ class _SelectSymptomState extends State<SelectSymptom> {
     }
   }
 
+  int amountChecked(Map<String, Map<String, dynamic>> list) {
+    int selectedCount = 0;
+    list.forEach((key, value) {
+      if (value["isChecked"] == true) {
+        selectedCount++;
+      }
+    });
+    
+    return selectedCount;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,8 +66,8 @@ class _SelectSymptomState extends State<SelectSymptom> {
                   const SizedBox(height: 10),
                   const Divider(thickness: 2),
                   const SizedBox(height: 5),
-                  SizedBox(
-                    height: 600,
+                  Expanded(
+                    // height: 600,
                     child: ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
@@ -65,17 +76,13 @@ class _SelectSymptomState extends State<SelectSymptom> {
                         } else {
                           return Column(
                             children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(color: teal),
-                                ),
-                                child: ExpansionTile(
+                              ExpansionTile(
+                                iconColor: navy,
                                 collapsedBackgroundColor: navy,
                                 collapsedIconColor: white,
                                 collapsedTextColor: white,
-                                collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15), side: const BorderSide(color: navy)),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15), side: const BorderSide(color: teal)),
                                 backgroundColor: boxinsides,
                                 title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold),),
                                 children: [
@@ -111,7 +118,6 @@ class _SelectSymptomState extends State<SelectSymptom> {
                                   )
                                 ],
                               ),
-                              ),
                               const SizedBox(height: 10),
                             ],
                           );
@@ -135,12 +141,34 @@ class _SelectSymptomState extends State<SelectSymptom> {
         ),
         child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms),
-            )
-          );
+          int count = amountChecked(checkedSymptoms);
+          if (count > 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms),
+              )
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: background,
+                  title: const Text('Error'),
+                  content: const Text('Please choose at least one symptom.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("OK", style: TextStyle(color: navy),),
+                    ),
+                  ],
+                );
+              }
+            );
+          }
         },
       )
     );
