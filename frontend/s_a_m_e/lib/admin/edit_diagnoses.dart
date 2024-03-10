@@ -326,9 +326,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
     print(diagnoses);
     setState(() {
       selectedDiagnosis = diagnoses.isNotEmpty ? diagnoses[0].name : '';
-      print("hello");
       print(selectedDiagnosis);
-      print("hello");
     });
     fetchSymptoms(selectedDiagnosis);
   }
@@ -385,6 +383,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
     setState(() {
       symptomsSelectedAdd.clear();
       symptomsSelectedDel.clear();
+      symptomCheckedState.clear();
     });
 
     fetchSymptoms(selectedDiagnosis);
@@ -522,6 +521,9 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Diagnosis added successfully')),
               );
+              setState(() {
+                _diagnosisUpdateDefinitionController.clear();
+              });
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Failed to add diagnosis')),
