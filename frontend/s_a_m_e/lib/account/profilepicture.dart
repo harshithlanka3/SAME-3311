@@ -4,6 +4,7 @@
 
 import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,10 +20,32 @@ class ProfilePicturePageState extends State<ProfilePicturePage> {
   Uint8List? _image;
   String? imageURL;
   UserClass? user;
+  late Future fetchFuture;
 
   @override
   void initState() {
     super.initState();
+    fetchFuture = fetchPicture();
+  }
+
+  Future<String> fetchPicture() async {
+    user = await fetchUser();
+    if (user!.profilePicture != null) {
+      final storageRef = FirebaseStorage.instance.ref();
+      final photoRef = storageRef.child("images/profilephotos/${user!.email}");
+      try {
+        const fiveMBs = 1024 * 1024 * 5;
+        final Uint8List? img = await photoRef.getData(fiveMBs);
+        setState(() {
+          _image = img;
+        });
+        return "We have an image!";
+      } catch(e) {
+        print("Error with grabbing photo");
+        print(e);
+      }
+    }
+    return "No image";
   }
 
   pickImage(ImageSource source) async {
@@ -37,15 +60,12 @@ class ProfilePicturePageState extends State<ProfilePicturePage> {
 
   void selectImage() async {
     XFile file = await pickImage(ImageSource.gallery);
+    // ignore: unnecessary_null_comparison
     if (file == null) {
       return;
     }
-
-    user = await fetchUser();
     String email = user!.email;
-
     imageURL = await FirebaseService().uploadUserProfilePicture(email, file);
-    print(imageURL);
 
     Uint8List img = await file.readAsBytes();
     setState(() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/userflow/potential_diagnosis.dart';
@@ -38,6 +39,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Select Symptoms", style: TextStyle(fontSize: 32.0)),
+        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),

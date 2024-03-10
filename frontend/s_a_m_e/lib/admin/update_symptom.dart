@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 
 class UpdateSymptomPage extends StatefulWidget {
@@ -96,6 +97,7 @@ class UpdateSymptomPageState extends State<UpdateSymptomPage> {
           'Update Symptom',
           style: TextStyle(fontSize: 32), 
         ),
+        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/account/view_profile.dart';
@@ -73,6 +74,7 @@ class ViewAccountsState extends State<ViewAccounts> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("All Users", style: TextStyle(fontSize: 36.0)),
+        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

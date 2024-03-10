@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/account.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/account/login.dart';
 import 'package:s_a_m_e/user/symptom_list.dart';
@@ -152,6 +153,7 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       title: const Text('S.A.M.E'),
+      actions: [ProfilePicturePage()],
     ),
     drawer: Drawer(
       backgroundColor: background,
