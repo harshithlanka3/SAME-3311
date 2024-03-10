@@ -9,10 +9,10 @@ class ManageAccountPage extends StatefulWidget {
   const ManageAccountPage({super.key});
 
   @override
-  _ManageAccountPageState createState() => _ManageAccountPageState();
+  ManageAccountPageState createState() => ManageAccountPageState();
 }
 
-class _ManageAccountPageState extends State<ManageAccountPage> {
+class ManageAccountPageState extends State<ManageAccountPage> {
   late Future<UserClass?> account;
   late Future<List<UserClass>> accounts;
 
@@ -35,7 +35,7 @@ class _ManageAccountPageState extends State<ManageAccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Account", style: TextStyle(fontSize: 36.0)),
+        title: const Text("My Account", style: TextStyle(fontSize: 36.0)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -49,68 +49,65 @@ class _ManageAccountPageState extends State<ManageAccountPage> {
             } else if (snapshot.hasData) {
               return Column(
                 children: <Widget>[
-                  Container( // where the UI starts
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 25),
-                        SizedBox(
-                          width: 120,
-                          height: 120,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: ProfilePicturePage(),
-                          ),
+                  Column(
+                    children: [
+                      const SizedBox(height: 25),
+                      SizedBox(
+                        width: 120,
+                        height: 120,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: ProfilePicturePage(),
                         ),
-                        const SizedBox(height: 20),
-                        Text('${snapshot.data!.firstName} ${snapshot.data!.lastName}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
-                        Text('User Role: ${snapshot.data!.role}', style: const TextStyle(fontSize: 16.0)), 
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          width: 200,
-                          child: ElevatedButton(
-                            onPressed: () {},
+                      ),
+                      const SizedBox(height: 20),
+                      Text('${snapshot.data!.firstName} ${snapshot.data!.lastName}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
+                      Text('User Role: ${snapshot.data!.role}', style: const TextStyle(fontSize: 16.0)), 
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: const ButtonStyle(
+                            foregroundColor: MaterialStatePropertyAll<Color>(white),
+                            backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                          ),
+                          child: const Text("Edit Profile", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+                        )
+                      ),
+                      const SizedBox(height: 20),
+                      const Divider(),
+                      const SizedBox(height: 20),
+                  
+                      ProfileMenuWidget(title: "${snapshot.data!.firstName} ${snapshot.data!.lastName}", icon: Icons.abc),
+                      //ProfileMenuWidget(title: "Username", icon: Icons.account_circle),
+                      ProfileMenuWidget(title: snapshot.data!.email, icon: Icons.email),
+                      const ProfileMenuWidget(title: "Password", icon: Icons.key),
+                  
+                      const SizedBox(height: 20),
+                      const Divider(),
+                      const SizedBox(height: 20),
+                  
+                      SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).popUntil((route) => route.isFirst);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Login(),
+                              ),
+                            );
+                          },
                             style: const ButtonStyle(
                               foregroundColor: MaterialStatePropertyAll<Color>(white),
                               backgroundColor: MaterialStatePropertyAll<Color>(navy),
                             ),
-                            child: const Text("Edit Profile", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-                          )
-                        ),
-                        const SizedBox(height: 20),
-                        const Divider(),
-                        const SizedBox(height: 20),
-
-                        ProfileMenuWidget(title: snapshot.data!.firstName + " " + snapshot.data!.lastName, icon: Icons.abc),
-                        //ProfileMenuWidget(title: "Username", icon: Icons.account_circle),
-                        ProfileMenuWidget(title: snapshot.data!.email, icon: Icons.email),
-                        ProfileMenuWidget(title: "Password", icon: Icons.key),
-
-                        const SizedBox(height: 20),
-                        const Divider(),
-                        const SizedBox(height: 20),
-
-                        SizedBox(
-                          width: 200,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).popUntil((route) => route.isFirst);
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Login(),
-                                ),
-                              );
-                            },
-                              style: const ButtonStyle(
-                                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                              ),
-                              child: const Text("Sign out", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-                          )
-                        ),
-                          
-                      ],
-                    )
+                            child: const Text("Sign out", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+                        )
+                      ), 
+                    ],
                   ),
                   const SizedBox(height: 10),
                 ],

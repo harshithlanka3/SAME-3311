@@ -2,35 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
-// import 'package:s_a_m_e/account/profilepicture.dart';
 
-class SymptomsListPage extends StatefulWidget {
-  const SymptomsListPage({super.key});
+class DiagnosisListPage extends StatefulWidget {
+  const DiagnosisListPage({super.key});
 
   @override
-  _SymptomsListPageState createState() => _SymptomsListPageState();
+  DiagnosisListPageState createState() => DiagnosisListPageState();
 }
 
-class _SymptomsListPageState extends State<SymptomsListPage> {
-  late Future<List<String>> symptoms;
+class DiagnosisListPageState extends State<DiagnosisListPage> {
+  late Future<List<Diagnosis>> diagnosis;
 
   @override
   void initState() {
     super.initState();
-    symptoms = FirebaseService().getAllSymptoms();
+    diagnosis = FirebaseService().getAllDiagnosis();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Symptoms", style: TextStyle(fontSize: 36.0)),
+        title: const Text("Diagnoses List", style: TextStyle(fontSize: 36.0)),
         actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: FutureBuilder<List<String>>(
-          future: symptoms,
+        child: 
+          
+          FutureBuilder<List<Diagnosis>>(
+          future: diagnosis,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -51,8 +52,8 @@ class _SymptomsListPageState extends State<SymptomsListPage> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: ListTile(
-                            title: Text(snapshot.data![index], style: const TextStyle(fontWeight: FontWeight.bold)),
-                            subtitle: const Text('Symptom Description'), 
+                            title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            subtitle: Text(snapshot.data![index].definition, maxLines: 2, overflow: TextOverflow.ellipsis), 
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -62,7 +63,7 @@ class _SymptomsListPageState extends State<SymptomsListPage> {
                 ),
               );
             } else {
-              return const Center(child: Text('No symptoms found'));
+              return const Center(child: Text('No diagnoses found'));
             }
           },
         ),

@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
-import 'package:s_a_m_e/userflow/potentialDiagnosis.dart';
+// import 'package:s_a_m_e/userflow/potentialDiagnosis.dart';
 
 class SearchSymptom extends StatefulWidget {
   const SearchSymptom({Key? key}) : super(key: key);
 
   @override
-  _SearchSymptomState createState() => _SearchSymptomState();
+  SearchSymptomState createState() => SearchSymptomState();
 }
 
-class _SearchSymptomState extends State<SearchSymptom> {
+class SearchSymptomState extends State<SearchSymptom> {
   late Future<List<String>> symptoms;
   final TextEditingController _searchController = TextEditingController();
   late List<String> symptomsSearch;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
-import 'package:s_a_m_e/userflow/potentialDiagnosis.dart';
+import 'package:s_a_m_e/userflow/potential_diagnosis.dart';
 
 class SelectSymptom extends StatefulWidget {
   const SelectSymptom({super.key});
@@ -28,12 +28,10 @@ class _SelectSymptomState extends State<SelectSymptom> {
 
   void getSymptoms() async {
     result = await FirebaseService().getAllSymptoms();
-    print(result);
     for (int i = 0; i < result.length; i++) {
       Map<String, dynamic> tempDict = {"isChecked": false};
       checkedSymptoms[result[i]] = tempDict;
     }
-    print(checkedSymptoms);
   }
 
   @override

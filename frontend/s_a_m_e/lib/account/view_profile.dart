@@ -53,19 +53,19 @@ class ProfilePage extends StatelessWidget {
               Row(
                 children: [
                   const Text('Name: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text(name, style: TextStyle(fontSize: 16),)
+                  Text(name, style: const TextStyle(fontSize: 16),)
                 ],),
               const SizedBox(height: 30),
               Row(
                 children: [
                   const Text('Email: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text(email, style: TextStyle(fontSize: 16),)
+                  Text(email, style: const TextStyle(fontSize: 16),)
                 ],),
               const SizedBox(height: 30),
               Row(
                 children: [
                   const Text('Role: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text(role, style: TextStyle(fontSize: 16),)
+                  Text(role, style: const TextStyle(fontSize: 16),)
                 ],),
               const SizedBox(height: 50),
               SizedBox(
