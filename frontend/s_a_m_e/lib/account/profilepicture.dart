@@ -3,7 +3,8 @@
 // wanting const, even though would throw error since stateful
 
 import 'dart:typed_data';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -16,26 +17,47 @@ class ProfilePicturePage extends StatefulWidget {
 
 class ProfilePicturePageState extends State<ProfilePicturePage> {
   Uint8List? _image;
+  String? imageURL;
+  UserClass? user;
 
   @override
   void initState() {
     super.initState();
   }
 
-  pickImage(ImageSource source) async{
+  pickImage(ImageSource source) async {
     final ImagePicker imagePicker = ImagePicker();
     XFile? file = await imagePicker.pickImage(source: source);
     if (file != null) {
-      return await file.readAsBytes();
+      return file;
     }
     print('No image selected.');
+    return file;
   }
 
   void selectImage() async {
-    Uint8List img = await pickImage(ImageSource.gallery);
+    XFile file = await pickImage(ImageSource.gallery);
+    if (file == null) {
+      return;
+    }
+
+    user = await fetchUser();
+    String email = user!.email;
+
+    imageURL = await FirebaseService().uploadUserProfilePicture(email, file);
+    print(imageURL);
+
+    Uint8List img = await file.readAsBytes();
     setState(() {
       _image = img;
     });
+  }
+
+  Future<UserClass?> fetchUser() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String uid = user?.uid as String;
+    return FirebaseService().getUser(uid);
   }
 
   @override
@@ -51,7 +73,7 @@ class ProfilePicturePageState extends State<ProfilePicturePage> {
             ): 
         CircleAvatar(
         radius: 22.0,
-        backgroundImage: NetworkImage('https://www.mgp.net.au/wp-content/uploads/2023/05/150-1503945_transparent-user-png-default-user-image-png-png.png'),
+        backgroundImage: AssetImage('assets/profile_pic.png'),
         ),
       )
     );
