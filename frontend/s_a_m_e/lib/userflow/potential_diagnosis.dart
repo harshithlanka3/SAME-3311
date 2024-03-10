@@ -16,7 +16,6 @@ class PotentialDiagnosis extends StatefulWidget {
 }
 
 class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
-
   late Future<List<Diagnosis>> diagnoses;
   List<String> checkedSymptoms = [];
   String symptoms = "";
@@ -33,14 +32,17 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
     });
 
     symptoms = symptoms.substring(0, symptoms.length - 2);
-    diagnoses = FirebaseService().getAllDiagnosis();
+    diagnoses = FirebaseService().getSortedDiagnosesBySymptoms(checkedSymptoms);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Potential Diagnosis", style: TextStyle(fontSize: 32.0),),
+        title: const Text(
+          "Potential Diagnosis",
+          style: TextStyle(fontSize: 32.0),
+        ),
         actions: [ProfilePicturePage()],
       ),
       body: Padding(
@@ -49,20 +51,23 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
           children: [
             RichText(
               text: TextSpan(
-                style: const TextStyle(fontSize: 16, color: Colors.black, fontFamily: "PT Serif"),
-                children: <TextSpan>[
-                  const TextSpan(text: "Symptoms", style: TextStyle(fontWeight: FontWeight.bold)),
-                  TextSpan(text: ": $symptoms")
-                ]
-              ),
+                  style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontFamily: "PT Serif"),
+                  children: <TextSpan>[
+                    const TextSpan(
+                        text: "Symptoms",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: ": $symptoms")
+                  ]),
             ),
             const SizedBox(height: 10),
             const Divider(thickness: 2),
             const SizedBox(height: 5),
             Expanded(
               // height: MediaQuery.of(context).size.height - 235,
-              child: 
-                FutureBuilder<List<Diagnosis>>(
+              child: FutureBuilder<List<Diagnosis>>(
                 future: diagnoses,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -77,33 +82,43 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
                         itemBuilder: (context, index) {
                           return Column(
                             children: <Widget>[
-                              Container( // where the UI starts
+                              Container(
+                                // where the UI starts
                                 decoration: BoxDecoration(
                                   border: Border.all(color: teal),
                                   color: boxinsides,
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 child: ListTile(
-                                  title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text(snapshot.data![index].definition, maxLines: 2, overflow: TextOverflow.ellipsis),
+                                  title: Text(snapshot.data![index].name,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  subtitle: Text(
+                                      snapshot.data![index].definition,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis),
                                   trailing: GestureDetector(
                                     onTap: () {
                                       Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => DiagnosisPage(diagnosis: snapshot.data![index]),
-                                        )
-                                      );
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => DiagnosisPage(
+                                                diagnosis:
+                                                    snapshot.data![index]),
+                                          ));
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.all(5),
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                           border: Border.all(
                                             color: navy,
                                             width: 1.0,
                                           )),
-                                      child: const Icon(Icons.arrow_forward_ios_outlined, color: navy),
+                                      child: const Icon(
+                                          Icons.arrow_forward_ios_outlined,
+                                          color: navy),
                                     ),
                                   ),
                                 ),
@@ -125,7 +140,4 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
       ),
     );
   }
-
 }
-
-
