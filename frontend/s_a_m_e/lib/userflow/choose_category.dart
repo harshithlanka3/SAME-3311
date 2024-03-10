@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/userflow/search_symptom.dart';
@@ -24,6 +25,7 @@ class ChooseCategoryState extends State<ChooseCategory> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Choose Category", style: TextStyle(fontSize: 32.0)),
+        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

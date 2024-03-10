@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/userflow/diagnosis_page.dart';
@@ -40,6 +41,7 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Potential Diagnosis", style: TextStyle(fontSize: 32.0),),
+        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),

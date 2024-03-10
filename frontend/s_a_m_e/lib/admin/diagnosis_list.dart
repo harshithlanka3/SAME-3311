@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 
@@ -23,6 +24,7 @@ class DiagnosisListPageState extends State<DiagnosisListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Diagnoses List", style: TextStyle(fontSize: 36.0)),
+        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

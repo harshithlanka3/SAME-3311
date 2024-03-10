@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart'; 
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
@@ -14,6 +15,7 @@ class EditDiagnosisPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("S.A.M.E."),
+        actions: [ProfilePicturePage()],
       ),
       body: Center(
         child: Column(
@@ -324,9 +326,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
     print(diagnoses);
     setState(() {
       selectedDiagnosis = diagnoses.isNotEmpty ? diagnoses[0].name : '';
-      print("hello");
       print(selectedDiagnosis);
-      print("hello");
     });
     fetchSymptoms(selectedDiagnosis);
   }
@@ -383,6 +383,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
     setState(() {
       symptomsSelectedAdd.clear();
       symptomsSelectedDel.clear();
+      symptomCheckedState.clear();
     });
 
     fetchSymptoms(selectedDiagnosis);
@@ -520,6 +521,9 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Diagnosis added successfully')),
               );
+              setState(() {
+                _diagnosisUpdateDefinitionController.clear();
+              });
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Failed to add diagnosis')),

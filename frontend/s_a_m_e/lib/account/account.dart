@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/account/login.dart';
@@ -56,7 +57,7 @@ class ManageAccountPageState extends State<ManageAccountPage> {
                         height: 120,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
-                          child: const Image(image: AssetImage('assets/profile_pic.png')),
+                          child: ProfilePicturePage(),
                         ),
                       ),
                       const SizedBox(height: 20),

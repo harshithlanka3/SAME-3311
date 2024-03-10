@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
@@ -24,7 +25,7 @@ class CategoriesListPageState extends State<CategoriesListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Categories List", style: TextStyle(fontSize: 36.0)),
-        // actions: const [ProfilePicturePage()],
+        actions: const [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
