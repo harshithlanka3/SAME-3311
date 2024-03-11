@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
+import 'package:s_a_m_e/account/viewallprofilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 
 class ProfilePage extends StatelessWidget {
 
-  // final String profilePic;
+  final String? profilePic;
   final String name;
   final String email;
   final String role;
 
   const ProfilePage({
     Key? key,
-    // required this.profilePic,
+    required this.profilePic,
     required this.name,
     required this.email,
     required this.role,
@@ -39,7 +40,7 @@ class ProfilePage extends StatelessWidget {
                   height: 120,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: ProfilePicturePage(),
+                    child: ViewAllProfilePicturePage(email: email, url: profilePic),
                   ),
                 )
               ),
