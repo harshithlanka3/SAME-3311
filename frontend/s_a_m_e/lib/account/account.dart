@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
+import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/account/login.dart';
+import 'package:s_a_m_e/user/user_home.dart';
 
 class ManageAccountPage extends StatefulWidget {
   const ManageAccountPage({super.key});
@@ -21,7 +23,6 @@ class ManageAccountPageState extends State<ManageAccountPage> {
     super.initState();
     account = fetchUser();
     accounts = FirebaseService().getAllUsers();
-    // testing getAllUsers()
   }
 
   Future<UserClass?> fetchUser() async {
@@ -116,6 +117,43 @@ class ManageAccountPageState extends State<ManageAccountPage> {
               return const Center(child: Text('No account found'));
             }
           },
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FutureBuilder<UserClass?>(
+              future: account,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (snapshot.hasData) {
+                  final UserClass? user = snapshot.data; 
+                  return IconButton(
+                    icon: Icon(Icons.home),
+                    onPressed: () {
+                      if (user!.role == "admin") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Admin()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const UserHome()),
+                        );
+                      }
+                    },
+                  );
+                } else {
+                  return const SizedBox(); 
+                }
+              },
+            ),
+          ],
         ),
       ),
     );

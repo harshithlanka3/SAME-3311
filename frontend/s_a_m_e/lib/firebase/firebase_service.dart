@@ -14,6 +14,16 @@ class Symptom {
   Symptom.fromJson(Map<String, dynamic> json) : name = json['name'];
 }
 
+class Sign {
+  final String name;
+
+  Sign({
+    required this.name,
+  });
+
+  Sign.fromJson(Map<String, dynamic> json) : name = json['name'];
+}
+
 class Category {
   final String name;
   final List<String> symptoms;
@@ -39,14 +49,19 @@ class Diagnosis {
   final String name;
   final String definition;
   final List<String> symptoms;
+  final List<String> signs;
 
   Diagnosis(
-      {required this.name, required this.symptoms, required this.definition});
+      {required this.name,
+      required this.symptoms,
+      required this.signs,
+      required this.definition});
 
   Diagnosis.fromJson(Map<String, dynamic> json)
       : definition = json['definition'],
         name = json['name'],
-        symptoms = json['symptoms'];
+        symptoms = json['symptoms'],
+        signs = json['signs'];
 }
 
 class UserClass {
@@ -96,6 +111,7 @@ class UserClass {
 
 class FirebaseService {
   final _symptomsRef = FirebaseDatabase.instance.ref('data/symptoms');
+  final _signsRef = FirebaseDatabase.instance.ref('data/signs');
   final _catRef = FirebaseDatabase.instance.ref('data/categories');
   final _usersRef = FirebaseDatabase.instance.ref('users/');
   final _diagnosisRef = FirebaseDatabase.instance.ref('data/diagnoses');
@@ -283,6 +299,33 @@ class FirebaseService {
     }
   }
 
+  Future<void> addCategoryToSymptom(
+      String categoryName, String symptomName) async {
+    try {
+      DataSnapshot snapshot = await _symptomsRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) async {
+          if (value["name"] == symptomName) {
+            List<String> categories =
+                List<String>.from(value["categories"] ?? []);
+            if (!categories.contains(categoryName)) {
+              categories.add(categoryName);
+              await _symptomsRef.child(key).update({"categories": categories});
+              print('Category added to symptom: $categoryName');
+            } else {
+              print('Category already exists for symptom: $categoryName');
+            }
+          }
+        });
+      }
+    } catch (e) {
+      print('Error adding category to symptom: $e');
+    }
+  }
+
   Future<List<String>> getSymptomsForCat(String catName) async {
     try {
       DatabaseEvent event =
@@ -313,33 +356,6 @@ class FirebaseService {
     } catch (e) {
       print('Error getting symptoms for category: $e');
       return [];
-    }
-  }
-
-  Future<void> addCategoryToSymptom(
-      String categoryName, String symptomName) async {
-    try {
-      DataSnapshot snapshot = await _symptomsRef.get();
-
-      if (snapshot.value != null) {
-        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
-
-        data.forEach((key, value) async {
-          if (value["name"] == symptomName) {
-            List<String> categories =
-                List<String>.from(value["categories"] ?? []);
-            if (!categories.contains(categoryName)) {
-              categories.add(categoryName);
-              await _symptomsRef.child(key).update({"categories": categories});
-              print('Category added to symptom: $categoryName');
-            } else {
-              print('Category already exists for symptom: $categoryName');
-            }
-          }
-        });
-      }
-    } catch (e) {
-      print('Error adding category to symptom: $e');
     }
   }
 
@@ -524,6 +540,115 @@ class FirebaseService {
       return categoriesList;
     } catch (e) {
       print('Error getting categories: $e');
+      return [];
+    }
+  }
+
+  Future<int> addSign(String name) async {
+    //require List<Category> categories if catagories added
+    try {
+      DatabaseReference newSignRef = _signsRef.push();
+
+      // List<String> complaintNames =
+      //   categories.map((complaint) => complaint.name).toList();
+
+      await newSignRef
+          //.set({'name': name, 'categories': complaintNames, 'diagnoses': []});
+          .set({'name': name, 'diagnoses': []});
+      print('Data added successfully');
+
+      // for (Category category in categories) {
+      //   await addSymptomToCategory(name, category.name);
+      // }
+
+      return 200;
+    } catch (e) {
+      print('Error adding data: $e');
+      return 400;
+    }
+  }
+
+  Future<bool> signNonExistent(String name) async {
+    try {
+      String lowerName = name.toLowerCase();
+      DataSnapshot snapshot = await _signsRef.get();
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      // We have to go through each one by one because if we use .equalTo() it is not case insensitive
+      if (snapshot.value != null) {
+        bool nonExistence = true;
+        data.forEach((key, value) async {
+          if (value['name'].toString().toLowerCase() == lowerName) {
+            // The value exists
+            nonExistence = false;
+          }
+        });
+        return nonExistence;
+      } else {
+        return true;
+      }
+    } catch (e) {
+      print("Error fetching data");
+    }
+    return true;
+  }
+
+  Future<void> deleteSign(String name) async {
+    try {
+      DataSnapshot snapshot = await _signsRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) async {
+          if (value["name"] == name) {
+            print("Sign to be deleted:");
+            print(value);
+            await _signsRef.child(key).remove();
+            print('Sign deleted successfully from Firebase');
+            // await _catRef.get().then((categorySnapshot) {
+            //   if (categorySnapshot.value != null) {
+            //     Map<dynamic, dynamic> categoryData =
+            //         categorySnapshot.value as Map<dynamic, dynamic>;
+            //     categoryData.forEach((categoryKey, categoryValue) async {
+            //       if (categoryValue["symptoms"] != null &&
+            //           categoryValue["symptoms"].contains(name)) {
+            //         List<String> updatedSymptoms =
+            //             List<String>.from(categoryValue["symptoms"]);
+            //         updatedSymptoms.remove(name);
+            //         await _catRef
+            //             .child(categoryKey)
+            //             .update({"symptoms": updatedSymptoms});
+            //         print('Symptom removed from category: $categoryKey');
+            //       }
+            //     });
+            //   }
+            // });
+          }
+        });
+      }
+    } catch (e) {
+      print("Error deleting sign: $e");
+    }
+  }
+
+  Future<List<String>> getAllSigns() async {
+    try {
+      DataSnapshot snapshot = await _signsRef.get();
+
+      List<String> signList = [];
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          var sign = Sign(name: value['name']);
+          signList.add(sign.name);
+        });
+      }
+      return signList;
+    } catch (e) {
+      print('Error getting data: $e');
       return [];
     }
   }
@@ -774,13 +899,21 @@ class FirebaseService {
   }
 
   //RAMYA
-  Future<int> addDiagnosis(
-      String name, String definition, List<String> symptoms) async {
+  Future<int> addDiagnosis(String name, String definition,
+      List<String> symptoms, List<String> signs) async {
     try {
       DatabaseReference newDiagnosisReference = _diagnosisRef.push();
 
       await newDiagnosisReference
           .set({'name': name, 'definition': definition, 'symptoms': symptoms});
+      print('Data added successfully');
+
+      await newDiagnosisReference.set({
+        'name': name,
+        'definition': definition,
+        'symptoms': symptoms,
+        'signs': signs
+      });
       print('Data added successfully');
 
       return 200;
@@ -853,9 +986,13 @@ class FirebaseService {
             String name = value['name'];
             String definition = value['definition'];
             List<String> symptoms = List<String>.from(value['symptoms'] ?? []);
+            List<String> signs = List<String>.from(value['signs'] ?? []);
 
             Diagnosis diagnosis = Diagnosis(
-                name: name, symptoms: symptoms, definition: definition);
+                name: name,
+                symptoms: symptoms,
+                signs: signs,
+                definition: definition);
             diagnoses.add(diagnosis);
           }
         });
@@ -887,6 +1024,26 @@ class FirebaseService {
     return [];
   }
 
+  Future<List<String>> getSignsForDiagnosis(String diagnosisName) async {
+    try {
+      DataSnapshot snapshot = await _diagnosisRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        for (var value in data.values) {
+          if (value["name"] == diagnosisName) {
+            List<String> signs = List<String>.from(value["signs"] ?? []);
+            return signs;
+          }
+        }
+      }
+    } catch (e) {
+      print('Error getting signs: $e');
+    }
+    return [];
+  }
+
   Future<void> addSymptomToDiagnosis(
       String symptom, String selectedDiagnosis) async {
     try {
@@ -911,6 +1068,29 @@ class FirebaseService {
     }
   }
 
+  Future<void> addSignToDiagnosis(String sign, String selectedDiagnosis) async {
+    try {
+      DataSnapshot snapshot = await _diagnosisRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) async {
+          if (value["name"] == selectedDiagnosis) {
+            List<String> signs = List<String>.from(value["signs"] ?? []);
+            if (!signs.contains(sign)) {
+              signs.add(sign);
+              await _diagnosisRef.child(key).update({"signs": signs});
+              print('Sign added');
+            }
+          }
+        });
+      }
+    } catch (e) {
+      print('Error adding sign to diagnosis: $e');
+    }
+  }
+
   Future<void> removeSymptomFromDiagnosis(
       String symptom, String selectedDiagnosis) async {
     try {
@@ -932,6 +1112,30 @@ class FirebaseService {
       }
     } catch (e) {
       print('Error removing symptom from diagnosis: $e');
+    }
+  }
+
+  Future<void> removeSignFromDiagnosis(
+      String sign, String selectedDiagnosis) async {
+    try {
+      DataSnapshot snapshot = await _diagnosisRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) async {
+          if (value["name"] == selectedDiagnosis) {
+            List<String> signs = List<String>.from(value["signs"] ?? []);
+            if (signs.contains(sign)) {
+              signs.remove(sign);
+              await _diagnosisRef.child(key).update({"signs": signs});
+              print('Sign removed');
+            }
+          }
+        });
+      }
+    } catch (e) {
+      print('Error removing sign from diagnosis: $e');
     }
   }
 

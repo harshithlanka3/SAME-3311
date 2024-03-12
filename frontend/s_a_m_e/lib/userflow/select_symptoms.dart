@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:s_a_m_e/account/profilepicture.dart';
+import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import 'package:s_a_m_e/user/user_home.dart';
 import 'package:s_a_m_e/userflow/potential_diagnosis.dart';
 
 class SelectSymptom extends StatefulWidget {
@@ -15,6 +17,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
 
   late Future<List<Category>> categories;
   late Future<List<String>> symptoms;
+  late Future<UserClass?> account;
 
   List<String> result = [];
   Map<String, Map<String, dynamic>> checkedSymptoms = {};
@@ -23,26 +26,24 @@ class _SelectSymptomState extends State<SelectSymptom> {
   void initState() {
     super.initState();
     categories = FirebaseService().getAllCategories();
-    getSymptoms();
+    getSymptoms();account = fetchUser();
+  }
+
+  Future<UserClass?> fetchUser() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String uid = user?.uid as String;
+    return FirebaseService().getUser(uid);
   }
 
   void getSymptoms() async {
     result = await FirebaseService().getAllSymptoms();
+    print(result);
     for (int i = 0; i < result.length; i++) {
       Map<String, dynamic> tempDict = {"isChecked": false};
       checkedSymptoms[result[i]] = tempDict;
     }
-  }
-
-  int amountChecked(Map<String, Map<String, dynamic>> list) {
-    int selectedCount = 0;
-    list.forEach((key, value) {
-      if (value["isChecked"] == true) {
-        selectedCount++;
-      }
-    });
-    
-    return selectedCount;
+    print(checkedSymptoms);
   }
 
   @override
@@ -50,7 +51,6 @@ class _SelectSymptomState extends State<SelectSymptom> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Select Symptoms", style: TextStyle(fontSize: 32.0)),
-        actions: [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
@@ -68,8 +68,8 @@ class _SelectSymptomState extends State<SelectSymptom> {
                   const SizedBox(height: 10),
                   const Divider(thickness: 2),
                   const SizedBox(height: 5),
-                  Expanded(
-                    // height: 600,
+                  SizedBox(
+                    height: 600,
                     child: ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
@@ -78,13 +78,17 @@ class _SelectSymptomState extends State<SelectSymptom> {
                         } else {
                           return Column(
                             children: [
-                              ExpansionTile(
-                                iconColor: navy,
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(color: teal),
+                                ),
+                                child: ExpansionTile(
                                 collapsedBackgroundColor: navy,
                                 collapsedIconColor: white,
                                 collapsedTextColor: white,
-                                collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15), side: const BorderSide(color: navy)),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15), side: const BorderSide(color: teal)),
+                                collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                                 backgroundColor: boxinsides,
                                 title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold),),
                                 children: [
@@ -120,6 +124,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
                                   )
                                 ],
                               ),
+                              ),
                               const SizedBox(height: 10),
                             ],
                           );
@@ -143,36 +148,81 @@ class _SelectSymptomState extends State<SelectSymptom> {
         ),
         child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {
-          int count = amountChecked(checkedSymptoms);
-          if (count > 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms),
-              )
-            );
-          } else {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  backgroundColor: background,
-                  title: const Text('Error'),
-                  content: const Text('Please choose at least one symptom.'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text("OK", style: TextStyle(color: navy),),
-                    ),
-                  ],
-                );
-              }
-            );
-          }
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms),
+            )
+          );
         },
-      )
+      ),bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FutureBuilder<UserClass?>(
+              future: account,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (snapshot.hasData) {
+                  final UserClass? user = snapshot.data; 
+                  return IconButton(
+                    icon: Icon(Icons.home),
+                    onPressed: () {
+                      if (user!.role == "admin") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Admin()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const UserHome()),
+                        );
+                      }
+                    },
+                  );
+                } else {
+                  return const SizedBox(); 
+                }
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
+
+class ProfileMenuWidget extends StatelessWidget {
+  const ProfileMenuWidget({
+    super.key,
+    required this.title,
+    required this.icon,
+  });
+
+  final String title;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: boxinsides,
+        ),
+        child: Icon(icon, color: navy,),
+      ),
+      title: Text(title),
+    );
+  }
+}
+
+
+
+

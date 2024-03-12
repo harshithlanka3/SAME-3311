@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
-import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
 
-class CategoryDeletionPage extends StatefulWidget {
-  const CategoryDeletionPage({super.key});
+class SignDeletionPage extends StatefulWidget {
+  const SignDeletionPage({super.key});
 
   @override
-  CategoryDeletionPageState createState() => CategoryDeletionPageState();
+  SignDeletionPageState createState() => SignDeletionPageState();
 }
 
-class CategoryDeletionPageState extends State<CategoryDeletionPage> {
+class SignDeletionPageState extends State<SignDeletionPage> {
   final FirebaseService _firebaseService = FirebaseService();
-  List<String> _selectedCategories = [];
+  List<String> _selectedSigns = [];
 
   @override
   Widget build(BuildContext context) {
@@ -30,21 +29,21 @@ class CategoryDeletionPageState extends State<CategoryDeletionPage> {
           children: [
             const SizedBox(height: 20),
             const Text(
-              'Delete Category',
+              'Delete Sign',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0),
             ),
             const SizedBox(height: 40),
-            FutureBuilder<List<Category>>(
-              future: _firebaseService.getAllCategories(),
+            FutureBuilder<List<String>>(
+              future: _firebaseService.getAllSigns(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-                  List<Category>? categories = snapshot.data;
+                  List<String>? signs = snapshot.data;
 
-                  if (categories != null && categories.isNotEmpty) {
+                  if (signs != null && signs.isNotEmpty) {
                     return MultiSelectDialogField<String>(
                       backgroundColor: background,
                       cancelText: const Text(
@@ -57,16 +56,16 @@ class CategoryDeletionPageState extends State<CategoryDeletionPage> {
                       ),
                       unselectedColor: navy,
                       selectedColor: navy,
-                      items: categories
-                          .map((category) => MultiSelectItem<String>(category.name, category.name))
+                      items: signs
+                          .map((sign) => MultiSelectItem<String>(sign, sign))
                           .toList(),
-                      title: const Text("Categories"),
+                      title: const Text("Signs"),
                       onConfirm: (values) {
-                        _selectedCategories = values;
+                        _selectedSigns = values;
                       },
                     );
                   } else {
-                    return const Text('No categories available');
+                    return const Text('No signs available');
                   }
                 }
               },
@@ -78,76 +77,37 @@ class CategoryDeletionPageState extends State<CategoryDeletionPage> {
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
               onPressed: () async {
-                if (_selectedCategories.isNotEmpty) {
-                  for (String category in _selectedCategories) {
-                    await _firebaseService.deleteCategory(category);
+                if (_selectedSigns.isNotEmpty) {
+                  for (String sign in _selectedSigns) {
+                    await _firebaseService.deleteSign(sign);
                   }
+                  
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Category deleted successfully'),
+                      content: Text('Signs deleted successfully'),
                     ),
                   );
+                  setState(() {
+                      _selectedSigns.clear();
+                      
+                  });
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Please select categories to delete'),
+                      content: Text('Please select signs to delete'),
                     ),
                   );
                 }
               },
               child: const Text(
-                'Delete Categories',
+                'Delete Signs',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
               ),
             ),
             const SizedBox(height: 20),
           ],
         ),
-      ),bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () {
-                Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Admin()),
-                    );
-              },
-            ),
-          ],
-        ),
       ),
     );
   }
 }
-
-class ProfileMenuWidget extends StatelessWidget {
-  const ProfileMenuWidget({
-    super.key,
-    required this.title,
-    required this.icon,
-  });
-
-  final String title;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: boxinsides,
-        ),
-        child: Icon(icon, color: navy,),
-      ),
-      title: Text(title),
-    );
-  }
-}
-
-

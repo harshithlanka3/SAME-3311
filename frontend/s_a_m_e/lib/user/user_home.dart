@@ -3,11 +3,12 @@ import 'package:s_a_m_e/account/account.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/account/login.dart';
+import 'package:s_a_m_e/user/sign_list.dart';
 import 'package:s_a_m_e/user/symptom_list.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:s_a_m_e/userflow/select_symptoms.dart';
-import 'package:s_a_m_e/admin/diagnosis_list.dart';
+import 'package:s_a_m_e/user/diagnosis_list.dart';
 
 
 class UserHome extends StatelessWidget {
@@ -214,6 +215,20 @@ Widget build(BuildContext context) {
               },
             ),
            
+            const SizedBox(height: 10),
+            ElevatedButton(
+              style: const ButtonStyle(
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
+              child: const Text('Signs List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SignsListPage()),
+                );
+              },
+            ),
             const SizedBox(height: 10),
             ElevatedButton(
               style: const ButtonStyle(
