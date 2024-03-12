@@ -3,8 +3,8 @@ Navigating Management of the Rapidly Decompensating Patient: S.A.M.E - Software 
 
 Techstack:
 Frontend - Flutter
-Backend - Node.js
-Database - MongoDB
+Backend - Node.js (Changed to Firebase)
+Database - MongoDB (Changed to Firebase Realtime Database and Storage)
 
 To run the application you must have flutter and node.js installed. Following these installations, all necessary packages must also be installed. A personal database's access key must be specified in backend/app.js in the uri variable. The database must use mongoDB as a platform. Running node app.js will start the server and connect to the database automatically. Then run the flutter app through main.dart.
 
@@ -13,6 +13,33 @@ The artifact chosen to be implemented is the admin symptom adding functionality 
 
 ## Release Notes
 ---
+### Version 0.3.0:
+#### New Features
+* Added categories to symptoms to make UI experience better
+* Admin ability to add diagnoses
+* User ability to select symptoms to get diagnoses
+* Ability to search up specific symptoms as a user
+* Being able to redirect back to the homepage at any given page
+* Ability to see which page user is currently on
+* Admin being able to update and delete symptoms/categories/diagnoses
+* Sorting functionality using K-Nearest Neighbors for diagnoses
+
+#### Bug Fixes
+* Updated profile pictures to be on Firebase storage
+* Added check to stop duplicate adding to symptoms, categories, and diagnoses
+* Fixed expanding VBox issues on certain pages
+* 3rd Party API service built to delete users from Firebase authentication
+* Profile Picture persists on UI beyond upload
+
+
+#### Known Issues
+* Implementing 'Lost Password' functionality
+* Implementing user login beyond app lifecycle
+* Exceptions thrown on certain category update pages
+* Exceptions thrown on certain diagnoses update pages
+
+
+
 ### Version 0.2.0:
 #### New Features
 * Backend updated to use Firebase 
