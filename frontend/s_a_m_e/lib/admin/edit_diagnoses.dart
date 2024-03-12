@@ -177,6 +177,8 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
   final _diagnosisDefinitionController = TextEditingController();
   final FirebaseService _firebaseService = FirebaseService();
   List<String> _selectedSymptoms = [];
+  List<String> _selectedSigns = [];
+
 
   @override
   void dispose() {
@@ -282,6 +284,58 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                 }
               },
             ),
+
+////////fixing after spring but not displaing signs here for now --- Giselle
+            // FutureBuilder<List<String>>(
+            //   future: _firebaseService.getAllSigns(),
+            //   builder: (context, snapshot) {
+            //     if (snapshot.connectionState == ConnectionState.waiting) {
+            //       return const CircularProgressIndicator();
+            //     } else if (snapshot.hasError) {
+            //       return Text('Error: ${snapshot.error}');
+            //     } else {
+            //       List<String>? signs = snapshot.data;
+
+            //       if (signs != null && signs.isNotEmpty) {
+            //         return Column(
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: [
+            //             const SizedBox(height: 20),
+            //             const Text('Select Signs:'),
+            //             SizedBox(
+            //               height: 200,
+            //               child: ListView.builder(
+            //                 itemCount: signs.length,
+            //                 itemBuilder: (context, index) {
+            //                   final sign = signs[index];
+            //                   return CheckboxListTile(
+            //                     title: Text(sign),
+            //                     value: _selectedSigns.contains(sign),
+            //                     onChanged: (value) {
+            //                       setState(() {
+            //                         if (value != null && value) {
+            //                           _selectedSigns.add(sign);
+            //                         } else {
+            //                           _selectedSigns.remove(sign);
+            //                         }
+            //                       });
+            //                     },
+            //                   );
+            //                 },
+            //               ),
+            //             ),
+            //           ],
+            //         );
+            //       } else {
+            //         return const Text('No signs available');
+            //       }
+            //     }
+            //   },
+            // ),
+
+
+
+
             const SizedBox(height: 20),
             ElevatedButton(
               style: const ButtonStyle(
@@ -291,11 +345,13 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
               onPressed: () async {
                 if ((_diagnosisNameController.text.isNotEmpty &&
                     _diagnosisDefinitionController.text.isNotEmpty &&
-                    _selectedSymptoms.isNotEmpty) && await _firebaseService.diagnosisNonExistent(_diagnosisNameController.text)) {
+                    _selectedSymptoms.isNotEmpty && 
+                    _selectedSigns.isNotEmpty) && await _firebaseService.diagnosisNonExistent(_diagnosisNameController.text)) {
                   final response = await _firebaseService.addDiagnosis(
                     _diagnosisNameController.text,
                     _diagnosisDefinitionController.text,
                     _selectedSymptoms,
+                    _selectedSigns,
                   );
                   if (response == 200) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -305,6 +361,7 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                     _diagnosisDefinitionController.clear();
                     setState(() {
                       _selectedSymptoms.clear();
+                      _selectedSigns.clear();
                       
                     });
 
@@ -353,6 +410,9 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
   List<String> symptomsToAdd = [];
   List<String> symptomsToDelete = [];
   Map<String, bool> symptomCheckedState = {};
+  List<String> signsToAdd = [];
+  List<String> signsToDelete = [];
+  Map<String, bool> signCheckedState = {};
 
   @override
   void initState() {
@@ -375,6 +435,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
       print(selectedDiagnosis);
     });
     fetchSymptoms(selectedDiagnosis);
+    fetchSigns(selectedDiagnosis);
   }
 
   Future<void> fetchSymptoms(String diagnosisName) async {
@@ -397,6 +458,29 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
       symptomsToAdd = symptomsForAddition;
       symptomCheckedState = Map.fromIterable(allSymptoms,
           key: (symptom) => symptom, value: (_) => false);
+    });
+  }
+
+  Future<void> fetchSigns(String diagnosisName) async {
+    List<String> allSigns =
+        await FirebaseService().getAllSigns();
+
+    List<String> currentSigns =
+        await FirebaseService().getSignsForDiagnosis(diagnosisName);
+
+    List<String> signsForAddition = [];
+
+    for (String sign in allSigns) {
+      if (!currentSigns.contains(sign)) {
+        signsForAddition.add(sign);
+      }
+    }
+
+    setState(() {
+      signsToDelete = currentSigns;
+      signsToAdd = signsForAddition;
+      signCheckedState = Map.fromIterable(allSigns,
+          key: (sign) => sign, value: (_) => false);
     });
   }
 
@@ -433,6 +517,41 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
     });
 
     fetchSymptoms(selectedDiagnosis);
+  }
+
+  Future<void> updateSigns() async {
+    List<String> signsSelectedAdd = [];
+    List<String> signsSelectedDel = [];
+
+    signCheckedState.forEach((sign, isChecked) {
+      if (isChecked && signsToAdd.contains(sign)) {
+        signsSelectedAdd.add(sign);
+      } else if (isChecked && signsToDelete.contains(sign)) {
+        signsSelectedDel.add(sign);
+      }
+    });
+
+    for (String sign in signsSelectedAdd) {
+      await FirebaseService().addSignToDiagnosis(
+        sign,
+        selectedDiagnosis,
+      );
+    }
+
+    for (String sign in signsSelectedDel) {
+      await FirebaseService().removeSignFromDiagnosis(
+        sign,
+        selectedDiagnosis,
+      );
+    }
+
+    setState(() {
+      signsSelectedAdd.clear();
+      signsSelectedDel.clear();
+      signCheckedState.clear();
+    });
+
+    fetchSigns(selectedDiagnosis);
   }
 
   @override
@@ -479,6 +598,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                           selectedDiagnosis = value;
                         });
                         fetchSymptoms(selectedDiagnosis);
+                        fetchSigns(selectedDiagnosis);
                       }
                     },
                   );
@@ -534,6 +654,30 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
             ),
             const SizedBox(height: 10),
             const Text(
+              'Add Signs:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Flexible(
+              child: ListView.builder(
+                itemCount: signsToAdd.length,
+                itemBuilder: (context, index) {
+                  final sign = signsToAdd[index];
+                  return CheckboxListTile(
+                    title: Text(sign),
+                    activeColor: navy,
+                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    value: signCheckedState[sign] ?? false,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        signCheckedState[sign] = value ?? false;
+                      });
+                    },
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Text(
               'Remove Symptoms:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -550,6 +694,30 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                     onChanged: (bool? value) {
                       setState(() {
                         symptomCheckedState[symptom] = value ?? false;
+                      });
+                    },
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Remove Signs:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Flexible(
+              child: ListView.builder(
+                itemCount: signsToDelete.length,
+                itemBuilder: (context, index) {
+                  final sign = signsToDelete[index];
+                  return CheckboxListTile(
+                    title: Text(sign),
+                    activeColor: navy,
+                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    value: signCheckedState[sign] ?? false,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        signCheckedState[sign] = value ?? false;
                       });
                     },
                   );
@@ -577,6 +745,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
             }
           } 
           updateSymptoms();
+          updateSigns();
         },
         // onPressed: () {
         //   updateCategories();

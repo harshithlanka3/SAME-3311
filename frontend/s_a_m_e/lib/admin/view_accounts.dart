@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
+import 'package:s_a_m_e/account/viewallprofilepicture.dart';
 import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
@@ -153,7 +154,7 @@ class ViewAccountsState extends State<ViewAccounts> {
                             ),
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(100),
-                              child: const Image(image: AssetImage('assets/profile_pic.png')),
+                              child: ViewAllProfilePicturePage(email: displayedUsers[index].email, url: displayedUsers[index].profilePicture),
                             ),
                             trailing: GestureDetector(
                               onTap: () {

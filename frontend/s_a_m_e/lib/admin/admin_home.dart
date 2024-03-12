@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/account.dart';
+import 'package:s_a_m_e/account/edit_signs.dart';
+import 'package:s_a_m_e/account/edit_symptoms.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/admin/add_category.dart';
+import 'package:s_a_m_e/admin/add_sign.dart';
 import 'package:s_a_m_e/admin/adminrequest.dart';
+import 'package:s_a_m_e/admin/delete_sign.dart';
+import 'package:s_a_m_e/admin/edit_categories.dart';
+import 'package:s_a_m_e/admin/update_sign.dart';
 import 'package:s_a_m_e/user/diagnosis_list.dart';
 import 'package:s_a_m_e/user/categories_list.dart';
 import 'package:s_a_m_e/colors.dart';
@@ -11,6 +17,7 @@ import 'package:s_a_m_e/admin/delete_category.dart';
 import 'package:s_a_m_e/admin/delete_symptom.dart';
 import 'package:s_a_m_e/admin/edit_diagnoses.dart';
 import 'package:s_a_m_e/account/login.dart';
+import 'package:s_a_m_e/user/sign_list.dart';
 import 'package:s_a_m_e/user/symptom_list.dart';
 import 'package:s_a_m_e/admin/update_category.dart';
 import 'package:s_a_m_e/admin/update_symptom.dart';
@@ -89,7 +96,7 @@ Widget build(BuildContext context) {
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
-              child: const Text('Update Diagnoses List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              child: const Text('Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -99,6 +106,23 @@ Widget build(BuildContext context) {
                 );
               },
             ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              style: const ButtonStyle(
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
+              child: const Text('Signs', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SignEdit(),
+                  ),
+                );
+              },
+            ),
+            
             //const SizedBox(height: 10),
             const SizedBox(height: 10),
             ElevatedButton(
@@ -106,129 +130,36 @@ Widget build(BuildContext context) {
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
-              child: const Text('Add Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              child: const Text('Symptoms', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const SymptomCreationPage(),
+                    builder: (context) => SymptomEdit(),
                   ),
                 );
               },
             ),
+            
+            
             const SizedBox(height: 10),
             ElevatedButton(
               style: const ButtonStyle(
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
-              child: const Text('Delete Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              child: const Text('Categories', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const SymptomDeletionPage(),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Update Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UpdateSymptomPage(),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Symptoms List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SymptomsListPage(),
-                  ),
-                );
-              },
-              
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Add Category', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CategoryCreationPage(),
+                    builder: (context) => CategoryEdit(),
                   ),
                 );
               },
             ),
 
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Delete Category', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CategoryDeletionPage(),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Update Category', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UpdateCatPage(),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Categories List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CategoriesListPage()),
-                );
-              },
-            ),
+            
             const SizedBox(height: 10),
             ElevatedButton(
               style: const ButtonStyle(
