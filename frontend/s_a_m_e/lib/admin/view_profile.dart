@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
-import 'package:s_a_m_e/account/viewallprofilepicture.dart';
+import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 
 class ProfilePage extends StatelessWidget {
 
-  final String? profilePic;
+  // final String profilePic;
   final String name;
   final String email;
   final String role;
 
   const ProfilePage({
     Key? key,
-    required this.profilePic,
+    // required this.profilePic,
     required this.name,
     required this.email,
     required this.role,
@@ -40,7 +40,7 @@ class ProfilePage extends StatelessWidget {
                   height: 120,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: ViewAllProfilePicturePage(email: email, url: profilePic),
+                    child: ProfilePicturePage(),
                   ),
                 )
               ),
@@ -102,8 +102,26 @@ class ProfilePage extends StatelessWidget {
           ),
         )
       ),
+       bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Admin()),
+                    );
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
+
+
 
   void _showRoleSelectionDialog(BuildContext context) {
     showDialog(
@@ -358,3 +376,31 @@ Future<void> _updateUserRole(BuildContext context, String email, String newRole)
 
 String confirmDelete = "Are you sure you want go through with these changes? Once you delete a user you cannot revert these changes.";
 String confirmEdit = "Are you sure you want go through with these changes? A user's role can be changed again later if needed.";
+
+
+class ProfileMenuWidget extends StatelessWidget {
+  const ProfileMenuWidget({
+    super.key,
+    required this.title,
+    required this.icon,
+  });
+
+  final String title;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: boxinsides,
+        ),
+        child: Icon(icon, color: navy,),
+      ),
+      title: Text(title),
+    );
+  }
+}

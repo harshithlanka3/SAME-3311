@@ -9,6 +9,7 @@ import 'package:s_a_m_e/admin/adminrequest.dart';
 import 'package:s_a_m_e/admin/delete_sign.dart';
 import 'package:s_a_m_e/admin/edit_categories.dart';
 import 'package:s_a_m_e/admin/update_sign.dart';
+import 'package:s_a_m_e/user/diagnosis_list.dart';
 import 'package:s_a_m_e/user/categories_list.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/admin/add_symptom.dart';
@@ -171,6 +172,21 @@ Widget build(BuildContext context) {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const SelectSymptom()),
+                );
+              },
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              style: const ButtonStyle(
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
+              child: const Text('Diagnosis List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const DiagnosisListPage()),
                 );
               },
             )

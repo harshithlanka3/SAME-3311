@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
@@ -188,7 +189,52 @@ class UpdateCatPageState extends State<UpdateCatPage> {
           updateSymptoms();
         },
         child: const Icon(Icons.check),
+      ),bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Admin()),
+                    );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+
+class ProfileMenuWidget extends StatelessWidget {
+  const ProfileMenuWidget({
+    super.key,
+    required this.title,
+    required this.icon,
+  });
+
+  final String title;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: boxinsides,
+        ),
+        child: Icon(icon, color: navy,),
+      ),
+      title: Text(title),
+    );
+  }
+}
+
+
+
