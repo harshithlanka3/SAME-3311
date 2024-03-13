@@ -3,6 +3,7 @@ import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import '../firebase/models.dart';
 
 class UpdateCatPage extends StatefulWidget {
   const UpdateCatPage({super.key});
@@ -32,25 +33,24 @@ class UpdateCatPageState extends State<UpdateCatPage> {
   }
 
   Future<void> fetchSymptoms(String catName) async {
-    List<String> allSymptoms =
-        await FirebaseService().getAllSymptoms();
+    List<String> allSymptoms = await FirebaseService().getAllSymptoms();
 
     List<String> currentSymptoms =
         await FirebaseService().getSymptomsForCat(catName);
 
     List<String> symptomsForAddition = [];
 
-    for (String symptom in allSymptoms) { 
+    for (String symptom in allSymptoms) {
       if (!currentSymptoms.contains(symptom)) {
         symptomsForAddition.add(symptom);
       }
     }
-  
+
     setState(() {
       symptomsToDelete = currentSymptoms;
       symptomsToAdd = symptomsForAddition;
-      symptomsCheckedState = Map.fromIterable(allSymptoms, 
-        key: (symptom) => symptom, value: (_) => false);
+      symptomsCheckedState = Map.fromIterable(allSymptoms,
+          key: (symptom) => symptom, value: (_) => false);
     });
   }
 
@@ -96,7 +96,7 @@ class UpdateCatPageState extends State<UpdateCatPage> {
       appBar: AppBar(
         title: const Text(
           'Update Category',
-          style: TextStyle(fontSize: 32), 
+          style: TextStyle(fontSize: 32),
         ),
         actions: [ProfilePicturePage()],
       ),
@@ -145,15 +145,16 @@ class UpdateCatPageState extends State<UpdateCatPage> {
                 itemBuilder: (context, index) {
                   final symptom = symptomsToAdd[index];
                   return CheckboxListTile(
-                    title: Text(symptom),
-                    activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
-                    value: symptomsCheckedState[symptom],
-                    onChanged: (bool? value) {
-                      setState(() {
-                        symptomsCheckedState[symptom] = value!;
+                      title: Text(symptom),
+                      activeColor: navy,
+                      visualDensity:
+                          const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                      value: symptomsCheckedState[symptom],
+                      onChanged: (bool? value) {
+                        setState(() {
+                          symptomsCheckedState[symptom] = value!;
+                        });
                       });
-                    });
                 },
               ),
             ),
@@ -170,7 +171,8 @@ class UpdateCatPageState extends State<UpdateCatPage> {
                   return CheckboxListTile(
                     title: Text(symptom),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity:
+                        const VisualDensity(horizontal: -2.0, vertical: -2.0),
                     value: symptomsCheckedState[symptom],
                     onChanged: (bool? value) {
                       setState(() {
@@ -189,7 +191,8 @@ class UpdateCatPageState extends State<UpdateCatPage> {
           updateSymptoms();
         },
         child: const Icon(Icons.check),
-      ),bottomNavigationBar: BottomAppBar(
+      ),
+      bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -197,9 +200,9 @@ class UpdateCatPageState extends State<UpdateCatPage> {
               icon: Icon(Icons.home),
               onPressed: () {
                 Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Admin()),
-                    );
+                  context,
+                  MaterialPageRoute(builder: (context) => const Admin()),
+                );
               },
             ),
           ],
@@ -229,12 +232,12 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: boxinsides,
         ),
-        child: Icon(icon, color: navy,),
+        child: Icon(
+          icon,
+          color: navy,
+        ),
       ),
       title: Text(title),
     );
   }
 }
-
-
-

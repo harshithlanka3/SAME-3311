@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:s_a_m_e/account/profilepicture.dart';
-import 'package:s_a_m_e/colors.dart'; 
-import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import '../firebase/models.dart';
 
 class UpdateDiagnosisPage extends StatefulWidget {
   const UpdateDiagnosisPage({super.key});
@@ -29,7 +28,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
     fetchDiagnoses();
   }
 
-   @override
+  @override
   void dispose() {
     _diagnosisUpdateDefinitionController.dispose();
     super.dispose();
@@ -47,8 +46,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
   }
 
   Future<void> fetchSymptoms(String diagnosisName) async {
-    List<String> allSymptoms =
-        await FirebaseService().getAllSymptoms();
+    List<String> allSymptoms = await FirebaseService().getAllSymptoms();
 
     List<String> currentSymptoms =
         await FirebaseService().getSymptomsForDiagnosis(diagnosisName);
@@ -70,8 +68,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
   }
 
   Future<void> fetchSigns(String diagnosisName) async {
-    List<String> allSigns =
-        await FirebaseService().getAllSigns();
+    List<String> allSigns = await FirebaseService().getAllSigns();
 
     List<String> currentSigns =
         await FirebaseService().getSignsForDiagnosis(diagnosisName);
@@ -87,8 +84,8 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
     setState(() {
       signsToDelete = currentSigns;
       signsToAdd = signsForAddition;
-      signCheckedState = Map.fromIterable(allSigns,
-          key: (sign) => sign, value: (_) => false);
+      signCheckedState =
+          Map.fromIterable(allSigns, key: (sign) => sign, value: (_) => false);
     });
   }
 
@@ -184,7 +181,6 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-
                   List<String> diagnoses = [];
                   for (int i = 0; i < snapshot.data!.length; i++) {
                     diagnoses.add(snapshot.data![i].name);
@@ -223,13 +219,11 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                 filled: true,
                 fillColor: boxinsides,
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: boxinsides),
-                  borderRadius: BorderRadius.all(Radius.circular(40.0))
-                ),
+                    borderSide: BorderSide(color: boxinsides),
+                    borderRadius: BorderRadius.all(Radius.circular(40.0))),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: boxinsides),
-                  borderRadius: BorderRadius.all(Radius.circular(40.0))
-                ),
+                    borderSide: BorderSide(color: boxinsides),
+                    borderRadius: BorderRadius.all(Radius.circular(40.0))),
               ),
             ),
             // Text(
@@ -249,7 +243,8 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                   return CheckboxListTile(
                     title: Text(symptom),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity:
+                        const VisualDensity(horizontal: -2.0, vertical: -2.0),
                     value: symptomCheckedState[symptom] ?? false,
                     onChanged: (bool? value) {
                       setState(() {
@@ -273,7 +268,8 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                   return CheckboxListTile(
                     title: Text(sign),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity:
+                        const VisualDensity(horizontal: -2.0, vertical: -2.0),
                     value: signCheckedState[sign] ?? false,
                     onChanged: (bool? value) {
                       setState(() {
@@ -297,7 +293,8 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                   return CheckboxListTile(
                     title: Text(symptom),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity:
+                        const VisualDensity(horizontal: -2.0, vertical: -2.0),
                     value: symptomCheckedState[symptom] ?? false,
                     onChanged: (bool? value) {
                       setState(() {
@@ -321,7 +318,8 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                   return CheckboxListTile(
                     title: Text(sign),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity:
+                        const VisualDensity(horizontal: -2.0, vertical: -2.0),
                     value: signCheckedState[sign] ?? false,
                     onChanged: (bool? value) {
                       setState(() {
@@ -338,7 +336,8 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           if (_diagnosisUpdateDefinitionController.text.isNotEmpty) {
-            final response = await FirebaseService().updateDiagnosisDef(selectedDiagnosis, _diagnosisUpdateDefinitionController.text);
+            final response = await FirebaseService().updateDiagnosisDef(
+                selectedDiagnosis, _diagnosisUpdateDefinitionController.text);
             if (response == 200) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Diagnosis added successfully')),
@@ -351,7 +350,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                 const SnackBar(content: Text('Failed to add diagnosis')),
               );
             }
-          } 
+          }
           updateSymptoms();
           updateSigns();
         },

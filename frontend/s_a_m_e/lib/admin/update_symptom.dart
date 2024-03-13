@@ -3,6 +3,7 @@ import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import '../firebase/models.dart';
 
 class UpdateSymptomPage extends StatefulWidget {
   const UpdateSymptomPage({super.key});
@@ -32,25 +33,24 @@ class UpdateSymptomPageState extends State<UpdateSymptomPage> {
   }
 
   Future<void> fetchCategories(String symptomName) async {
-    List<Category> allCategories =
-        await FirebaseService().getAllCategories();
+    List<Category> allCategories = await FirebaseService().getAllCategories();
 
     List<Category> currentCategories =
         await FirebaseService().getCategoriesForSymptom(symptomName);
 
     List<Category> categoriesForAddition = [];
 
-    for (Category category in allCategories) { 
+    for (Category category in allCategories) {
       if (!currentCategories.contains(category)) {
         categoriesForAddition.add(category);
       }
     }
-  
+
     setState(() {
       categoriesToDelete = currentCategories;
       categoriesToAdd = categoriesForAddition;
-      categoryCheckedState = Map.fromIterable(allCategories, 
-        key: (category) => category, value: (_) => false);
+      categoryCheckedState = Map.fromIterable(allCategories,
+          key: (category) => category, value: (_) => false);
     });
   }
 
@@ -71,7 +71,8 @@ class UpdateSymptomPageState extends State<UpdateSymptomPage> {
         category.name,
         selectedSymptom,
       );
-      await FirebaseService().addSymptomToCategory(selectedSymptom, category.name);
+      await FirebaseService()
+          .addSymptomToCategory(selectedSymptom, category.name);
     }
 
     for (Category category in categoriesSelectedDel) {
@@ -79,7 +80,8 @@ class UpdateSymptomPageState extends State<UpdateSymptomPage> {
         category.name,
         selectedSymptom,
       );
-      await FirebaseService().removeSymptomFromCategory(selectedSymptom, category.name);
+      await FirebaseService()
+          .removeSymptomFromCategory(selectedSymptom, category.name);
     }
 
     setState(() {
@@ -96,7 +98,7 @@ class UpdateSymptomPageState extends State<UpdateSymptomPage> {
       appBar: AppBar(
         title: const Text(
           'Update Symptom',
-          style: TextStyle(fontSize: 32), 
+          style: TextStyle(fontSize: 32),
         ),
         actions: [ProfilePicturePage()],
       ),
@@ -147,7 +149,8 @@ class UpdateSymptomPageState extends State<UpdateSymptomPage> {
                   return CheckboxListTile(
                     title: Text(category.name),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity:
+                        const VisualDensity(horizontal: -2.0, vertical: -2.0),
                     value: categoryCheckedState[category],
                     onChanged: (bool? value) {
                       setState(() {
@@ -171,7 +174,8 @@ class UpdateSymptomPageState extends State<UpdateSymptomPage> {
                   return CheckboxListTile(
                     title: Text(category.name),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity:
+                        const VisualDensity(horizontal: -2.0, vertical: -2.0),
                     value: categoryCheckedState[category],
                     onChanged: (bool? value) {
                       setState(() {
@@ -190,7 +194,8 @@ class UpdateSymptomPageState extends State<UpdateSymptomPage> {
           updateCategories();
         },
         child: const Icon(Icons.check),
-      ),bottomNavigationBar: BottomAppBar(
+      ),
+      bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -198,9 +203,9 @@ class UpdateSymptomPageState extends State<UpdateSymptomPage> {
               icon: Icon(Icons.home),
               onPressed: () {
                 Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Admin()),
-                    );
+                  context,
+                  MaterialPageRoute(builder: (context) => const Admin()),
+                );
               },
             ),
           ],
@@ -230,11 +235,12 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: boxinsides,
         ),
-        child: Icon(icon, color: navy,),
+        child: Icon(
+          icon,
+          color: navy,
+        ),
       ),
       title: Text(title),
     );
   }
 }
-
-

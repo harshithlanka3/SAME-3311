@@ -8,6 +8,7 @@ import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/user/user_home.dart';
 import 'package:s_a_m_e/userflow/diagnosis_page.dart';
+import '../firebase/models.dart';
 
 class PotentialDiagnosis extends StatefulWidget {
   const PotentialDiagnosis({super.key, required this.selectedSymptoms});

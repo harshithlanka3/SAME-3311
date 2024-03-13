@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:s_a_m_e/account/profilepicture.dart';
-import 'package:s_a_m_e/colors.dart'; 
+import 'package:s_a_m_e/colors.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import '../firebase/models.dart';
 
 class DiagnosisDeletionPage extends StatefulWidget {
   const DiagnosisDeletionPage({super.key});
@@ -12,7 +12,7 @@ class DiagnosisDeletionPage extends StatefulWidget {
 }
 
 class DiagnosisDeletionPageState extends State<DiagnosisDeletionPage> {
-  List<String> _selectedDiagnosis= [];
+  List<String> _selectedDiagnosis = [];
   final FirebaseService _firebaseService = FirebaseService();
 
   @override
@@ -50,16 +50,19 @@ class DiagnosisDeletionPageState extends State<DiagnosisDeletionPage> {
                       backgroundColor: background,
                       cancelText: const Text(
                         'CANCEL',
-                        style: TextStyle(fontWeight: FontWeight.bold, color: navy),
+                        style:
+                            TextStyle(fontWeight: FontWeight.bold, color: navy),
                       ),
                       confirmText: const Text(
                         'SELECT',
-                        style: TextStyle(fontWeight: FontWeight.bold, color: navy),
+                        style:
+                            TextStyle(fontWeight: FontWeight.bold, color: navy),
                       ),
                       unselectedColor: navy,
                       selectedColor: navy,
                       items: diagnosis
-                          .map((diagnosis) => MultiSelectItem<String>(diagnosis, diagnosis))
+                          .map((diagnosis) =>
+                              MultiSelectItem<String>(diagnosis, diagnosis))
                           .toList(),
                       title: const Text("Diagnosis"),
                       onConfirm: (values) {
@@ -90,9 +93,8 @@ class DiagnosisDeletionPageState extends State<DiagnosisDeletionPage> {
                     ),
                   );
                   setState(() {
-                      _selectedDiagnosis.clear();
+                    _selectedDiagnosis.clear();
                   });
-                  
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

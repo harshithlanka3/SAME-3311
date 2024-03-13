@@ -5,6 +5,7 @@ import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/user/user_home.dart';
+import '../firebase/models.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
 
 class CategoriesListPage extends StatefulWidget {
@@ -56,7 +57,7 @@ class CategoriesListPageState extends State<CategoriesListPage> {
                   itemBuilder: (context, index) {
                     Category category = snapshot.data![index];
                     List<String> symptoms = category.symptoms.cast<String>();
-                    
+
                     return Column(
                       children: <Widget>[
                         Container(
@@ -66,10 +67,14 @@ class CategoriesListPageState extends State<CategoriesListPage> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: ListTile(
-                            title: Text(category.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            title: Text(category.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: symptoms.map((symptom) => Text(symptom)).toList(),
+                              children: symptoms
+                                  .map((symptom) => Text(symptom))
+                                  .toList(),
                             ),
                           ),
                         ),
@@ -84,7 +89,8 @@ class CategoriesListPageState extends State<CategoriesListPage> {
             }
           },
         ),
-      ),bottomNavigationBar: BottomAppBar(
+      ),
+      bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -96,25 +102,27 @@ class CategoriesListPageState extends State<CategoriesListPage> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.hasData) {
-                  final UserClass? user = snapshot.data; 
+                  final UserClass? user = snapshot.data;
                   return IconButton(
                     icon: Icon(Icons.home),
                     onPressed: () {
                       if (user!.role == "admin") {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Admin()),
+                          MaterialPageRoute(
+                              builder: (context) => const Admin()),
                         );
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const UserHome()),
+                          MaterialPageRoute(
+                              builder: (context) => const UserHome()),
                         );
                       }
                     },
                   );
                 } else {
-                  return const SizedBox(); 
+                  return const SizedBox();
                 }
               },
             ),
@@ -145,13 +153,12 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: boxinsides,
         ),
-        child: Icon(icon, color: navy,),
+        child: Icon(
+          icon,
+          color: navy,
+        ),
       ),
       title: Text(title),
     );
   }
 }
-
-
-
-

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import '../firebase/models.dart';
 
 class UpdateSignPage extends StatefulWidget {
   const UpdateSignPage({super.key});
@@ -39,16 +39,16 @@ class UpdateSignPageState extends State<UpdateSignPage> {
 
   //   List<Category> categoriesForAddition = [];
 
-  //   for (Category category in allCategories) { 
+  //   for (Category category in allCategories) {
   //     if (!currentCategories.contains(category)) {
   //       categoriesForAddition.add(category);
   //     }
   //   }
-  
+
   //   setState(() {
   //     categoriesToDelete = currentCategories;
   //     categoriesToAdd = categoriesForAddition;
-  //     categoryCheckedState = Map.fromIterable(allCategories, 
+  //     categoryCheckedState = Map.fromIterable(allCategories,
   //       key: (category) => category, value: (_) => false);
   //   });
   // }
@@ -95,7 +95,7 @@ class UpdateSignPageState extends State<UpdateSignPage> {
       appBar: AppBar(
         title: const Text(
           'Update Sign',
-          style: TextStyle(fontSize: 32), 
+          style: TextStyle(fontSize: 32),
         ),
         actions: [ProfilePicturePage()],
       ),

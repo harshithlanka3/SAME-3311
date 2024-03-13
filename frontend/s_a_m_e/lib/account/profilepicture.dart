@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import '../firebase/models.dart';
 
 class ProfilePicturePage extends StatefulWidget {
   const ProfilePicturePage({super.key});
@@ -40,7 +41,7 @@ class ProfilePicturePageState extends State<ProfilePicturePage> {
           _image = img;
         });
         return "We have an image!";
-      } catch(e) {
+      } catch (e) {
         print("Error with grabbing photo");
         print(e);
       }
@@ -83,19 +84,18 @@ class ProfilePicturePageState extends State<ProfilePicturePage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(right: 8.0),
-      child: InkWell(
-        onTap: selectImage,
-        child: _image != null ?
-            CircleAvatar(
-              radius: 22.0,
-              backgroundImage: MemoryImage(_image!),
-            ): 
-        CircleAvatar(
-        radius: 22.0,
-        backgroundImage: AssetImage('assets/profile_pic.png'),
-        ),
-      )
-    );
+        padding: EdgeInsets.only(right: 8.0),
+        child: InkWell(
+          onTap: selectImage,
+          child: _image != null
+              ? CircleAvatar(
+                  radius: 22.0,
+                  backgroundImage: MemoryImage(_image!),
+                )
+              : CircleAvatar(
+                  radius: 22.0,
+                  backgroundImage: AssetImage('assets/profile_pic.png'),
+                ),
+        ));
   }
 }

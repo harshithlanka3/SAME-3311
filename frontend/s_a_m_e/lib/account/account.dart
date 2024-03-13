@@ -6,6 +6,7 @@ import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/account/login.dart';
 import 'package:s_a_m_e/user/user_home.dart';
+import '../firebase/models.dart';
 
 class ManageAccountPage extends StatefulWidget {
   const ManageAccountPage({super.key});
@@ -62,52 +63,71 @@ class ManageAccountPageState extends State<ManageAccountPage> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Text('${snapshot.data!.firstName} ${snapshot.data!.lastName}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
-                      Text('User Role: ${snapshot.data!.role}', style: const TextStyle(fontSize: 16.0)), 
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        width: 200,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: const ButtonStyle(
-                            foregroundColor: MaterialStatePropertyAll<Color>(white),
-                            backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                          ),
-                          child: const Text("Edit Profile", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-                        )
+                      Text(
+                        '${snapshot.data!.firstName} ${snapshot.data!.lastName}',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20.0),
                       ),
+                      Text('User Role: ${snapshot.data!.role}',
+                          style: const TextStyle(fontSize: 16.0)),
                       const SizedBox(height: 20),
-                      const Divider(),
-                      const SizedBox(height: 20),
-                  
-                      ProfileMenuWidget(title: "${snapshot.data!.firstName} ${snapshot.data!.lastName}", icon: Icons.abc),
-                      //ProfileMenuWidget(title: "Username", icon: Icons.account_circle),
-                      ProfileMenuWidget(title: snapshot.data!.email, icon: Icons.email),
-                      const ProfileMenuWidget(title: "Password", icon: Icons.key),
-                  
-                      const SizedBox(height: 20),
-                      const Divider(),
-                      const SizedBox(height: 20),
-                  
                       SizedBox(
-                        width: 200,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).popUntil((route) => route.isFirst);
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Login(),
-                              ),
-                            );
-                          },
+                          width: 200,
+                          child: ElevatedButton(
+                            onPressed: () {},
                             style: const ButtonStyle(
-                              foregroundColor: MaterialStatePropertyAll<Color>(white),
-                              backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                              foregroundColor:
+                                  MaterialStatePropertyAll<Color>(white),
+                              backgroundColor:
+                                  MaterialStatePropertyAll<Color>(navy),
                             ),
-                            child: const Text("Sign out", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-                        )
-                      ), 
+                            child: const Text("Edit Profile",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0)),
+                          )),
+                      const SizedBox(height: 20),
+                      const Divider(),
+                      const SizedBox(height: 20),
+
+                      ProfileMenuWidget(
+                          title:
+                              "${snapshot.data!.firstName} ${snapshot.data!.lastName}",
+                          icon: Icons.abc),
+                      //ProfileMenuWidget(title: "Username", icon: Icons.account_circle),
+                      ProfileMenuWidget(
+                          title: snapshot.data!.email, icon: Icons.email),
+                      const ProfileMenuWidget(
+                          title: "Password", icon: Icons.key),
+
+                      const SizedBox(height: 20),
+                      const Divider(),
+                      const SizedBox(height: 20),
+
+                      SizedBox(
+                          width: 200,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .popUntil((route) => route.isFirst);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Login(),
+                                ),
+                              );
+                            },
+                            style: const ButtonStyle(
+                              foregroundColor:
+                                  MaterialStatePropertyAll<Color>(white),
+                              backgroundColor:
+                                  MaterialStatePropertyAll<Color>(navy),
+                            ),
+                            child: const Text("Sign out",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0)),
+                          )),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -131,25 +151,27 @@ class ManageAccountPageState extends State<ManageAccountPage> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.hasData) {
-                  final UserClass? user = snapshot.data; 
+                  final UserClass? user = snapshot.data;
                   return IconButton(
                     icon: Icon(Icons.home),
                     onPressed: () {
                       if (user!.role == "admin") {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Admin()),
+                          MaterialPageRoute(
+                              builder: (context) => const Admin()),
                         );
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const UserHome()),
+                          MaterialPageRoute(
+                              builder: (context) => const UserHome()),
                         );
                       }
                     },
                   );
                 } else {
-                  return const SizedBox(); 
+                  return const SizedBox();
                 }
               },
             ),
@@ -180,7 +202,10 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: boxinsides,
         ),
-        child: Icon(icon, color: navy,),
+        child: Icon(
+          icon,
+          color: navy,
+        ),
       ),
       title: Text(title),
     );

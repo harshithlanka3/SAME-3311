@@ -3,6 +3,7 @@ import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import '../firebase/models.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
 
 class AdminRequestPage extends StatefulWidget {
@@ -28,7 +29,8 @@ class AdminRequestPageState extends State<AdminRequestPage> {
   void getUserNames() async {
     List<UserClass> users = await requests;
     setState(() {
-      userNames = users.map((user) => "${user.firstName} ${user.lastName}").toList();
+      userNames =
+          users.map((user) => "${user.firstName} ${user.lastName}").toList();
       userReasons = users.map((user) => user.requestReason).toList();
     });
   }
@@ -61,7 +63,8 @@ class AdminRequestPageState extends State<AdminRequestPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AdminRequestDetailsPage(user: users[index]),
+                            builder: (context) =>
+                                AdminRequestDetailsPage(user: users[index]),
                           ),
                         );
                       },
@@ -76,7 +79,8 @@ class AdminRequestPageState extends State<AdminRequestPage> {
                             child: ListTile(
                               title: Text(
                                 "${users[index].firstName} ${users[index].lastName}",
-                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               ),
                               subtitle: Text(users[index].requestReason),
                             ),
@@ -93,7 +97,8 @@ class AdminRequestPageState extends State<AdminRequestPage> {
             }
           },
         ),
-      ),bottomNavigationBar: BottomAppBar(
+      ),
+      bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -101,9 +106,9 @@ class AdminRequestPageState extends State<AdminRequestPage> {
               icon: Icon(Icons.home),
               onPressed: () {
                 Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Admin()),
-                    );
+                  context,
+                  MaterialPageRoute(builder: (context) => const Admin()),
+                );
               },
             ),
           ],
@@ -133,18 +138,22 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: boxinsides,
         ),
-        child: Icon(icon, color: navy,),
+        child: Icon(
+          icon,
+          color: navy,
+        ),
       ),
       title: Text(title),
     );
   }
 }
 
-//testing code 
+//testing code
 class AdminRequestDetailsPage extends StatelessWidget {
   final UserClass user;
 
-  const AdminRequestDetailsPage({Key? key, required this.user}) : super(key: key);
+  const AdminRequestDetailsPage({Key? key, required this.user})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +166,7 @@ class AdminRequestDetailsPage extends StatelessWidget {
         title: Text(
           "Review: ${user.firstName} ${user.lastName}",
           style: const TextStyle(fontSize: 23),
-          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(25.0),
@@ -170,14 +179,12 @@ class AdminRequestDetailsPage extends StatelessWidget {
             ),
             Text(user.requestReason),
             const SizedBox(height: 20),
-
             Text(
               "Grant ${user.firstName} ${user.lastName} Admin Status?",
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 5),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -201,11 +208,13 @@ class AdminRequestDetailsPage extends StatelessWidget {
                   //spacing : 20,
                   children: const [
                     Padding(
-                      padding: EdgeInsets.all(8.0), // spave btween togggle buttons 
+                      padding:
+                          EdgeInsets.all(8.0), // spave btween togggle buttons
                       child: Text('Approve'),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(20.0), // spave btween togggle buttons 
+                      padding:
+                          EdgeInsets.all(20.0), // spave btween togggle buttons
                       child: Text('Deny'),
                     ),
                     // Text('Approve'),
@@ -214,9 +223,7 @@ class AdminRequestDetailsPage extends StatelessWidget {
                 ),
               ],
             ),
-            
             const SizedBox(height: 20),
-
             const Text(
               "Reason:",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -229,13 +236,11 @@ class AdminRequestDetailsPage extends StatelessWidget {
               decoration: InputDecoration(
                 labelText: "Enter reason",
                 border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.teal),
-                  borderRadius: BorderRadius.circular(10)
-                ),
+                    borderSide: const BorderSide(color: Colors.teal),
+                    borderRadius: BorderRadius.circular(10)),
               ),
             ),
             const SizedBox(height: 20),
-
             Center(
               child: Container(
                 decoration: BoxDecoration(
@@ -243,30 +248,28 @@ class AdminRequestDetailsPage extends StatelessWidget {
                   color: boxinsides,
                   borderRadius: BorderRadius.circular(15),
                 ),
-              child: ElevatedButton(
-                onPressed: () {
-                  // Perform action on submit
-                  print('Reasoning: $reasoning');
-                  print('Approve Selected: $approveSelected');
-                  print('Deny Selected: $denySelected');
-                  // You can handle submit action here
-                },
-                child: const Text(
-                  'Submit Admin Review', 
-                  style: TextStyle(
-                    color: Colors.teal
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Perform action on submit
+                    print('Reasoning: $reasoning');
+                    print('Approve Selected: $approveSelected');
+                    print('Deny Selected: $denySelected');
+                    // You can handle submit action here
+                  },
+                  child: const Text(
+                    'Submit Admin Review',
+                    style: TextStyle(color: Colors.teal),
                   ),
+                  //child: const Text("Admin Requests", style: TextStyle(fontSize: 36.0)),
+
+                  // style: ElevatedButton.styleFrom(
+                  //   primary: Colors.transparent,
+                  //   elevation: 0, // Remove button elevation
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(15),
+                  //   ),
+                  // ),
                 ),
-                //child: const Text("Admin Requests", style: TextStyle(fontSize: 36.0)),
-                
-                // style: ElevatedButton.styleFrom(
-                //   primary: Colors.transparent,
-                //   elevation: 0, // Remove button elevation
-                //   shape: RoundedRectangleBorder(
-                //     borderRadius: BorderRadius.circular(15),
-                //   ),
-                // ),
-              ),
               ),
             ),
           ],

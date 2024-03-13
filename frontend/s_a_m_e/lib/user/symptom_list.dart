@@ -6,6 +6,7 @@ import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/user/user_home.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
+import '../firebase/models.dart';
 
 class SymptomsListPage extends StatefulWidget {
   const SymptomsListPage({super.key});
@@ -32,6 +33,7 @@ class SymptomsListPageState extends State<SymptomsListPage> {
     String uid = user?.uid as String;
     return FirebaseService().getUser(uid);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,15 +58,18 @@ class SymptomsListPageState extends State<SymptomsListPage> {
                   itemBuilder: (context, index) {
                     return Column(
                       children: <Widget>[
-                        Container( // where the UI starts
+                        Container(
+                          // where the UI starts
                           decoration: BoxDecoration(
                             border: Border.all(color: teal),
                             color: boxinsides,
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: ListTile(
-                            title: Text(snapshot.data![index], style: const TextStyle(fontWeight: FontWeight.bold)),
-                            subtitle: const Text('Symptom Description'), 
+                            title: Text(snapshot.data![index],
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            subtitle: const Text('Symptom Description'),
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -78,7 +83,8 @@ class SymptomsListPageState extends State<SymptomsListPage> {
             }
           },
         ),
-      ),bottomNavigationBar: BottomAppBar(
+      ),
+      bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -90,25 +96,27 @@ class SymptomsListPageState extends State<SymptomsListPage> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.hasData) {
-                  final UserClass? user = snapshot.data; 
+                  final UserClass? user = snapshot.data;
                   return IconButton(
                     icon: Icon(Icons.home),
                     onPressed: () {
                       if (user!.role == "admin") {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Admin()),
+                          MaterialPageRoute(
+                              builder: (context) => const Admin()),
                         );
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const UserHome()),
+                          MaterialPageRoute(
+                              builder: (context) => const UserHome()),
                         );
                       }
                     },
                   );
                 } else {
-                  return const SizedBox(); 
+                  return const SizedBox();
                 }
               },
             ),
@@ -139,13 +147,12 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: boxinsides,
         ),
-        child: Icon(icon, color: navy,),
+        child: Icon(
+          icon,
+          color: navy,
+        ),
       ),
       title: Text(title),
     );
   }
 }
-
-
-
-

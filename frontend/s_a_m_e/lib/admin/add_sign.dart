@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/user/sign_list.dart';
 import 'package:s_a_m_e/colors.dart';

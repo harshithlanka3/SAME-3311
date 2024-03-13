@@ -5,6 +5,7 @@ import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/user/symptom_list.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import '../firebase/models.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
 
 class SymptomCreationPage extends StatefulWidget {
@@ -38,7 +39,8 @@ class SymptomCreationPageState extends State<SymptomCreationPage> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            const Text('Add Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0)),
+            const Text('Add Symptom',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0)),
             const SizedBox(height: 40),
             TextField(
               controller: _symptomNameController,
@@ -49,20 +51,19 @@ class SymptomCreationPageState extends State<SymptomCreationPage> {
                 filled: true,
                 fillColor: boxinsides,
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: boxinsides),
-                  borderRadius: BorderRadius.all(Radius.circular(40.0))
-                ),
+                    borderSide: BorderSide(color: boxinsides),
+                    borderRadius: BorderRadius.all(Radius.circular(40.0))),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: boxinsides),
-                  borderRadius: BorderRadius.all(Radius.circular(40.0))
-                ),
+                    borderSide: BorderSide(color: boxinsides),
+                    borderRadius: BorderRadius.all(Radius.circular(40.0))),
               ),
             ),
             const SizedBox(height: 30),
             FutureBuilder<List<Category>>(
               future: _firebaseService.getAllCategories(),
               builder: (context, categoriesSnapshot) {
-                if (categoriesSnapshot.connectionState == ConnectionState.waiting) {
+                if (categoriesSnapshot.connectionState ==
+                    ConnectionState.waiting) {
                   return const CircularProgressIndicator();
                 } else if (categoriesSnapshot.hasError) {
                   return Text('Error: ${categoriesSnapshot.error}');
@@ -72,8 +73,12 @@ class SymptomCreationPageState extends State<SymptomCreationPage> {
                   if (categories != null && categories.isNotEmpty) {
                     return MultiSelectDialogField<Category>(
                       backgroundColor: background,
-                      cancelText: const Text('CANCEL', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
-                      confirmText: const Text('SELECT', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
+                      cancelText: const Text('CANCEL',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: navy)),
+                      confirmText: const Text('SELECT',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: navy)),
                       unselectedColor: navy,
                       selectedColor: navy,
                       items: categories
@@ -94,17 +99,19 @@ class SymptomCreationPageState extends State<SymptomCreationPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               style: const ButtonStyle(
-                  foregroundColor: MaterialStatePropertyAll<Color>(white),
-                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                ),
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
               onPressed: () async {
                 if (_symptomNameController.text.isNotEmpty &&
-                    _selectedComplaints.isNotEmpty && await _firebaseService.symptomNonExistent(_symptomNameController.text)) {
+                    _selectedComplaints.isNotEmpty &&
+                    await _firebaseService
+                        .symptomNonExistent(_symptomNameController.text)) {
                   final response = await _firebaseService.addSymptom(
                     _symptomNameController.text,
                     _selectedComplaints,
                   );
-                  
+
                   if (response == 200) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -113,17 +120,17 @@ class SymptomCreationPageState extends State<SymptomCreationPage> {
                     _symptomNameController.clear();
                     setState(() {
                       _selectedComplaints.clear();
-                      
                     });
-                  
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Failed to add symptom')),
                     );
                   }
-                } else if (!await _firebaseService.symptomNonExistent(_symptomNameController.text)) {
+                } else if (!await _firebaseService
+                    .symptomNonExistent(_symptomNameController.text)) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Symptom already in database')),
+                    const SnackBar(
+                        content: Text('Symptom already in database')),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -131,24 +138,30 @@ class SymptomCreationPageState extends State<SymptomCreationPage> {
                   );
                 }
               },
-              child: const Text('Create Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+              child: const Text('Create Symptom',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               style: const ButtonStyle(
-                  foregroundColor: MaterialStatePropertyAll<Color>(white),
-                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                ),
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const SymptomsListPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const SymptomsListPage()),
                 );
               },
-              child: const Text('View All Symptoms', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+              child: const Text('View All Symptoms',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
           ],
         ),
-      ),bottomNavigationBar: BottomAppBar(
+      ),
+      bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -156,9 +169,9 @@ class SymptomCreationPageState extends State<SymptomCreationPage> {
               icon: Icon(Icons.home),
               onPressed: () {
                 Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Admin()),
-                    );
+                  context,
+                  MaterialPageRoute(builder: (context) => const Admin()),
+                );
               },
             ),
           ],
@@ -188,11 +201,12 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: boxinsides,
         ),
-        child: Icon(icon, color: navy,),
+        child: Icon(
+          icon,
+          color: navy,
+        ),
       ),
       title: Text(title),
     );
   }
 }
-
-

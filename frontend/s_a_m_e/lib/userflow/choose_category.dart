@@ -3,6 +3,7 @@ import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/userflow/search_symptom.dart';
+import '../firebase/models.dart';
 
 class ChooseCategory extends StatefulWidget {
   const ChooseCategory({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class ChooseCategoryState extends State<ChooseCategory> {
     super.initState();
     categories = FirebaseService().getAllCategories();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +46,8 @@ class ChooseCategoryState extends State<ChooseCategory> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const SearchSymptom()),
+                          MaterialPageRoute(
+                              builder: (context) => const SearchSymptom()),
                         );
                       },
                       child: Container(
@@ -58,7 +60,8 @@ class ChooseCategoryState extends State<ChooseCategory> {
                         child: const Center(
                           child: Text(
                             'SEARCH BY SYMPTOM NAME HERE',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
@@ -68,7 +71,8 @@ class ChooseCategoryState extends State<ChooseCategory> {
                     child: Scrollbar(
                       trackVisibility: true,
                       child: GridView.builder(
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           mainAxisSpacing: 15.0,
                           crossAxisSpacing: 15.0,
@@ -103,7 +107,8 @@ class ChooseCategoryState extends State<ChooseCategory> {
                                 title: Center(
                                   child: Text(
                                     snapshot.data![index].name,
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),

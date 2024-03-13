@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/admin/admin_home.dart';
-import 'package:s_a_m_e/colors.dart'; 
+import 'package:s_a_m_e/colors.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import '../firebase/models.dart';
 // import 'package:s_a_m_e/admin/diagnosislist.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
 
@@ -20,7 +21,6 @@ class EditDiagnosisPage extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
@@ -29,70 +29,77 @@ class EditDiagnosisPage extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0),
             ),
             //Displaying list of symptoms
-            Expanded (
-            child: FutureBuilder<List<Diagnosis>>(
-              future: _firebaseService.getAllDiagnosis(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (snapshot.hasData) {
-                  return Scrollbar(
-                    trackVisibility: true,
-                    child: ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: <Widget>[
-                            Container( // where the UI starts
-                              decoration: BoxDecoration(
-                                border: Border.all(color: teal),
-                                color: boxinsides,
-                                borderRadius: BorderRadius.circular(15),
+            Expanded(
+              child: FutureBuilder<List<Diagnosis>>(
+                future: _firebaseService.getAllDiagnosis(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.hasData) {
+                    return Scrollbar(
+                      trackVisibility: true,
+                      child: ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: <Widget>[
+                              Container(
+                                // where the UI starts
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: teal),
+                                  color: boxinsides,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: ListTile(
+                                  title: Text(snapshot.data![index].name,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  subtitle: Text(
+                                      snapshot.data![index].definition,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis),
+                                ),
                               ),
-                              child: ListTile(
-                                title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                subtitle: Text(snapshot.data![index].definition, maxLines: 2, overflow: TextOverflow.ellipsis), 
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                          ],
-                        );
-                      },
-                    ),
-                  );
-                } else {
-                  return const Center(child: Text('No diagnoses found'));
-                }
-              },
+                              const SizedBox(height: 10),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  } else {
+                    return const Center(child: Text('No diagnoses found'));
+                  }
+                },
+              ),
             ),
-            ),    
 
             ElevatedButton(
               style: const ButtonStyle(
-                  foregroundColor: MaterialStatePropertyAll<Color>(white),
-                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                ),
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DiagnosisCreationPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const DiagnosisCreationPage()),
                 );
               },
-              child: const Text("Add Diagnosis"), 
+              child: const Text("Add Diagnosis"),
             ),
             const SizedBox(height: 50),
             ElevatedButton(
               style: const ButtonStyle(
-                  
-                  foregroundColor: MaterialStatePropertyAll<Color>(white),
-                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                ),
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => UpdateDiagnosisPage()),
+                  MaterialPageRoute(
+                      builder: (context) => UpdateDiagnosisPage()),
                 );
               },
               child: const Text("Update Diagnosis"),
@@ -100,20 +107,22 @@ class EditDiagnosisPage extends StatelessWidget {
             const SizedBox(height: 50),
             ElevatedButton(
               style: const ButtonStyle(
-                  foregroundColor: MaterialStatePropertyAll<Color>(white),
-                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                ),
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DiagnosisDeletionPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const DiagnosisDeletionPage()),
                 );
               },
               child: const Text("Delete Diagnosis"),
             ),
           ],
         ),
-      ),bottomNavigationBar: BottomAppBar(
+      ),
+      bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -121,9 +130,9 @@ class EditDiagnosisPage extends StatelessWidget {
               icon: Icon(Icons.home),
               onPressed: () {
                 Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Admin()),
-                    );
+                  context,
+                  MaterialPageRoute(builder: (context) => const Admin()),
+                );
               },
             ),
           ],
@@ -153,16 +162,15 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: boxinsides,
         ),
-        child: Icon(icon, color: navy,),
+        child: Icon(
+          icon,
+          color: navy,
+        ),
       ),
       title: Text(title),
     );
   }
 }
-
-
-
-
 
 class DiagnosisCreationPage extends StatefulWidget {
   const DiagnosisCreationPage({super.key});
@@ -178,7 +186,6 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
   final FirebaseService _firebaseService = FirebaseService();
   List<String> _selectedSymptoms = [];
   List<String> _selectedSigns = [];
-
 
   @override
   void dispose() {
@@ -198,7 +205,8 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            const Text('Add Diagnosis', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0)),
+            const Text('Add Diagnosis',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0)),
             const SizedBox(height: 40),
             TextField(
               controller: _diagnosisNameController,
@@ -209,13 +217,11 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                 filled: true,
                 fillColor: boxinsides,
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: boxinsides),
-                  borderRadius: BorderRadius.all(Radius.circular(40.0))
-                ),
+                    borderSide: BorderSide(color: boxinsides),
+                    borderRadius: BorderRadius.all(Radius.circular(40.0))),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: boxinsides),
-                  borderRadius: BorderRadius.all(Radius.circular(40.0))
-                ),
+                    borderSide: BorderSide(color: boxinsides),
+                    borderRadius: BorderRadius.all(Radius.circular(40.0))),
               ),
             ),
             const SizedBox(height: 40),
@@ -228,13 +234,11 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                 filled: true,
                 fillColor: boxinsides,
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: boxinsides),
-                  borderRadius: BorderRadius.all(Radius.circular(40.0))
-                ),
+                    borderSide: BorderSide(color: boxinsides),
+                    borderRadius: BorderRadius.all(Radius.circular(40.0))),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: boxinsides),
-                  borderRadius: BorderRadius.all(Radius.circular(40.0))
-                ),
+                    borderSide: BorderSide(color: boxinsides),
+                    borderRadius: BorderRadius.all(Radius.circular(40.0))),
               ),
             ),
             const SizedBox(height: 30),
@@ -333,20 +337,19 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
             //   },
             // ),
 
-
-
-
             const SizedBox(height: 20),
             ElevatedButton(
               style: const ButtonStyle(
-                  foregroundColor: MaterialStatePropertyAll<Color>(white),
-                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                ),
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
               onPressed: () async {
                 if ((_diagnosisNameController.text.isNotEmpty &&
-                    _diagnosisDefinitionController.text.isNotEmpty &&
-                    _selectedSymptoms.isNotEmpty && 
-                    _selectedSigns.isNotEmpty) && await _firebaseService.diagnosisNonExistent(_diagnosisNameController.text)) {
+                        _diagnosisDefinitionController.text.isNotEmpty &&
+                        _selectedSymptoms.isNotEmpty &&
+                        _selectedSigns.isNotEmpty) &&
+                    await _firebaseService
+                        .diagnosisNonExistent(_diagnosisNameController.text)) {
                   final response = await _firebaseService.addDiagnosis(
                     _diagnosisNameController.text,
                     _diagnosisDefinitionController.text,
@@ -355,36 +358,35 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                   );
                   if (response == 200) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Diagnosis added successfully')),
+                      const SnackBar(
+                          content: Text('Diagnosis added successfully')),
                     );
                     _diagnosisNameController.clear();
                     _diagnosisDefinitionController.clear();
                     setState(() {
                       _selectedSymptoms.clear();
                       _selectedSigns.clear();
-                      
                     });
-
-
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Failed to add diagnosis')),
                     );
                   }
-                } else if (!await _firebaseService.diagnosisNonExistent(_diagnosisNameController.text)) {
+                } else if (!await _firebaseService
+                    .diagnosisNonExistent(_diagnosisNameController.text)) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Diagnosis already in database')),
+                    const SnackBar(
+                        content: Text('Diagnosis already in database')),
                   );
-                  
-
-                }
-                else {
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Please fill all the fields')),
                   );
                 }
               },
-              child: const Text('Create Diagnosis', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+              child: const Text('Create Diagnosis',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
             const SizedBox(height: 20),
           ],
@@ -421,7 +423,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
     fetchDiagnoses();
   }
 
-   @override
+  @override
   void dispose() {
     _diagnosisUpdateDefinitionController.dispose();
     super.dispose();
@@ -439,8 +441,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
   }
 
   Future<void> fetchSymptoms(String diagnosisName) async {
-    List<String> allSymptoms =
-        await FirebaseService().getAllSymptoms();
+    List<String> allSymptoms = await FirebaseService().getAllSymptoms();
 
     List<String> currentSymptoms =
         await FirebaseService().getSymptomsForDiagnosis(diagnosisName);
@@ -462,8 +463,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
   }
 
   Future<void> fetchSigns(String diagnosisName) async {
-    List<String> allSigns =
-        await FirebaseService().getAllSigns();
+    List<String> allSigns = await FirebaseService().getAllSigns();
 
     List<String> currentSigns =
         await FirebaseService().getSignsForDiagnosis(diagnosisName);
@@ -479,8 +479,8 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
     setState(() {
       signsToDelete = currentSigns;
       signsToAdd = signsForAddition;
-      signCheckedState = Map.fromIterable(allSigns,
-          key: (sign) => sign, value: (_) => false);
+      signCheckedState =
+          Map.fromIterable(allSigns, key: (sign) => sign, value: (_) => false);
     });
   }
 
@@ -576,7 +576,6 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-
                   List<String> diagnoses = [];
                   for (int i = 0; i < snapshot.data!.length; i++) {
                     diagnoses.add(snapshot.data![i].name);
@@ -615,13 +614,11 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                 filled: true,
                 fillColor: boxinsides,
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: boxinsides),
-                  borderRadius: BorderRadius.all(Radius.circular(40.0))
-                ),
+                    borderSide: BorderSide(color: boxinsides),
+                    borderRadius: BorderRadius.all(Radius.circular(40.0))),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: boxinsides),
-                  borderRadius: BorderRadius.all(Radius.circular(40.0))
-                ),
+                    borderSide: BorderSide(color: boxinsides),
+                    borderRadius: BorderRadius.all(Radius.circular(40.0))),
               ),
             ),
             // Text(
@@ -641,7 +638,8 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                   return CheckboxListTile(
                     title: Text(symptom),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity:
+                        const VisualDensity(horizontal: -2.0, vertical: -2.0),
                     value: symptomCheckedState[symptom] ?? false,
                     onChanged: (bool? value) {
                       setState(() {
@@ -665,7 +663,8 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                   return CheckboxListTile(
                     title: Text(sign),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity:
+                        const VisualDensity(horizontal: -2.0, vertical: -2.0),
                     value: signCheckedState[sign] ?? false,
                     onChanged: (bool? value) {
                       setState(() {
@@ -689,7 +688,8 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                   return CheckboxListTile(
                     title: Text(symptom),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity:
+                        const VisualDensity(horizontal: -2.0, vertical: -2.0),
                     value: symptomCheckedState[symptom] ?? false,
                     onChanged: (bool? value) {
                       setState(() {
@@ -713,7 +713,8 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                   return CheckboxListTile(
                     title: Text(sign),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity:
+                        const VisualDensity(horizontal: -2.0, vertical: -2.0),
                     value: signCheckedState[sign] ?? false,
                     onChanged: (bool? value) {
                       setState(() {
@@ -730,7 +731,8 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           if (_diagnosisUpdateDefinitionController.text.isNotEmpty) {
-            final response = await FirebaseService().updateDiagnosisDef(selectedDiagnosis, _diagnosisUpdateDefinitionController.text);
+            final response = await FirebaseService().updateDiagnosisDef(
+                selectedDiagnosis, _diagnosisUpdateDefinitionController.text);
             if (response == 200) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Diagnosis added successfully')),
@@ -743,7 +745,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                 const SnackBar(content: Text('Failed to add diagnosis')),
               );
             }
-          } 
+          }
           updateSymptoms();
           updateSigns();
         },
@@ -756,8 +758,6 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
   }
 }
 
-
-
 class DiagnosisDeletionPage extends StatefulWidget {
   const DiagnosisDeletionPage({super.key});
 
@@ -766,7 +766,7 @@ class DiagnosisDeletionPage extends StatefulWidget {
 }
 
 class DiagnosisDeletionPageState extends State<DiagnosisDeletionPage> {
-  List<String> _selectedDiagnosis= [];
+  List<String> _selectedDiagnosis = [];
   final FirebaseService _firebaseService = FirebaseService();
 
   @override
@@ -804,16 +804,19 @@ class DiagnosisDeletionPageState extends State<DiagnosisDeletionPage> {
                       backgroundColor: background,
                       cancelText: const Text(
                         'CANCEL',
-                        style: TextStyle(fontWeight: FontWeight.bold, color: navy),
+                        style:
+                            TextStyle(fontWeight: FontWeight.bold, color: navy),
                       ),
                       confirmText: const Text(
                         'SELECT',
-                        style: TextStyle(fontWeight: FontWeight.bold, color: navy),
+                        style:
+                            TextStyle(fontWeight: FontWeight.bold, color: navy),
                       ),
                       unselectedColor: navy,
                       selectedColor: navy,
                       items: diagnosis
-                          .map((diagnosis) => MultiSelectItem<String>(diagnosis, diagnosis))
+                          .map((diagnosis) =>
+                              MultiSelectItem<String>(diagnosis, diagnosis))
                           .toList(),
                       title: const Text("Diagnosis"),
                       onConfirm: (values) {
@@ -844,9 +847,8 @@ class DiagnosisDeletionPageState extends State<DiagnosisDeletionPage> {
                     ),
                   );
                   setState(() {
-                      _selectedDiagnosis.clear();
+                    _selectedDiagnosis.clear();
                   });
-                  
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:s_a_m_e/account/profilepicture.dart';
-import 'package:s_a_m_e/colors.dart'; 
-import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
-
 
 class DiagnosisCreationPage extends StatefulWidget {
   const DiagnosisCreationPage({super.key});
@@ -19,7 +16,6 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
   final FirebaseService _firebaseService = FirebaseService();
   List<String> _selectedSymptoms = [];
   List<String> _selectedSigns = [];
-
 
   @override
   void dispose() {
@@ -39,7 +35,8 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            const Text('Add Diagnosis', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0)),
+            const Text('Add Diagnosis',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0)),
             const SizedBox(height: 40),
             TextField(
               controller: _diagnosisNameController,
@@ -50,13 +47,11 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                 filled: true,
                 fillColor: boxinsides,
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: boxinsides),
-                  borderRadius: BorderRadius.all(Radius.circular(40.0))
-                ),
+                    borderSide: BorderSide(color: boxinsides),
+                    borderRadius: BorderRadius.all(Radius.circular(40.0))),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: boxinsides),
-                  borderRadius: BorderRadius.all(Radius.circular(40.0))
-                ),
+                    borderSide: BorderSide(color: boxinsides),
+                    borderRadius: BorderRadius.all(Radius.circular(40.0))),
               ),
             ),
             const SizedBox(height: 40),
@@ -69,13 +64,11 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                 filled: true,
                 fillColor: boxinsides,
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: boxinsides),
-                  borderRadius: BorderRadius.all(Radius.circular(40.0))
-                ),
+                    borderSide: BorderSide(color: boxinsides),
+                    borderRadius: BorderRadius.all(Radius.circular(40.0))),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: boxinsides),
-                  borderRadius: BorderRadius.all(Radius.circular(40.0))
-                ),
+                    borderSide: BorderSide(color: boxinsides),
+                    borderRadius: BorderRadius.all(Radius.circular(40.0))),
               ),
             ),
             const SizedBox(height: 30),
@@ -174,20 +167,19 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
               },
             ),
 
-
-
-
             const SizedBox(height: 20),
             ElevatedButton(
               style: const ButtonStyle(
-                  foregroundColor: MaterialStatePropertyAll<Color>(white),
-                  backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                ),
+                foregroundColor: MaterialStatePropertyAll<Color>(white),
+                backgroundColor: MaterialStatePropertyAll<Color>(navy),
+              ),
               onPressed: () async {
                 if ((_diagnosisNameController.text.isNotEmpty &&
-                    _diagnosisDefinitionController.text.isNotEmpty &&
-                    _selectedSymptoms.isNotEmpty && 
-                    _selectedSigns.isNotEmpty) && await _firebaseService.diagnosisNonExistent(_diagnosisNameController.text)) {
+                        _diagnosisDefinitionController.text.isNotEmpty &&
+                        _selectedSymptoms.isNotEmpty &&
+                        _selectedSigns.isNotEmpty) &&
+                    await _firebaseService
+                        .diagnosisNonExistent(_diagnosisNameController.text)) {
                   final response = await _firebaseService.addDiagnosis(
                     _diagnosisNameController.text,
                     _diagnosisDefinitionController.text,
@@ -196,36 +188,35 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                   );
                   if (response == 200) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Diagnosis added successfully')),
+                      const SnackBar(
+                          content: Text('Diagnosis added successfully')),
                     );
                     _diagnosisNameController.clear();
                     _diagnosisDefinitionController.clear();
                     setState(() {
                       _selectedSymptoms.clear();
                       _selectedSigns.clear();
-                      
                     });
-
-
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Failed to add diagnosis')),
                     );
                   }
-                } else if (!await _firebaseService.diagnosisNonExistent(_diagnosisNameController.text)) {
+                } else if (!await _firebaseService
+                    .diagnosisNonExistent(_diagnosisNameController.text)) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Diagnosis already in database')),
+                    const SnackBar(
+                        content: Text('Diagnosis already in database')),
                   );
-                  
-
-                }
-                else {
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Please fill all the fields')),
                   );
                 }
               },
-              child: const Text('Create Diagnosis', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+              child: const Text('Create Diagnosis',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
             const SizedBox(height: 20),
           ],

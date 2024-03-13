@@ -5,6 +5,7 @@ import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/user/user_home.dart';
+import '../firebase/models.dart';
 
 class DiagnosisListPage extends StatefulWidget {
   const DiagnosisListPage({Key? key}) : super(key: key);
@@ -17,7 +18,6 @@ class DiagnosisListPageState extends State<DiagnosisListPage> {
   late Future<List<Diagnosis>> diagnosis;
   late TextEditingController _searchController;
   late Future<UserClass?> account;
-
 
   @override
   void initState() {
@@ -46,7 +46,8 @@ class DiagnosisListPageState extends State<DiagnosisListPage> {
       final definitionLower = diagnosis.definition.toLowerCase();
       final queryLower = query.toLowerCase();
 
-      return nameLower.contains(queryLower) || definitionLower.contains(queryLower);
+      return nameLower.contains(queryLower) ||
+          definitionLower.contains(queryLower);
     }).toList();
   }
 
@@ -81,8 +82,8 @@ class DiagnosisListPageState extends State<DiagnosisListPage> {
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (snapshot.hasData) {
-                    final List<Diagnosis> filteredDiagnoses =
-                        _searchDiagnosis(_searchController.text, snapshot.data!);
+                    final List<Diagnosis> filteredDiagnoses = _searchDiagnosis(
+                        _searchController.text, snapshot.data!);
 
                     if (filteredDiagnoses.isEmpty) {
                       return const Center(child: Text('No diagnoses found'));
@@ -103,9 +104,12 @@ class DiagnosisListPageState extends State<DiagnosisListPage> {
                                 ),
                                 child: ListTile(
                                   title: Text(filteredDiagnoses[index].name,
-                                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text(filteredDiagnoses[index].definition,
-                                      maxLines: 2, overflow: TextOverflow.ellipsis),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  subtitle: Text(
+                                      filteredDiagnoses[index].definition,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis),
                                 ),
                               ),
                               const SizedBox(height: 10),
@@ -122,7 +126,8 @@ class DiagnosisListPageState extends State<DiagnosisListPage> {
             ),
           ],
         ),
-      ),bottomNavigationBar: BottomAppBar(
+      ),
+      bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -134,25 +139,27 @@ class DiagnosisListPageState extends State<DiagnosisListPage> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.hasData) {
-                  final UserClass? user = snapshot.data; 
+                  final UserClass? user = snapshot.data;
                   return IconButton(
                     icon: Icon(Icons.home),
                     onPressed: () {
                       if (user!.role == "admin") {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Admin()),
+                          MaterialPageRoute(
+                              builder: (context) => const Admin()),
                         );
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const UserHome()),
+                          MaterialPageRoute(
+                              builder: (context) => const UserHome()),
                         );
                       }
                     },
                   );
                 } else {
-                  return const SizedBox(); 
+                  return const SizedBox();
                 }
               },
             ),
@@ -183,13 +190,12 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: boxinsides,
         ),
-        child: Icon(icon, color: navy,),
+        child: Icon(
+          icon,
+          color: navy,
+        ),
       ),
       title: Text(title),
     );
   }
 }
-
-
-
-

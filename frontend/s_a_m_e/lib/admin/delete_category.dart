@@ -4,6 +4,7 @@ import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import '../firebase/models.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
 
 class CategoryDeletionPage extends StatefulWidget {
@@ -49,16 +50,19 @@ class CategoryDeletionPageState extends State<CategoryDeletionPage> {
                       backgroundColor: background,
                       cancelText: const Text(
                         'CANCEL',
-                        style: TextStyle(fontWeight: FontWeight.bold, color: navy),
+                        style:
+                            TextStyle(fontWeight: FontWeight.bold, color: navy),
                       ),
                       confirmText: const Text(
                         'SELECT',
-                        style: TextStyle(fontWeight: FontWeight.bold, color: navy),
+                        style:
+                            TextStyle(fontWeight: FontWeight.bold, color: navy),
                       ),
                       unselectedColor: navy,
                       selectedColor: navy,
                       items: categories
-                          .map((category) => MultiSelectItem<String>(category.name, category.name))
+                          .map((category) => MultiSelectItem<String>(
+                              category.name, category.name))
                           .toList(),
                       title: const Text("Categories"),
                       onConfirm: (values) {
@@ -103,7 +107,8 @@ class CategoryDeletionPageState extends State<CategoryDeletionPage> {
             const SizedBox(height: 20),
           ],
         ),
-      ),bottomNavigationBar: BottomAppBar(
+      ),
+      bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -111,9 +116,9 @@ class CategoryDeletionPageState extends State<CategoryDeletionPage> {
               icon: Icon(Icons.home),
               onPressed: () {
                 Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Admin()),
-                    );
+                  context,
+                  MaterialPageRoute(builder: (context) => const Admin()),
+                );
               },
             ),
           ],
@@ -143,11 +148,12 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: boxinsides,
         ),
-        child: Icon(icon, color: navy,),
+        child: Icon(
+          icon,
+          color: navy,
+        ),
       ),
       title: Text(title),
     );
   }
 }
-
-

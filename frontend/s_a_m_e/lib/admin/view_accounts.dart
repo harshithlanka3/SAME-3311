@@ -5,13 +5,13 @@ import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/admin/view_profile.dart';
+import '../firebase/models.dart';
 
 class ViewAccounts extends StatefulWidget {
   const ViewAccounts({Key? key}) : super(key: key);
 
   @override
   ViewAccountsState createState() => ViewAccountsState();
-  
 }
 
 class ViewAccountsState extends State<ViewAccounts> {
@@ -30,7 +30,7 @@ class ViewAccountsState extends State<ViewAccounts> {
   Future<void> startAsyncInit() async {
     usersSearch = await FirebaseService().getAllUsers();
     setState(() {
-      displayedUsers = usersSearch; 
+      displayedUsers = usersSearch;
     });
   }
 
@@ -99,7 +99,9 @@ class ViewAccountsState extends State<ViewAccounts> {
                       const Text(
                         ' Search for a user below',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24.0, color: Colors.black),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24.0,
+                            color: Colors.black),
                       ),
                       const SizedBox(height: 10),
                       TextField(
@@ -111,11 +113,13 @@ class ViewAccountsState extends State<ViewAccounts> {
                           filled: true,
                           fillColor: boxinsides,
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
                             borderSide: BorderSide(color: boxinsides),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
                             borderSide: BorderSide(color: boxinsides),
                           ),
                         ),
@@ -123,17 +127,21 @@ class ViewAccountsState extends State<ViewAccounts> {
                       const SizedBox(height: 10),
                       ElevatedButton(
                         style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(white),
-                          backgroundColor: MaterialStateProperty.all<Color>(navy),
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(white),
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(navy),
                         ),
                         onPressed: () async {
-                          List<UserClass> searchedUsers = await getSearchedUsers(_searchController.text);
+                          List<UserClass> searchedUsers =
+                              await getSearchedUsers(_searchController.text);
                           setState(() {
                             displayedUsers = searchedUsers;
                           });
                         },
                         child: const Text('Search',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16.0)),
                       ),
                       const SizedBox(height: 10),
                       const Divider(),
@@ -143,7 +151,8 @@ class ViewAccountsState extends State<ViewAccounts> {
                         itemCount: displayedUsers.length,
                         itemBuilder: (context, index) {
                           return ListTile(
-                            title: Text("${displayedUsers[index].firstName} ${displayedUsers[index].lastName}"), // change this when add name var
+                            title: Text(
+                                "${displayedUsers[index].firstName} ${displayedUsers[index].lastName}"), // change this when add name var
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -154,15 +163,20 @@ class ViewAccountsState extends State<ViewAccounts> {
                             ),
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(100),
-                              child: ViewAllProfilePicturePage(email: displayedUsers[index].email, url: displayedUsers[index].profilePicture),
+                              child: ViewAllProfilePicturePage(
+                                  email: displayedUsers[index].email,
+                                  url: displayedUsers[index].profilePicture),
                             ),
                             trailing: GestureDetector(
                               onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => ProfilePage(
-                                        name: "${displayedUsers[index].firstName} ${displayedUsers[index].lastName}",
-                                        email: displayedUsers[index].email,
-                                        role: displayedUsers[index].role))).then((info) => refreshUsers(info));
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                        builder: (context) => ProfilePage(
+                                            name:
+                                                "${displayedUsers[index].firstName} ${displayedUsers[index].lastName}",
+                                            email: displayedUsers[index].email,
+                                            role: displayedUsers[index].role)))
+                                    .then((info) => refreshUsers(info));
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(5),
@@ -172,7 +186,9 @@ class ViewAccountsState extends State<ViewAccounts> {
                                       color: navy,
                                       width: 1.0,
                                     )),
-                                child: const Icon(Icons.arrow_forward_ios_outlined, color: navy),
+                                child: const Icon(
+                                    Icons.arrow_forward_ios_outlined,
+                                    color: navy),
                               ),
                             ),
                           );
@@ -196,9 +212,9 @@ class ViewAccountsState extends State<ViewAccounts> {
               icon: Icon(Icons.home),
               onPressed: () {
                 Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Admin()),
-                    );
+                  context,
+                  MaterialPageRoute(builder: (context) => const Admin()),
+                );
               },
             ),
           ],
@@ -228,11 +244,12 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: boxinsides,
         ),
-        child: Icon(icon, color: navy,),
+        child: Icon(
+          icon,
+          color: navy,
+        ),
       ),
       title: Text(title),
     );
   }
 }
-
-
