@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/admin/admin_home.dart';
+import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/user/symptom_list.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
@@ -148,22 +149,7 @@ class SymptomCreationPageState extends State<SymptomCreationPage> {
             ),
           ],
         ),
-      ),bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () {
-                Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Admin()),
-                    );
-              },
-            ),
-          ],
-        ),
-      ),
+      ),bottomNavigationBar: const HomeButton()
     );
   }
 }
