@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/user/user_home.dart';
 import 'package:s_a_m_e/userflow/potential_diagnosis.dart';
 
@@ -155,43 +156,8 @@ class _SelectSymptomState extends State<SelectSymptom> {
             )
           );
         },
-      ),bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            FutureBuilder<UserClass?>(
-              future: account,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else if (snapshot.hasData) {
-                  final UserClass? user = snapshot.data; 
-                  return IconButton(
-                    icon: Icon(Icons.home),
-                    onPressed: () {
-                      if (user!.role == "admin") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Admin()),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const UserHome()),
-                        );
-                      }
-                    },
-                  );
-                } else {
-                  return const SizedBox(); 
-                }
-              },
-            ),
-          ],
-        ),
       ),
+      bottomNavigationBar: const HomeButton()
     );
   }
 }
