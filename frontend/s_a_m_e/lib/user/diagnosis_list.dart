@@ -1,11 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
-import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/home_button.dart';
-import 'package:s_a_m_e/user/user_home.dart';
 
 class DiagnosisListPage extends StatefulWidget {
   const DiagnosisListPage({Key? key}) : super(key: key);
