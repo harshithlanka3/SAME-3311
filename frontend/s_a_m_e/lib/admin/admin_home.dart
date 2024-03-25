@@ -8,6 +8,7 @@ import 'package:s_a_m_e/admin/add_sign.dart';
 import 'package:s_a_m_e/admin/adminrequest.dart';
 import 'package:s_a_m_e/admin/delete_sign.dart';
 import 'package:s_a_m_e/admin/edit_categories.dart';
+import 'package:s_a_m_e/admin/edit_daignosiss.dart';
 import 'package:s_a_m_e/admin/update_sign.dart';
 import 'package:s_a_m_e/user/diagnosis_list.dart';
 import 'package:s_a_m_e/user/categories_list.dart';
@@ -101,7 +102,7 @@ Widget build(BuildContext context) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EditDiagnosisPage(),
+                    builder: (context) => DiagnosisEdit(),
                   ),
                 );
               },
