@@ -45,6 +45,17 @@ class _SelectSymptomState extends State<SelectSymptom> {
     print(checkedSymptoms);
   }
 
+  int amountChecked(Map<String, Map<String, dynamic>> list) {
+    int selectedCount = 0;
+    list.forEach((key, value) {
+      if (value["isChecked"] == true) {
+        selectedCount++;
+      }
+    });
+
+    return selectedCount;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -147,12 +158,34 @@ class _SelectSymptomState extends State<SelectSymptom> {
         ),
         child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms),
-            )
-          );
+          int count = amountChecked(checkedSymptoms);
+          if (count > 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms),
+              )
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: background,
+                  title: const Text('Error'),
+                  content: const Text('Please choose at least one symptom.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("OK", style: TextStyle(color: navy),),
+                    ),
+                  ],
+                );
+              }
+            );
+          }
         },
       ),
       bottomNavigationBar: const HomeButton()
