@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
-import 'package:s_a_m_e/user/user_home.dart';
+import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/userflow/potential_diagnosis.dart';
 
 class SelectSymptom extends StatefulWidget {
@@ -44,6 +43,17 @@ class _SelectSymptomState extends State<SelectSymptom> {
       checkedSymptoms[result[i]] = tempDict;
     }
     print(checkedSymptoms);
+  }
+
+  int amountChecked(Map<String, Map<String, dynamic>> list) {
+    int selectedCount = 0;
+    list.forEach((key, value) {
+      if (value["isChecked"] == true) {
+        selectedCount++;
+      }
+    });
+
+    return selectedCount;
   }
 
   @override
@@ -148,50 +158,37 @@ class _SelectSymptomState extends State<SelectSymptom> {
         ),
         child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms),
-            )
-          );
+          int count = amountChecked(checkedSymptoms);
+          if (count > 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms),
+              )
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: background,
+                  title: const Text('Error'),
+                  content: const Text('Please choose at least one symptom.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("OK", style: TextStyle(color: navy),),
+                    ),
+                  ],
+                );
+              }
+            );
+          }
         },
-      ),bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            FutureBuilder<UserClass?>(
-              future: account,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else if (snapshot.hasData) {
-                  final UserClass? user = snapshot.data; 
-                  return IconButton(
-                    icon: Icon(Icons.home),
-                    onPressed: () {
-                      if (user!.role == "admin") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Admin()),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const UserHome()),
-                        );
-                      }
-                    },
-                  );
-                } else {
-                  return const SizedBox(); 
-                }
-              },
-            ),
-          ],
-        ),
       ),
+      bottomNavigationBar: const HomeButton()
     );
   }
 }

@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:s_a_m_e/account/account.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/admin/add_sign.dart';
-import 'package:s_a_m_e/admin/adminrequest.dart';
 import 'package:s_a_m_e/admin/delete_sign.dart';
 import 'package:s_a_m_e/admin/update_sign.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/account/login.dart';
 import 'package:s_a_m_e/user/sign_list.dart';
-import 'package:s_a_m_e/admin/view_accounts.dart';
 
 class SignEdit extends StatelessWidget {
   //const Admin({super.key});

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:s_a_m_e/account/account.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/admin/add_symptom.dart';
-import 'package:s_a_m_e/admin/adminrequest.dart';
 import 'package:s_a_m_e/admin/delete_symptom.dart';
 import 'package:s_a_m_e/admin/update_symptom.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/account/login.dart';
-import 'package:s_a_m_e/admin/view_accounts.dart';
 import 'package:s_a_m_e/user/symptom_list.dart';
 
 class SymptomEdit extends StatelessWidget {
