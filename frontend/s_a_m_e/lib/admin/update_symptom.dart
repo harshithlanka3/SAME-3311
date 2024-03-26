@@ -50,7 +50,7 @@ class UpdateSymptomPageState extends State<UpdateSymptomPage> {
       categoriesToDelete = currentCategories;
       categoriesToAdd = categoriesForAddition;
       categoryCheckedState = Map.fromIterable(allCategories, 
-        key: (category) => category, value: (_) => false);
+          key: (category) => category, value: (_) => false);
     });
   }
 
