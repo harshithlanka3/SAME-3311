@@ -7,9 +7,9 @@ import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/userflow/diagnosis_page.dart';
 
 class PotentialDiagnosis extends StatefulWidget {
-  const PotentialDiagnosis({super.key, required this.selectedSymptoms});
+  const PotentialDiagnosis({Key? key, required this.selectedSymptoms});
 
-  final Map<String, Map<String, dynamic>> selectedSymptoms;
+  final Map<String, bool> selectedSymptoms;
 
   @override
   State<PotentialDiagnosis> createState() => _PotentialDiagnosisState();
@@ -27,7 +27,7 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
     account = fetchUser();
 
     widget.selectedSymptoms.forEach((key, value) {
-      if (value["isChecked"] == true) {
+      if (value == true) {
         checkedSymptoms.add(key);
         symptoms += "$key, ";
       }
@@ -60,22 +60,24 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
           children: [
             RichText(
               text: TextSpan(
-                  style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontFamily: "PT Serif"),
-                  children: <TextSpan>[
-                    const TextSpan(
-                        text: "Symptoms",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: ": $symptoms")
-                  ]),
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontFamily: "PT Serif",
+                ),
+                children: <TextSpan>[
+                  const TextSpan(
+                    text: "Symptoms",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: ": $symptoms")
+                ],
+              ),
             ),
             const SizedBox(height: 10),
             const Divider(thickness: 2),
             const SizedBox(height: 5),
             Expanded(
-              // height: MediaQuery.of(context).size.height - 235,
               child: FutureBuilder<List<Diagnosis>>(
                 future: diagnoses,
                 builder: (context, snapshot) {
@@ -92,42 +94,45 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
                           return Column(
                             children: <Widget>[
                               Container(
-                                // where the UI starts
                                 decoration: BoxDecoration(
                                   border: Border.all(color: teal),
                                   color: boxinsides,
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 child: ListTile(
-                                  title: Text(snapshot.data![index].name,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold)),
+                                  title: Text(
+                                    snapshot.data![index].name,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
                                   subtitle: Text(
-                                      snapshot.data![index].definition,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis),
+                                    snapshot.data![index].definition,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                   trailing: GestureDetector(
                                     onTap: () {
                                       Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => DiagnosisPage(
-                                                diagnosis:
-                                                    snapshot.data![index]),
-                                          ));
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DiagnosisPage(
+                                            diagnosis: snapshot.data![index],
+                                          ),
+                                        ),
+                                      );
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.all(5),
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          border: Border.all(
-                                            color: navy,
-                                            width: 1.0,
-                                          )),
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: navy,
+                                          width: 1.0,
+                                        ),
+                                      ),
                                       child: const Icon(
-                                          Icons.arrow_forward_ios_outlined,
-                                          color: navy),
+                                        Icons.arrow_forward_ios_outlined,
+                                        color: navy,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -147,14 +152,14 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
           ],
         ),
       ),
-      bottomNavigationBar: const HomeButton()
+      bottomNavigationBar: const HomeButton(),
     );
   }
 }
 
 class ProfileMenuWidget extends StatelessWidget {
   const ProfileMenuWidget({
-    super.key,
+    Key? key,
     required this.title,
     required this.icon,
   });
