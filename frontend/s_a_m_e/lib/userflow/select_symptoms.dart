@@ -6,26 +6,26 @@ import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/userflow/potential_diagnosis.dart';
 
 class SelectSymptom extends StatefulWidget {
-  const SelectSymptom({super.key});
+  const SelectSymptom({Key? key});
 
   @override
   State<SelectSymptom> createState() => _SelectSymptomState();
 }
 
 class _SelectSymptomState extends State<SelectSymptom> {
-
   late Future<List<Category>> categories;
-  late Future<List<String>> symptoms;
+  late Future<List<String>> allSymptoms;
   late Future<UserClass?> account;
 
-  List<String> result = [];
+  List<String> filteredSymptoms = [];
   Map<String, Map<String, dynamic>> checkedSymptoms = {};
 
   @override
   void initState() {
     super.initState();
     categories = FirebaseService().getAllCategories();
-    getSymptoms();account = fetchUser();
+    allSymptoms = FirebaseService().getAllSymptoms();
+    account = fetchUser();
   }
 
   Future<UserClass?> fetchUser() async {
@@ -35,14 +35,14 @@ class _SelectSymptomState extends State<SelectSymptom> {
     return FirebaseService().getUser(uid);
   }
 
-  void getSymptoms() async {
-    result = await FirebaseService().getAllSymptoms();
-    print(result);
-    for (int i = 0; i < result.length; i++) {
-      Map<String, dynamic> tempDict = {"isChecked": false};
-      checkedSymptoms[result[i]] = tempDict;
-    }
-    print(checkedSymptoms);
+  void searchSymptoms(String query) async {
+    List<String> allSymptomsList = await allSymptoms;
+    setState(() {
+      filteredSymptoms = allSymptomsList
+          .where((symptom) =>
+              symptom.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
   }
 
   int amountChecked(Map<String, Map<String, dynamic>> list) {
@@ -64,28 +64,36 @@ class _SelectSymptomState extends State<SelectSymptom> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
-        child: FutureBuilder(
-          future: categories,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (snapshot.hasData) {
-              return Column(
-                children: [
-                  const Text("Select symptoms from the categories below", style: TextStyle(fontSize: 18),),
-                  const SizedBox(height: 10),
-                  const Divider(thickness: 2),
-                  const SizedBox(height: 5),
-                  SizedBox(
-                    height: 600,
-                    child: ListView.builder(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text("Select symptoms from the categories below", style: TextStyle(fontSize: 18),),
+            const SizedBox(height: 10),
+            const Divider(thickness: 2),
+            const SizedBox(height: 5),
+            TextField(
+              onChanged: searchSymptoms,
+              decoration: InputDecoration(
+                hintText: 'Search Symptoms',
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: FutureBuilder(
+                future: categories,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.hasData) {
+                    return ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        if (snapshot.data!.isEmpty) {
-                          return const Center(child: Text('No Symptoms Found'));
-                        } else {
+                        final category = snapshot.data![index];
+                        final categorySymptoms = filteredSymptoms.isEmpty ? category.symptoms : category.symptoms.where((symptom) => filteredSymptoms.contains(symptom)).toList();
+                        if (categorySymptoms.isNotEmpty) {
                           return Column(
                             children: [
                               Container(
@@ -94,67 +102,63 @@ class _SelectSymptomState extends State<SelectSymptom> {
                                   border: Border.all(color: teal),
                                 ),
                                 child: ExpansionTile(
-                                collapsedBackgroundColor: navy,
-                                collapsedIconColor: white,
-                                collapsedTextColor: white,
-                                collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                                backgroundColor: boxinsides,
-                                title: Text(snapshot.data![index].name, style: const TextStyle(fontWeight: FontWeight.bold),),
-                                children: [
-                                  SizedBox(
-                                      height: snapshot.data![index].symptoms.length * 42,
+                                  collapsedBackgroundColor: navy,
+                                  collapsedIconColor: white,
+                                  collapsedTextColor: white,
+                                  collapsedShape:
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                  backgroundColor: boxinsides,
+                                  title: Text(
+                                    category.name,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  children: [
+                                    SizedBox(
+                                      height: categorySymptoms.length * 42,
                                       child: ListView.builder(
-                                      itemCount: snapshot.data![index].symptoms.length,
-                                      itemBuilder: (context, index2) {
-                                        if (snapshot.data![index].symptoms.isEmpty) {
-                                          return const Center(child: Text('No Symptoms Found'));
-                                        } else {
-                                          return Column(
-                                            children: [
-                                              CheckboxListTile(
-                                                visualDensity: const VisualDensity(horizontal: -4.0, vertical: -4.0),
-                                                controlAffinity: ListTileControlAffinity.leading,
-                                                title: Text(snapshot.data![index].symptoms[index2]), // this gets symptom name
-                                                // contentPadding: const EdgeInsets.all(5),
-                                                activeColor: teal,
-                                                value: checkedSymptoms[snapshot.data![index].symptoms[index2]]!["isChecked"],
-                                                onChanged: (bool? value) {
-                                                  setState(() {
-                                                    checkedSymptoms[snapshot.data![index].symptoms[index2]]!["isChecked"] = value!;
-                                                  });
-                                                }
-                                              )
-                                              // Text(snapshot.data![index].symptoms[index2])
-                                            ],
-                                          );
-                                        }
-                                      }
-                                    ),
-                                  )
-                                ],
-                              ),
+                                        itemCount: categorySymptoms.length,
+                                        itemBuilder: (context, index2) {
+                                          final symptom = categorySymptoms[index2];
+                                          return CheckboxListTile(
+                                              visualDensity: const VisualDensity(horizontal: -4.0, vertical: -4.0),
+                                              controlAffinity: ListTileControlAffinity.leading,
+                                              title: Text(symptom),
+                                              activeColor: teal,
+                                              value: checkedSymptoms[symptom]?["isChecked"] ?? false,
+                                              onChanged: (bool? value) {
+                                                setState(() {
+                                                  checkedSymptoms[symptom]?["isChecked"] = value!;
+                                                });
+                                              });
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                               const SizedBox(height: 10),
                             ],
                           );
+                        } else {
+                          return SizedBox.shrink(); // Hide the category if no matching symptoms found
                         }
-                      }
-                    ),
-                  )
-                ],
-              );
-            } else {
-              return const Center(child: Text('No symptoms found'));
-            }
-          }
-        )
+                      },
+                    );
+                  } else {
+                    return const Center(child: Text('No symptoms found'));
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ElevatedButton(
         style: const ButtonStyle(
           foregroundColor: MaterialStatePropertyAll<Color>(white),
-          backgroundColor: MaterialStatePropertyAll<Color>(navy), // idk what color to make this
+          backgroundColor: MaterialStatePropertyAll<Color>(navy),
         ),
         child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {
@@ -163,39 +167,38 @@ class _SelectSymptomState extends State<SelectSymptom> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => PotentialDiagnosis(selectedSymptoms:checkedSymptoms),
-              )
+                builder: (context) => PotentialDiagnosis(selectedSymptoms: checkedSymptoms),
+              ),
             );
           } else {
             showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  backgroundColor: background,
-                  title: const Text('Error'),
-                  content: const Text('Please choose at least one symptom.'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text("OK", style: TextStyle(color: navy),),
-                    ),
-                  ],
-                );
-              }
-            );
-          }
-        },
-      ),
-      bottomNavigationBar: const HomeButton()
-    );
-  }
-}
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                backgroundColor: background,
+                title: const Text('Error'),
+                content: const Text('Please choose at least one symptom.'),
+                actions: [
+                  TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("OK", style: TextStyle(color: navy)),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      },
+    ),
+    bottomNavigationBar: const HomeButton(),
+  );
+}}
 
 class ProfileMenuWidget extends StatelessWidget {
   const ProfileMenuWidget({
-    super.key,
+    Key? key,
     required this.title,
     required this.icon,
   });
@@ -213,13 +216,9 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: boxinsides,
         ),
-        child: Icon(icon, color: navy,),
+        child: Icon(icon, color: navy),
       ),
       title: Text(title),
     );
   }
 }
-
-
-
-
