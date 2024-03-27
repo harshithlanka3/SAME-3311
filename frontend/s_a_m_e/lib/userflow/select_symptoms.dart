@@ -18,7 +18,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
   late Future<UserClass?> account;
 
   List<String> filteredSymptoms = [];
-  Map<String, Map<String, dynamic>> checkedSymptoms = {};
+  Map<String, bool> checkedSymptoms = {};
 
   @override
   void initState() {
@@ -43,17 +43,6 @@ class _SelectSymptomState extends State<SelectSymptom> {
               symptom.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
-  }
-
-  int amountChecked(Map<String, Map<String, dynamic>> list) {
-    int selectedCount = 0;
-    list.forEach((key, value) {
-      if (value["isChecked"] == true) {
-        selectedCount++;
-      }
-    });
-
-    return selectedCount;
   }
 
   @override
@@ -125,10 +114,10 @@ class _SelectSymptomState extends State<SelectSymptom> {
                                               controlAffinity: ListTileControlAffinity.leading,
                                               title: Text(symptom),
                                               activeColor: teal,
-                                              value: checkedSymptoms[symptom]?["isChecked"] ?? false,
+                                              value: checkedSymptoms[symptom] ?? false,
                                               onChanged: (bool? value) {
                                                 setState(() {
-                                                  checkedSymptoms[symptom]?["isChecked"] = value!;
+                                                  checkedSymptoms[symptom] = value ?? false;
                                                 });
                                               });
                                         },
@@ -162,7 +151,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
         ),
         child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {
-          int count = amountChecked(checkedSymptoms);
+          int count = checkedSymptoms.values.where((element) => element).length;
           if (count > 0) {
             Navigator.push(
               context,
@@ -172,29 +161,30 @@ class _SelectSymptomState extends State<SelectSymptom> {
             );
           } else {
             showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                backgroundColor: background,
-                title: const Text('Error'),
-                content: const Text('Please choose at least one symptom.'),
-                actions: [
-                  TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("OK", style: TextStyle(color: navy)),
-                  ),
-                ],
-              );
-            },
-          );
-        }
-      },
-    ),
-    bottomNavigationBar: const HomeButton(),
-  );
-}}
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: background,
+                  title: const Text('Error'),
+                  content: const Text('Please choose at least one symptom.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("OK", style: TextStyle(color: navy)),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+        },
+      ),
+      bottomNavigationBar: const HomeButton(),
+    );
+  }
+}
 
 class ProfileMenuWidget extends StatelessWidget {
   const ProfileMenuWidget({
