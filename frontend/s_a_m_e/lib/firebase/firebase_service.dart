@@ -544,22 +544,22 @@ class FirebaseService {
     }
   }
 
-  Future<int> addSign(String name) async {
+  Future<int> addSign(String name, List<Category> categories) async {
     //require List<Category> categories if catagories added
     try {
       DatabaseReference newSignRef = _signsRef.push();
 
-      // List<String> complaintNames =
-      //   categories.map((complaint) => complaint.name).toList();
+      List<String> complaintNames =
+        categories.map((complaint) => complaint.name).toList();
 
       await newSignRef
-          //.set({'name': name, 'categories': complaintNames, 'diagnoses': []});
-          .set({'name': name, 'diagnoses': []});
+          .set({'name': name, 'categories': complaintNames, 'diagnoses': []});
+          // .set({'name': name, 'diagnoses': []});
       print('Data added successfully');
 
-      // for (Category category in categories) {
-      //   await addSymptomToCategory(name, category.name);
-      // }
+      for (Category category in categories) {
+        await addSymptomToCategory(name, category.name);
+      }
 
       return 200;
     } catch (e) {
