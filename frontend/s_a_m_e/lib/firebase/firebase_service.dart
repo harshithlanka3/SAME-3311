@@ -558,13 +558,59 @@ class FirebaseService {
       print('Data added successfully');
 
       for (Category category in categories) {
-        await addSymptomToCategory(name, category.name);
+        await addSignToCategory(name, category.name);
       }
 
       return 200;
     } catch (e) {
       print('Error adding data: $e');
       return 400;
+    }
+  }
+
+  Future<void> addSignToCategory(
+      String signName, String categoryName) async {
+    try {
+      DataSnapshot snapshot = await _catRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        bool categoryFound = false;
+
+        data.forEach((key, value) async {
+          if (value["name"] == categoryName) {
+            categoryFound = true;
+
+            if (value["signs"] == null) {
+              await _catRef.child(key).update({
+                "signs": [signName]
+              });
+              print('Sign added to category: $categoryName');
+            } else {
+              List<String> signs = List<String>.from(value["signs"]);
+              if (!signs.contains(signName)) {
+                signs.add(signName);
+                await _catRef.child(key).update({"signs": signs});
+                print('Sign added to category: $categoryName');
+              } else {
+                print('Sign already exists in category: $categoryName');
+              }
+            }
+            return;
+          }
+        });
+
+        if (!categoryFound) {
+          await _catRef.push().set({
+            "name": categoryName,
+            "symptoms": [signName]
+          });
+          print('Symptom added to new category: $categoryName');
+        }
+      }
+    } catch (e) {
+      print('Error adding symptom to category: $e');
     }
   }
 
