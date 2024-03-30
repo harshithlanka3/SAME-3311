@@ -244,14 +244,18 @@ class FirebaseService {
     }
   }
 
-  Future<int> addCategory(String name, List<String> symptoms) async {
+  Future<int> addCategory(String name, List<String> symptoms, List<String> signs) async {
     try {
       DatabaseReference newCatRef = _catRef.push();
       await newCatRef
-          .set({'name': name, 'symptoms': symptoms, 'diagnoses': []});
+          .set({'name': name, 'symptoms': symptoms, 'signs': signs, 'diagnoses': []});
 
       for (String symptom in symptoms) {
         await addCategoryToSymptom(name, symptom);
+      }
+
+      for (String sign in signs) {
+        await addCategoryToSign(name, sign);
       }
 
       print('Data added successfully');
@@ -312,11 +316,25 @@ class FirebaseService {
                 });
               }
             });
+
+            await _signsRef.get().then((signSnapshot) {
+              if (signSnapshot.value != null) {
+                Map<dynamic, dynamic> signData =
+                    signSnapshot.value as Map<dynamic, dynamic>;
+                signData.forEach((signKey, signValue) async {
+                  if (signValue["categories"] != null &&
+                      signValue["categories"].contains(name)) {
+                    await removeCategoryFromSign(name, signValue["name"]);
+                    print('Category removed from sign: $signKey');
+                  }
+                });
+              }
+            });
           }
         });
       }
     } catch (e) {
-      print("Error deleting symptom: $e");
+      print("Error deleting symptom or signs: $e");
     }
   }
 

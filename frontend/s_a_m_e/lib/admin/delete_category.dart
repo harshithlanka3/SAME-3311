@@ -87,6 +87,10 @@ class CategoryDeletionPageState extends State<CategoryDeletionPage> {
                       content: Text('Category deleted successfully'),
                     ),
                   );
+                  setState(() {
+                      _selectedCategories.clear();
+                      
+                  });
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
