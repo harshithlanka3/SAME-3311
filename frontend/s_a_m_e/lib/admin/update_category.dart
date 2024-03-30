@@ -159,7 +159,7 @@ class UpdateCatPageState extends State<UpdateCatPage> {
             ),
             const SizedBox(height: 16),
             const Text(
-              'Remove Categories:',
+              'Remove Symptoms:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Flexible(

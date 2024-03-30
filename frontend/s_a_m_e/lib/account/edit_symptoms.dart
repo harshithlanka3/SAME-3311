@@ -31,7 +31,7 @@ Widget build(BuildContext context) {
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
-              child: const Text('Add Sypmtom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              child: const Text('Add Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -47,7 +47,7 @@ Widget build(BuildContext context) {
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
-              child: const Text('Delete Sypmtom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              child: const Text('Delete Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -63,7 +63,7 @@ Widget build(BuildContext context) {
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
-              child: const Text('Update Sypmtom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              child: const Text('Update Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -79,7 +79,7 @@ Widget build(BuildContext context) {
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
-              child: const Text('Sypmtoms List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              child: const Text('Symptoms List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
                 Navigator.push(
                   context,
