@@ -3,6 +3,8 @@ import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/user/sign_list.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+
 
 class SignCreationPage extends StatefulWidget {
   const SignCreationPage({super.key});
@@ -15,7 +17,7 @@ class SignCreationPageState extends State<SignCreationPage> {
   //final _apiService = ApiService();
   final _signNameController = TextEditingController();
   final FirebaseService _firebaseService = FirebaseService();
-  //List<Category> _selectedComplaints = [];
+  List<Category> _selectedComplaints = [];
 
   @override
   void dispose() {
@@ -55,39 +57,39 @@ class SignCreationPageState extends State<SignCreationPage> {
                 ),
               ),
             ),
-            //const SizedBox(height: 30),
-            // FutureBuilder<List<Category>>(
-            //   future: _firebaseService.getAllCategories(),
-            //   builder: (context, categoriesSnapshot) {
-            //     if (categoriesSnapshot.connectionState == ConnectionState.waiting) {
-            //       return const CircularProgressIndicator();
-            //     } else if (categoriesSnapshot.hasError) {
-            //       return Text('Error: ${categoriesSnapshot.error}');
-            //     } else {
-            //       List<Category>? categories = categoriesSnapshot.data;
+            const SizedBox(height: 30),
+            FutureBuilder<List<Category>>(
+              future: _firebaseService.getAllCategories(),
+              builder: (context, categoriesSnapshot) {
+                if (categoriesSnapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (categoriesSnapshot.hasError) {
+                  return Text('Error: ${categoriesSnapshot.error}');
+                } else {
+                  List<Category>? categories = categoriesSnapshot.data;
 
-            //       if (categories != null && categories.isNotEmpty) {
-            //         return MultiSelectDialogField<Category>(
-            //           backgroundColor: background,
-            //           cancelText: const Text('CANCEL', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
-            //           confirmText: const Text('SELECT', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
-            //           unselectedColor: navy,
-            //           selectedColor: navy,
-            //           items: categories
-            //               .map((complaint) => MultiSelectItem<Category>(
-            //                   complaint, complaint.name))
-            //               .toList(),
-            //           title: const Text("Categories"),
-            //           onConfirm: (values) {
-            //             _selectedComplaints = values;
-            //           },
-            //         );
-            //       } else {
-            //         return const Text('No categories available');
-            //       }
-            //     }
-            //   },
-            // ),
+                  if (categories != null && categories.isNotEmpty) {
+                    return MultiSelectDialogField<Category>(
+                      backgroundColor: background,
+                      cancelText: const Text('CANCEL', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
+                      confirmText: const Text('SELECT', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
+                      unselectedColor: navy,
+                      selectedColor: navy,
+                      items: categories
+                          .map((complaint) => MultiSelectItem<Category>(
+                              complaint, complaint.name))
+                          .toList(),
+                      title: const Text("Categories"),
+                      onConfirm: (values) {
+                        _selectedComplaints = values;
+                      },
+                    );
+                  } else {
+                    return const Text('No categories available');
+                  }
+                }
+              },
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               style: const ButtonStyle(
@@ -96,11 +98,11 @@ class SignCreationPageState extends State<SignCreationPage> {
                 ),
               onPressed: () async {
                 if (_signNameController.text.isNotEmpty &&
-                    //_selectedComplaints.isNotEmpty && 
+                    _selectedComplaints.isNotEmpty && 
                     await _firebaseService.signNonExistent(_signNameController.text)) {
                   final response = await _firebaseService.addSign(
                     _signNameController.text,
-                    //_selectedComplaints,
+                    _selectedComplaints,
                   );
                   
                   if (response == 200) {
@@ -109,10 +111,10 @@ class SignCreationPageState extends State<SignCreationPage> {
                           content: Text('Sign added successfully')),
                     );
                     _signNameController.clear();
-                    // setState(() {
-                    //   _selectedComplaints.clear();
+                    setState(() {
+                      _selectedComplaints.clear();
                       
-                    // });
+                    });
                   
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(

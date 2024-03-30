@@ -544,27 +544,73 @@ class FirebaseService {
     }
   }
 
-  Future<int> addSign(String name) async {
+  Future<int> addSign(String name, List<Category> categories) async {
     //require List<Category> categories if catagories added
     try {
       DatabaseReference newSignRef = _signsRef.push();
 
-      // List<String> complaintNames =
-      //   categories.map((complaint) => complaint.name).toList();
+      List<String> complaintNames =
+        categories.map((complaint) => complaint.name).toList();
 
       await newSignRef
-          //.set({'name': name, 'categories': complaintNames, 'diagnoses': []});
-          .set({'name': name, 'diagnoses': []});
+          .set({'name': name, 'categories': complaintNames, 'diagnoses': []});
+          // .set({'name': name, 'diagnoses': []});
       print('Data added successfully');
 
-      // for (Category category in categories) {
-      //   await addSymptomToCategory(name, category.name);
-      // }
+      for (Category category in categories) {
+        await addSignToCategory(name, category.name);
+      }
 
       return 200;
     } catch (e) {
       print('Error adding data: $e');
       return 400;
+    }
+  }
+
+  Future<void> addSignToCategory(
+      String signName, String categoryName) async {
+    try {
+      DataSnapshot snapshot = await _catRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        bool categoryFound = false;
+
+        data.forEach((key, value) async {
+          if (value["name"] == categoryName) {
+            categoryFound = true;
+
+            if (value["signs"] == null) {
+              await _catRef.child(key).update({
+                "signs": [signName]
+              });
+              print('Sign added to category: $categoryName');
+            } else {
+              List<String> signs = List<String>.from(value["signs"]);
+              if (!signs.contains(signName)) {
+                signs.add(signName);
+                await _catRef.child(key).update({"signs": signs});
+                print('Sign added to category: $categoryName');
+              } else {
+                print('Sign already exists in category: $categoryName');
+              }
+            }
+            return;
+          }
+        });
+
+        if (!categoryFound) {
+          await _catRef.push().set({
+            "name": categoryName,
+            "symptoms": [signName]
+          });
+          print('Symptom added to new category: $categoryName');
+        }
+      }
+    } catch (e) {
+      print('Error adding symptom to category: $e');
     }
   }
 
