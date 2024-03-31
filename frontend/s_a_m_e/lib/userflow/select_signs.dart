@@ -132,7 +132,7 @@ class _SelectSignState extends State<SelectSign> {
                             ],
                           );
                         } else {
-                          return SizedBox.shrink(); // Hide the category if no matching symptoms found
+                          return SizedBox.shrink(); // Hide the category if no matching signs found
                         }
                       },
                     );
