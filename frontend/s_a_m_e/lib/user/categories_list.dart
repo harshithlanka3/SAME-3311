@@ -55,6 +55,7 @@ class CategoriesListPageState extends State<CategoriesListPage> {
                     Category category = snapshot.data![index];
                     List<String> symptoms = category.symptoms.cast<String>();
                     
+                    
                     return Column(
                       children: <Widget>[
                         Container(

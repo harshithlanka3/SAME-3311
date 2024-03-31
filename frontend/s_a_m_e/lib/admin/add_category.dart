@@ -18,6 +18,7 @@ class CategoryCreationPageState extends State<CategoryCreationPage> {
   final TextEditingController _categoryNameController = TextEditingController();
   final FirebaseService _firebaseService = FirebaseService();
   List<String> _selectedSymptoms = [];
+  List<String> _selectedSigns = [];
 
   @override
   void dispose() {
@@ -57,41 +58,88 @@ class CategoryCreationPageState extends State<CategoryCreationPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
-            FutureBuilder<List<String>>(
-              future: _firebaseService.getAllSymptoms(),
-              builder: (context, symptomsSnapshot) {
-                if (symptomsSnapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (symptomsSnapshot.hasError) {
-                  return Text('Error: ${symptomsSnapshot.error}');
-                } else {
-                  List<String>? symptoms = symptomsSnapshot.data;
 
-                  if (symptoms != null && symptoms.isNotEmpty) {
-                    return MultiSelectDialogField<String>(
-                      backgroundColor: background,
-                      cancelText: const Text('CANCEL', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
-                      confirmText: const Text('SELECT', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
-                      unselectedColor: navy,
-                      selectedColor: navy,
-                      items: symptoms
-                          .map((symptom) => MultiSelectItem<String>(
-                              symptom, symptom))
-                          .toList(),
-                      title: const Text("Symptoms"),
-                      onConfirm: (values) {
-                        setState(() {
-                          _selectedSymptoms = values;
-                        });
-                      },
-                    );
-                  } else {
-                    return const SizedBox(); // Return an empty SizedBox if no symptoms available
-                  }
-                }
-              },
+
+            const SizedBox(height: 30),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Symptoms', style: TextStyle(fontWeight: FontWeight.bold)),
+                FutureBuilder<List<String>>(
+                  future: _firebaseService.getAllSymptoms(),
+                  builder: (context, symptomsSnapshot) {
+                    if (symptomsSnapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (symptomsSnapshot.hasError) {
+                      return Text('Error: ${symptomsSnapshot.error}');
+                    } else {
+                      List<String>? symptoms = symptomsSnapshot.data;
+
+                      if (symptoms != null && symptoms.isNotEmpty) {
+                        return MultiSelectDialogField<String>(
+                          backgroundColor: background,
+                          cancelText: const Text('CANCEL', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
+                          confirmText: const Text('SELECT', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
+                          unselectedColor: navy,
+                          selectedColor: navy,
+                          items: symptoms
+                              .map((symptom) => MultiSelectItem<String>(
+                                  symptom, symptom))
+                              .toList(),
+                          title: const Text("Select Symptoms"),
+                          onConfirm: (values) {
+                            _selectedSymptoms = values;
+                          },
+                        );
+                      } else {
+                        return const Text('No symptoms available'); // Return an empty SizedBox if no symptoms available
+                      }
+                    }
+                  },
+                ),
+              ],
             ),
+
+            const SizedBox(height: 30),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Signs', style: TextStyle(fontWeight: FontWeight.bold)),
+                FutureBuilder<List<String>>(
+                  future: _firebaseService.getAllSigns(),
+                  builder: (context, signsSnapshot) {
+                    if (signsSnapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (signsSnapshot.hasError) {
+                      return Text('Error: ${signsSnapshot.error}');
+                    } else {
+                      List<String>? signs = signsSnapshot.data;
+
+                      if (signs != null && signs.isNotEmpty) {
+                        return MultiSelectDialogField<String>(
+                          backgroundColor: background,
+                          cancelText: const Text('CANCEL', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
+                          confirmText: const Text('SELECT', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
+                          unselectedColor: navy,
+                          selectedColor: navy,
+                          items: signs
+                              .map((sign) => MultiSelectItem<String>(
+                                  sign, sign))
+                              .toList(),
+                          title: const Text("Select Signs"),
+                          onConfirm: (values) {
+                            _selectedSigns = values;
+                          },
+                        );
+                      } else {
+                        return const Text('No signs available'); // Return an empty SizedBox if no signs available
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
+
 
             const SizedBox(height: 20),
             ElevatedButton(
@@ -104,12 +152,18 @@ class CategoryCreationPageState extends State<CategoryCreationPage> {
                   final response = await _firebaseService.addCategory(
                     _categoryNameController.text,
                     _selectedSymptoms,
+                    _selectedSigns,
                   );
                   if (response == 200) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Category added successfully')),
                     );
+                    setState(() {
+                      _selectedSigns.clear();
+                      _selectedSymptoms.clear();
+                      _categoryNameController.clear();
+                    });
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Failed to add category')),
