@@ -3,28 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/home_button.dart';
-import 'package:s_a_m_e/userflow/select_signs.dart';
+import 'package:s_a_m_e/userflow/potential_diagnosis.dart';
 
-class SelectSymptom extends StatefulWidget {
-  const SelectSymptom({Key? key});
+class SelectSign extends StatefulWidget {
+  const SelectSign({Key? key, required this.selectedSymptoms});
+
+  final Map<String, bool> selectedSymptoms;
 
   @override
-  State<SelectSymptom> createState() => _SelectSymptomState();
+  State<SelectSign> createState() => _SelectSignState();
 }
 
-class _SelectSymptomState extends State<SelectSymptom> {
-  late Future<List<Category>> categories;
-  late Future<List<String>> allSymptoms;
+class _SelectSignState extends State<SelectSign> {
+  late Future<List<SignCategory>> signCategories;
+  late Future<List<String>> allSigns;
   late Future<UserClass?> account;
 
-  List<String> filteredSymptoms = [];
-  Map<String, bool> checkedSymptoms = {};
+  List<String> filteredSigns = [];
+  Map<String, bool> checkedSigns = {};
 
   @override
   void initState() {
     super.initState();
-    categories = FirebaseService().getAllCategories();
-    allSymptoms = FirebaseService().getAllSymptoms();
+    signCategories = FirebaseService().getAllSignCategories();
+    allSigns = FirebaseService().getAllSigns();
     account = fetchUser();
   }
 
@@ -35,12 +37,12 @@ class _SelectSymptomState extends State<SelectSymptom> {
     return FirebaseService().getUser(uid);
   }
 
-  void searchSymptoms(String query) async {
-    List<String> allSymptomsList = await allSymptoms;
+  void searchSigns(String query) async {
+    List<String> allSignsList = await allSigns;
     setState(() {
-      filteredSymptoms = allSymptomsList
-          .where((symptom) =>
-              symptom.toLowerCase().contains(query.toLowerCase()))
+      filteredSigns = allSignsList
+          .where((sign) =>
+              sign.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -49,28 +51,28 @@ class _SelectSymptomState extends State<SelectSymptom> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Select Symptoms", style: TextStyle(fontSize: 32.0)),
+        title: const Text("Select Signs", style: TextStyle(fontSize: 32.0)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text("Select symptoms from the categories below", style: TextStyle(fontSize: 18),),
+            const Text("Select observed signs from the categories below", style: TextStyle(fontSize: 18),),
             const SizedBox(height: 10),
             const Divider(thickness: 2),
             const SizedBox(height: 5),
             TextField(
-              onChanged: searchSymptoms,
+              onChanged: searchSigns,
               decoration: InputDecoration(
-                hintText: 'Search Symptoms',
+                hintText: 'Search Signs',
                 prefixIcon: Icon(Icons.search),
               ),
             ),
             const SizedBox(height: 10),
             Expanded(
               child: FutureBuilder(
-                future: categories,
+                future: signCategories,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -81,8 +83,8 @@ class _SelectSymptomState extends State<SelectSymptom> {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         final category = snapshot.data![index];
-                        final categorySymptoms = filteredSymptoms.isEmpty ? category.symptoms : category.symptoms.where((symptom) => filteredSymptoms.contains(symptom)).toList();
-                        if (categorySymptoms.isNotEmpty) {
+                        final categorySigns = filteredSigns.isEmpty ? category.signs : category.signs.where((sign) => filteredSigns.contains(sign)).toList();
+                        if (categorySigns.isNotEmpty) {
                           return Column(
                             children: [
                               Container(
@@ -104,20 +106,20 @@ class _SelectSymptomState extends State<SelectSymptom> {
                                   ),
                                   children: [
                                     SizedBox(
-                                      height: categorySymptoms.length * 42,
+                                      height: categorySigns.length * 42,
                                       child: ListView.builder(
-                                        itemCount: categorySymptoms.length,
+                                        itemCount: categorySigns.length,
                                         itemBuilder: (context, index2) {
-                                          final symptom = categorySymptoms[index2];
+                                          final sign = categorySigns[index2];
                                           return CheckboxListTile(
                                               visualDensity: const VisualDensity(horizontal: -4.0, vertical: -4.0),
                                               controlAffinity: ListTileControlAffinity.leading,
-                                              title: Text(symptom),
+                                              title: Text(sign),
                                               activeColor: teal,
-                                              value: checkedSymptoms[symptom] ?? false,
+                                              value: checkedSigns[sign] ?? false,
                                               onChanged: (bool? value) {
                                                 setState(() {
-                                                  checkedSymptoms[symptom] = value ?? false;
+                                                  checkedSigns[sign] = value ?? false;
                                                 });
                                               });
                                         },
@@ -130,12 +132,12 @@ class _SelectSymptomState extends State<SelectSymptom> {
                             ],
                           );
                         } else {
-                          return SizedBox.shrink(); // Hide the category if no matching symptoms found
+                          return SizedBox.shrink(); // Hide the category if no matching signs found
                         }
                       },
                     );
                   } else {
-                    return const Center(child: Text('No symptoms found'));
+                    return const Center(child: Text('No signs found'));
                   }
                 },
               ),
@@ -149,14 +151,14 @@ class _SelectSymptomState extends State<SelectSymptom> {
           foregroundColor: MaterialStatePropertyAll<Color>(white),
           backgroundColor: MaterialStatePropertyAll<Color>(navy),
         ),
-        child: const Text('Next Choose Signs', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+        child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {
-          int count = checkedSymptoms.values.where((element) => element).length;
+          int count = checkedSigns.values.where((element) => element).length;
           if (count > 0) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => SelectSign(selectedSymptoms: checkedSymptoms),
+                builder: (context) => PotentialDiagnosis(selectedSymptoms: widget.selectedSymptoms, selectedSigns: checkedSigns),
               ),
             );
           } else {
@@ -166,7 +168,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
                 return AlertDialog(
                   backgroundColor: background,
                   title: const Text('Error'),
-                  content: const Text('Please choose at least one symptom.'),
+                  content: const Text('Please choose at least one sign.'),
                   actions: [
                     TextButton(
                       onPressed: () {

@@ -7,9 +7,10 @@ import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/userflow/diagnosis_page.dart';
 
 class PotentialDiagnosis extends StatefulWidget {
-  const PotentialDiagnosis({Key? key, required this.selectedSymptoms});
+  const PotentialDiagnosis({Key? key, required this.selectedSymptoms, required this.selectedSigns});
 
   final Map<String, bool> selectedSymptoms;
+  final Map<String, bool> selectedSigns;
 
   @override
   State<PotentialDiagnosis> createState() => _PotentialDiagnosisState();
@@ -19,6 +20,8 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
   late Future<List<Diagnosis>> diagnoses;
   List<String> checkedSymptoms = [];
   String symptoms = "";
+  List<String> checkedSigns = [];
+  String signs = "";
   late Future<UserClass?> account;
 
   @override
@@ -33,8 +36,16 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
       }
     });
 
+    widget.selectedSigns.forEach((key, value) {
+      if (value == true) {
+        checkedSigns.add(key);
+        signs += "$key, ";
+      }
+    });
+
     symptoms = symptoms.substring(0, symptoms.length - 2);
-    diagnoses = FirebaseService().getSortedDiagnosesBySymptoms(checkedSymptoms);
+    signs = signs.substring(0, signs.length - 2);
+    diagnoses = FirebaseService().getSortedDiagnosesBySymptoms(checkedSymptoms); // Need to update diagnoses search to also include signs
   }
 
   Future<UserClass?> fetchUser() async {
@@ -70,7 +81,12 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
                     text: "Symptoms",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  TextSpan(text: ": $symptoms")
+                  TextSpan(text: ": $symptoms\n"),
+                  const TextSpan(
+                    text: "Signs",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: ": $signs")
                 ],
               ),
             ),
