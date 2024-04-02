@@ -185,11 +185,13 @@ class UpdateCatPageState extends State<UpdateCatPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: navy,
         onPressed: () {
           updateSymptoms();
         },
-        child: const Icon(Icons.check),
-      ),bottomNavigationBar: const HomeButton()
+        child: const Icon(Icons.check, color: white,),
+      ),
+      bottomNavigationBar: const HomeButton()
     );
   }
 }

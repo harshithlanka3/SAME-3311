@@ -334,6 +334,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: navy,
         onPressed: () async {
           if (_diagnosisUpdateDefinitionController.text.isNotEmpty) {
             final response = await FirebaseService().updateDiagnosisDef(selectedDiagnosis, _diagnosisUpdateDefinitionController.text);
@@ -356,7 +357,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
         // onPressed: () {
         //   updateCategories();
         // },
-        child: const Icon(Icons.check),
+        child: const Icon(Icons.check, color: white,),
       ),
     );
   }
