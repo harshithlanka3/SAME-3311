@@ -5,6 +5,7 @@
 import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:s_a_m_e/account/account.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -85,16 +86,23 @@ class ProfilePicturePageState extends State<ProfilePicturePage> {
     return Padding(
       padding: EdgeInsets.only(right: 8.0),
       child: InkWell(
-        onTap: selectImage,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ManageAccountPage(),
+            ),
+          );
+        },
         child: _image != null ?
-            CircleAvatar(
-              radius: 22.0,
-              backgroundImage: MemoryImage(_image!),
-            ): 
-        CircleAvatar(
-        radius: 22.0,
-        backgroundImage: AssetImage('assets/profile_pic.png'),
-        ),
+          CircleAvatar(
+            radius: 22.0,
+            backgroundImage: MemoryImage(_image!),
+          ):
+          CircleAvatar(
+            radius: 22.0,
+            backgroundImage: AssetImage('assets/profile_pic.png'),
+          ),
       )
     );
   }
