@@ -25,6 +25,7 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("User Profile", style: TextStyle(fontSize: 36.0)),
+        actions: [ProfilePicturePage()],
       ),
       body: SafeArea(
         child: Padding(
