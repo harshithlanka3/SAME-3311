@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/home_button.dart';
@@ -50,6 +51,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Select Symptoms", style: TextStyle(fontSize: 32.0)),
+        actions: const [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
@@ -62,7 +64,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
             const SizedBox(height: 5),
             TextField(
               onChanged: searchSymptoms,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Search Symptoms',
                 prefixIcon: Icon(Icons.search),
               ),
@@ -130,7 +132,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
                             ],
                           );
                         } else {
-                          return SizedBox.shrink(); // Hide the category if no matching symptoms found
+                          return const SizedBox.shrink(); // Hide the category if no matching symptoms found
                         }
                       },
                     );
@@ -148,8 +150,9 @@ class _SelectSymptomState extends State<SelectSymptom> {
         style: const ButtonStyle(
           foregroundColor: MaterialStatePropertyAll<Color>(white),
           backgroundColor: MaterialStatePropertyAll<Color>(navy),
+          shadowColor: MaterialStatePropertyAll<Color>(white),
         ),
-        child: const Text('Next Choose Signs', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+        child: const Text('Select Signs', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {
           int count = checkedSymptoms.values.where((element) => element).length;
           if (count > 0) {

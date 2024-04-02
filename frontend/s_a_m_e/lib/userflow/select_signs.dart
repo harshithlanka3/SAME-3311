@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/userflow/potential_diagnosis.dart';
 
 class SelectSign extends StatefulWidget {
-  const SelectSign({Key? key, required this.selectedSymptoms});
+  const SelectSign({super.key, required this.selectedSymptoms});
 
   final Map<String, bool> selectedSymptoms;
 
@@ -52,6 +53,7 @@ class _SelectSignState extends State<SelectSign> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Select Signs", style: TextStyle(fontSize: 32.0)),
+        actions: const [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
@@ -64,7 +66,7 @@ class _SelectSignState extends State<SelectSign> {
             const SizedBox(height: 5),
             TextField(
               onChanged: searchSigns,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Search Signs',
                 prefixIcon: Icon(Icons.search),
               ),
@@ -132,7 +134,7 @@ class _SelectSignState extends State<SelectSign> {
                             ],
                           );
                         } else {
-                          return SizedBox.shrink(); // Hide the category if no matching signs found
+                          return const SizedBox.shrink(); // Hide the category if no matching signs found
                         }
                       },
                     );
@@ -150,6 +152,7 @@ class _SelectSignState extends State<SelectSign> {
         style: const ButtonStyle(
           foregroundColor: MaterialStatePropertyAll<Color>(white),
           backgroundColor: MaterialStatePropertyAll<Color>(navy),
+          shadowColor: MaterialStatePropertyAll<Color>(white),
         ),
         child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {

@@ -76,6 +76,16 @@ class DiagnosisPageState extends State<DiagnosisPage> {
                             text: TextSpan(
                               style: const TextStyle(fontSize: 16, color: Colors.black, fontFamily: "PT Serif"),
                               children: <TextSpan>[
+                                const TextSpan(text: "Organ System", style: TextStyle(fontWeight: FontWeight.bold)),
+                                TextSpan(text: ": Organ system shall go here")
+                              ]
+                            ),
+                          ),
+                          const SizedBox(height: 15,),
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(fontSize: 16, color: Colors.black, fontFamily: "PT Serif"),
+                              children: <TextSpan>[
                                 const TextSpan(text: "Description", style: TextStyle(fontWeight: FontWeight.bold)),
                                 TextSpan(text: ": ${widget.diagnosis.definition}")
                               ]

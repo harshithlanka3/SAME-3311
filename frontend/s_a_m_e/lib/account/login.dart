@@ -249,17 +249,17 @@ class LoginState extends State<Login> {
               )),
               const SizedBox(height: 40),
               SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    child: ElevatedButton(
-                        style: const ButtonStyle(
-                          foregroundColor: MaterialStatePropertyAll<Color>(white),
-                          backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                        ),
-                        onPressed: _signIn,
-                        child: const Text('Sign In',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 24.0)))),
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                child: ElevatedButton(
+                    style: const ButtonStyle(
+                      foregroundColor: MaterialStatePropertyAll<Color>(white),
+                      backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                    ),
+                    onPressed: _signIn,
+                    child: const Text('Sign In',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 24.0)))),
               const SizedBox(height: 30),
               // const Text('Forgot password?'),
             ],

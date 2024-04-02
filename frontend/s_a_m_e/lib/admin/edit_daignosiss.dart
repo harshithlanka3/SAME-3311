@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/admin/create_diagnosis.dart';
 import 'package:s_a_m_e/admin/delete_diagnosis.dart';
-import 'package:s_a_m_e/admin/diagnosis_update.dart';
+import 'package:s_a_m_e/admin/update_diagnosis.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/user/diagnosis_list.dart';
 
@@ -13,7 +13,7 @@ class DiagnosisEdit extends StatelessWidget {
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      title: const Text('S.A.M.E'),
+      title: const Text('Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0)),
       actions: [ProfilePicturePage()],
     ),
     
@@ -22,7 +22,7 @@ Widget build(BuildContext context) {
         child: Column(
           children: <Widget>[
             const SizedBox(height: 25),
-            const Text('Hello Admin User!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
+            const Text('Select one of the options below.', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
             const SizedBox(height: 10),
             
             
