@@ -132,6 +132,7 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
                                         MaterialPageRoute(
                                           builder: (context) => DiagnosisPage(
                                             diagnosis: snapshot.data![index],
+                                            title: "Potential Diagnosis"
                                           ),
                                         ),
                                       );

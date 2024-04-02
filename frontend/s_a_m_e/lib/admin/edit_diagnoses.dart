@@ -7,6 +7,9 @@ import 'package:s_a_m_e/home_button.dart';
 // import 'package:s_a_m_e/admin/diagnosislist.dart';
 // import 'package:s_a_m_e/account/profilepicture.dart';
 
+
+// ARE WE STILL USING THIS PAGE OR CAN WE DELETE IT
+
 class EditDiagnosisPage extends StatelessWidget {
   final FirebaseService _firebaseService = FirebaseService();
   EditDiagnosisPage({Key? key}) : super(key: key);

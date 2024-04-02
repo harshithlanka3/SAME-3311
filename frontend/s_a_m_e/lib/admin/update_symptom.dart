@@ -186,10 +186,11 @@ class UpdateSymptomPageState extends State<UpdateSymptomPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: navy,
         onPressed: () {
           updateCategories();
         },
-        child: const Icon(Icons.check),
+        child: const Icon(Icons.check, color: white,),
       ),bottomNavigationBar: const HomeButton()
     );
   }

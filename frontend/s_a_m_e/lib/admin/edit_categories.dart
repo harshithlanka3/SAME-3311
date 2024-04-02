@@ -13,7 +13,7 @@ class CategoryEdit extends StatelessWidget {
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      title: const Text('S.A.M.E'),
+      title: const Text('Categories', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0)),
       actions: [ProfilePicturePage()],
     ),
     
@@ -22,7 +22,7 @@ Widget build(BuildContext context) {
         child: Column(
           children: <Widget>[
             const SizedBox(height: 25),
-            const Text('Hello Admin User!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
+            const Text('Select one of the options below.', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
             const SizedBox(height: 10),
             
             
