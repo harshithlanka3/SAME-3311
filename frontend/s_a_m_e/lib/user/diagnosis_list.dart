@@ -4,6 +4,7 @@ import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/home_button.dart';
+import 'package:s_a_m_e/userflow/diagnosis_page.dart';
 
 class DiagnosisListPage extends StatefulWidget {
   const DiagnosisListPage({Key? key}) : super(key: key);
@@ -54,7 +55,7 @@ class DiagnosisListPageState extends State<DiagnosisListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Diagnoses List", style: TextStyle(fontSize: 36.0)),
-        actions: [ProfilePicturePage()],
+        actions: const [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -62,7 +63,7 @@ class DiagnosisListPageState extends State<DiagnosisListPage> {
           children: [
             TextField(
               controller: _searchController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Search Diagnoses',
                 prefixIcon: Icon(Icons.search),
               ),
@@ -105,6 +106,33 @@ class DiagnosisListPageState extends State<DiagnosisListPage> {
                                       style: const TextStyle(fontWeight: FontWeight.bold)),
                                   subtitle: Text(filteredDiagnoses[index].definition,
                                       maxLines: 2, overflow: TextOverflow.ellipsis),
+                                  trailing: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DiagnosisPage(
+                                            diagnosis: filteredDiagnoses[index],
+                                            title: "Diagnosis Info"
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: navy,
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                      child: const Icon(
+                                        Icons.arrow_forward_ios_outlined,
+                                        color: navy,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 10),
@@ -127,6 +155,7 @@ class DiagnosisListPageState extends State<DiagnosisListPage> {
   }
 }
 
+// do we need this & can we get rid of it if not?
 class ProfileMenuWidget extends StatelessWidget {
   const ProfileMenuWidget({
     super.key,

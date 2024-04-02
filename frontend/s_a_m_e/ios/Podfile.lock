@@ -890,7 +890,7 @@ SPEC CHECKSUMS:
   FirebaseFirestoreInternal: 86fe6fc8ca156309cb4842d2d7b2f15c669a64a0
   FirebaseSharedSwift: 48076404e6e52372290d15a07d2ed1d2f1754023
   FirebaseStorage: bc7bddc743548a89cfb896843a77cf4bdde2c231
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
   GoogleUtilities: d053d902a8edaa9904e1bd00c37535385b8ed152
   "gRPC-C++": 2df8cba576898bdacd29f0266d5236fa0e26ba6a
@@ -905,4 +905,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 
-COCOAPODS: 1.15.0
+COCOAPODS: 1.14.3

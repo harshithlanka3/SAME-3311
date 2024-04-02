@@ -3,10 +3,11 @@ import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 
 class DiagnosisPage extends StatefulWidget {
-  const DiagnosisPage({super.key, required this.diagnosis});
+  const DiagnosisPage({super.key, required this.diagnosis, required this.title});
 
   // take the diagnosis selected
   final Diagnosis diagnosis;
+  final String title;
 
   @override
   State<DiagnosisPage> createState() => DiagnosisPageState();
@@ -21,7 +22,7 @@ class DiagnosisPageState extends State<DiagnosisPage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Potential Diagnosis", style: TextStyle(fontSize: 32.0)),
+          title: Text(widget.title, style: const TextStyle(fontSize: 32.0)),
         ),
         body: Padding(
           padding: const EdgeInsets.all(15),
