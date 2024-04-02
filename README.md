@@ -13,6 +13,26 @@ The artifact chosen to be implemented is the admin symptom adding functionality 
 
 ## Release Notes
 ---
+### Version 0.4.0:
+#### New Features
+* User can see all existing diagnoses now as well
+* New page created called signs that the user can now access
+* Admin can see all relevant signs and categories now
+* User can see all signs that fall under a given category
+
+#### Bug Fixes
+* Fixed UI exceptions thrown on category pages
+* Fixed UI exceptions thrown on diagnoses update pages
+* Reorganized some backend functions to stop unknown reload behavior
+
+#### Known Issues
+* Admin side missing home button
+* Diagnosess does not take signs into account
+* Profile picture logo is not clickable in some pages
+* Inconsistency between potential diagnoses and diagnoses list
+* Inconsistent page titles
+
+
 ### Version 0.3.0:
 #### New Features
 * Added categories to symptoms to make UI experience better
