@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/forgot_password.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
@@ -16,6 +18,7 @@ class ManageAccountPage extends StatefulWidget {
 class ManageAccountPageState extends State<ManageAccountPage> {
   late Future<UserClass?> account;
   late Future<List<UserClass>> accounts;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -29,6 +32,59 @@ class ManageAccountPageState extends State<ManageAccountPage> {
     User? user = auth.currentUser;
     String uid = user?.uid as String;
     return FirebaseService().getUser(uid);
+  }
+
+  Future forgotPassword({required String email}) async {
+      try {
+        await _auth.sendPasswordResetEmail(email: email);
+      } on FirebaseAuthException catch (err) {
+        throw Exception(err.message.toString());
+      } catch (err) {
+        throw Exception(err.toString());
+      }
+  }
+
+  void _showAwaitEmailMessage(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              backgroundColor: Colors.white,
+              content: const SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      "Please check your email for a password reset link.",
+                      style: TextStyle(
+                        fontFamily: "PT Serif",
+                        fontSize: 16.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: 10), 
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Close',
+                      style: TextStyle(
+                        fontFamily: "PT Serif",
+                        fontSize: 16.0,
+                        color: Colors.black, 
+                      )),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -83,7 +139,6 @@ class ManageAccountPageState extends State<ManageAccountPage> {
                       //ProfileMenuWidget(title: "Username", icon: Icons.account_circle),
                       ProfileMenuWidget(title: snapshot.data!.email, icon: Icons.email),
                       const ProfileMenuWidget(title: "Password", icon: Icons.key),
-                  
                       const SizedBox(height: 20),
                       const Divider(),
                       const SizedBox(height: 20),
@@ -107,6 +162,22 @@ class ManageAccountPageState extends State<ManageAccountPage> {
                             child: const Text("Sign out", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
                         )
                       ), 
+                      const SizedBox(height: 20),
+                      RichText(
+                        text: TextSpan(
+                        style: const TextStyle(fontFamily: "PT Serif"),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: "Reset Password",
+                            style: const TextStyle(color: blue, decoration: TextDecoration.underline),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                forgotPassword(email: snapshot.data!.email);
+                                _showAwaitEmailMessage(context);
+                              } 
+                          ),
+                        ],
+                      )),
                     ],
                   ),
                   const SizedBox(height: 10),

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/login.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/user/user_home.dart';
 
@@ -39,12 +40,15 @@ class SignUpPageState extends State<SignUpPage> {
         email: _userEmail.text,
         password: _userPassword.text,
       );
+
+      await userCredential.user?.sendEmailVerification();
+
       final String uid = userCredential.user!.uid;
       await _storeUserData(uid);
       print('User registered: $uid');
 
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (_context) => UserHome()),
+        MaterialPageRoute(builder: (_context) => Login()),
       );
     } catch (e) {
       print('Error during user registration: $e');

@@ -37,31 +37,45 @@ class LoginState extends State<Login> {
       password: _passwordController.text,
     );
 
-    if (userCredential.user != null) {
-      String uid = userCredential.user!.uid;
+  if (userCredential.user != null) {
+      if (userCredential.user!.emailVerified) {
+        String uid = userCredential.user!.uid;
 
-      UserClass? userData = await FirebaseService().getUser(uid);
+        UserClass? userData = await FirebaseService().getUser(uid);
 
-      if (userData != null) {
-        String role = userData.role;
-        print(role);
+        if (userData != null) {
+          String role = userData.role;
+          print(role);
 
-        if (role == 'user') {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const UserHome()),
-          );
-        } else if (role == 'admin') {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const Admin()),
-          );
+          if (role == 'user') {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const UserHome()),
+            );
+          } else if (role == 'admin') {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const Admin()),
+            );
+          }
+        } else {
+          print('Error: User data not found in the database.');
         }
       } else {
-        print('Error: User data not found in the database.');
+        await userCredential.user?.sendEmailVerification();
+        Fluttertoast.showToast(
+          msg: 'Please verify your email before logging in.',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: blue,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
     } else {
       print('Error: User is null after sign-in.');
     }
   } catch (e) {
+    print('Error during sign-in: $e');
     print('Error during sign-in: $e');
     // Handle exceptions
   }

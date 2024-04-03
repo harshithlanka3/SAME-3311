@@ -38,7 +38,6 @@ class ForgotPassPageState extends State<ForgotPassPage> {
   }
 
   void _showAwaitEmailMessage(BuildContext context) {
-    bool checkboxValue = false;
 
     showDialog(
       context: context,
@@ -46,7 +45,6 @@ class ForgotPassPageState extends State<ForgotPassPage> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-              title: const Text('Disclaimer:'),
               backgroundColor: Colors.white,
               content: const SingleChildScrollView(
                 child: Column(
@@ -99,7 +97,7 @@ class ForgotPassPageState extends State<ForgotPassPage> {
                 image: AssetImage('assets/logo.png')
               ),
               const SizedBox(height: 10), 
-              const Text('Recover Password',
+              const Text('Reset Password',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 30.0,
