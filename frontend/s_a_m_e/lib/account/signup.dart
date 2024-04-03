@@ -3,7 +3,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/login.dart';
 import 'package:s_a_m_e/colors.dart';
-import 'package:s_a_m_e/user/user_home.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -47,9 +46,7 @@ class SignUpPageState extends State<SignUpPage> {
       await _storeUserData(uid);
       print('User registered: $uid');
 
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_context) => Login()),
-      );
+      Navigator.of(context).pop();
     } catch (e) {
       print('Error during user registration: $e');
 

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:s_a_m_e/account/forgot_password.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
@@ -144,7 +144,7 @@ class ManageAccountPageState extends State<ManageAccountPage> {
                       const SizedBox(height: 20),
                   
                       SizedBox(
-                        width: 200,
+                      width: MediaQuery.of(context).size.width,
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).popUntil((route) => route.isFirst);
@@ -162,6 +162,20 @@ class ManageAccountPageState extends State<ManageAccountPage> {
                             child: const Text("Sign out", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
                         )
                       ), 
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 40,
+                      child: ElevatedButton(
+                        style: const ButtonStyle(
+                          foregroundColor: MaterialStatePropertyAll<Color>(white),
+                          backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                        ),
+                        onPressed: () {
+                          confirmDeleteDialog(context, snapshot.data!.email);
+                        },
+                        child: const Text('Delete Account', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0))
+                      )
+                    ),
                       const SizedBox(height: 20),
                       RichText(
                         text: TextSpan(
@@ -219,4 +233,108 @@ class ProfileMenuWidget extends StatelessWidget {
       title: Text(title),
     );
   }
+}
+
+void confirmDeleteDialog(BuildContext context, String email) {
+  bool checkboxValue = false;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return AlertDialog(
+            title: const Text('Confirm Deletion:'),
+            backgroundColor: Colors.white,
+            content: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  const Text(
+                    "Are you sure you want go through with these changes? Once you delete your account you cannot revert these changes.",
+                    style: TextStyle(
+                      fontFamily: "PT Serif",
+                      fontSize: 16.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: <Widget>[
+                      Checkbox(
+                        fillColor: MaterialStateProperty.resolveWith((states) {
+                          if (!states.contains(MaterialState.selected)) {
+                            return Colors.transparent;
+                          }
+                          return null;
+                        }),
+                        side: const BorderSide(color: blue, width: 2),
+                        value: checkboxValue,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            checkboxValue = value!;
+                          });
+                        },
+                        activeColor: blue,
+                        checkColor: Colors.white,
+                      ),
+                      const Text(
+                        'Click here to confirm the deletion.',
+                        style: TextStyle(
+                          fontFamily: "PT Serif",
+                          fontSize: 14.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    fontFamily: "PT Serif",
+                    fontSize: 16.0,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (checkboxValue) {
+                    FirebaseService().deleteUser(email);
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop([email, "delete"]); // passed in info for refreshUsers()
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: 'Please click the box to confirm your choice.',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: blue,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  }
+                },
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(
+                    fontFamily: "PT Serif",
+                    fontSize: 16.0,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
 }
