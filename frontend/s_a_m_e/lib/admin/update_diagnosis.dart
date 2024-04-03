@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart'; 
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 
@@ -166,8 +167,9 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
       appBar: AppBar(
         title: const Text(
           'Update Diagnosis',
-          style: TextStyle(fontSize: 40),
+          style: TextStyle(fontSize: 32),
         ),
+        actions: const [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

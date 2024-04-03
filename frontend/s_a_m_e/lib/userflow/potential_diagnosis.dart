@@ -63,7 +63,7 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
           "Potential Diagnosis",
           style: TextStyle(fontSize: 28.0),
         ),
-        actions: [ProfilePicturePage()],
+        actions: const [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
@@ -174,32 +174,3 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
   }
 }
 
-class ProfileMenuWidget extends StatelessWidget {
-  const ProfileMenuWidget({
-    Key? key,
-    required this.title,
-    required this.icon,
-  });
-
-  final String title;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: boxinsides,
-        ),
-        child: Icon(
-          icon,
-          color: navy,
-        ),
-      ),
-      title: Text(title),
-    );
-  }
-}

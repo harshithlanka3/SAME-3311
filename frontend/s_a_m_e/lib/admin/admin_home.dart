@@ -3,9 +3,9 @@ import 'package:s_a_m_e/account/account.dart';
 import 'package:s_a_m_e/admin/edit_signs.dart';
 import 'package:s_a_m_e/admin/edit_symptoms.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
-import 'package:s_a_m_e/admin/adminrequest.dart';
+import 'package:s_a_m_e/admin/admin_request.dart';
 import 'package:s_a_m_e/admin/edit_categories.dart';
-import 'package:s_a_m_e/admin/edit_daignosiss.dart';
+import 'package:s_a_m_e/admin/edit_diagnosis.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/account/login.dart';
 import 'package:s_a_m_e/admin/view_accounts.dart';
@@ -19,7 +19,7 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       title: const Text('S.A.M.E'),
-      actions: [ProfilePicturePage()],
+      actions: const [ProfilePicturePage()],
     ),
     drawer: Drawer(
       backgroundColor: background,
@@ -48,12 +48,6 @@ Widget build(BuildContext context) {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminRequestPage(),));
             },
           ),
-          // ListTile(
-          //   title: const Text('Edit Diagnosis'),
-          //   onTap: () {
-          //     Navigator.push(context, MaterialPageRoute(builder: (context) => const EditDiagnosisPage(),));
-          //   },
-          // ),
           ListTile(
             title: const Text('Sign Out'),
             onTap: () {

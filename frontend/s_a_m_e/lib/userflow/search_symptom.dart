@@ -56,7 +56,7 @@ class SearchSymptomState extends State<SearchSymptom> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Choose Symptom", style: TextStyle(fontSize: 32.0)),
-        actions: [ProfilePicturePage()],
+        actions: const [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

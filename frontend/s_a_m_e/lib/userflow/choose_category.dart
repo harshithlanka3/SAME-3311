@@ -25,7 +25,7 @@ class ChooseCategoryState extends State<ChooseCategory> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Choose Category", style: TextStyle(fontSize: 32.0)),
-        actions: [ProfilePicturePage()],
+        actions: const [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
