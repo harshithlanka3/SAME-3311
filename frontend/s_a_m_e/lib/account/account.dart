@@ -3,13 +3,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
+import 'package:s_a_m_e/account/reset_email.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/account/login.dart';
 import 'package:s_a_m_e/home_button.dart';
 
 class ManageAccountPage extends StatefulWidget {
-  const ManageAccountPage({super.key});
+  const ManageAccountPage({Key? key});
 
   @override
   ManageAccountPageState createState() => ManageAccountPageState();
@@ -35,13 +36,13 @@ class ManageAccountPageState extends State<ManageAccountPage> {
   }
 
   Future forgotPassword({required String email}) async {
-      try {
-        await _auth.sendPasswordResetEmail(email: email);
-      } on FirebaseAuthException catch (err) {
-        throw Exception(err.message.toString());
-      } catch (err) {
-        throw Exception(err.toString());
-      }
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (err) {
+      throw Exception(err.message.toString());
+    } catch (err) {
+      throw Exception(err.toString());
+    }
   }
 
   void _showAwaitEmailMessage(BuildContext context) {
@@ -52,7 +53,7 @@ class ManageAccountPageState extends State<ManageAccountPage> {
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
               backgroundColor: Colors.white,
-              content: const SingleChildScrollView(
+              content: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
                     Text(
@@ -63,7 +64,7 @@ class ManageAccountPageState extends State<ManageAccountPage> {
                         color: Colors.black,
                       ),
                     ),
-                    SizedBox(height: 10), 
+                    SizedBox(height: 10),
                   ],
                 ),
               ),
@@ -76,7 +77,7 @@ class ManageAccountPageState extends State<ManageAccountPage> {
                       style: TextStyle(
                         fontFamily: "PT Serif",
                         fontSize: 16.0,
-                        color: Colors.black, 
+                        color: Colors.black,
                       )),
                 ),
               ],
@@ -93,114 +94,160 @@ class ManageAccountPageState extends State<ManageAccountPage> {
       appBar: AppBar(
         title: const Text("My Account", style: TextStyle(fontSize: 36.0)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: FutureBuilder<UserClass?>(
-          future: account,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (snapshot.hasData) {
-              return Column(
-                children: <Widget>[
-                  Column(
-                    children: [
-                      const SizedBox(height: 25),
-                      SizedBox(
-                        width: 120,
-                        height: 120,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: ProfilePicturePage(),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Text('${snapshot.data!.firstName} ${snapshot.data!.lastName}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
-                      Text('User Role: ${snapshot.data!.role}', style: const TextStyle(fontSize: 16.0)), 
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        width: 200,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: const ButtonStyle(
-                            foregroundColor: MaterialStatePropertyAll<Color>(white),
-                            backgroundColor: MaterialStatePropertyAll<Color>(navy),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: FutureBuilder<UserClass?>(
+            future: account,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (snapshot.hasData) {
+                return Column(
+                  children: <Widget>[
+                    Column(
+                      children: [
+                        const SizedBox(height: 25),
+                        SizedBox(
+                          width: 120,
+                          height: 120,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: ProfilePicturePage(),
                           ),
-                          child: const Text("Edit Profile", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-                        )
-                      ),
-                      const SizedBox(height: 20),
-                      const Divider(),
-                      const SizedBox(height: 20),
-                  
-                      ProfileMenuWidget(title: "${snapshot.data!.firstName} ${snapshot.data!.lastName}", icon: Icons.abc),
-                      //ProfileMenuWidget(title: "Username", icon: Icons.account_circle),
-                      ProfileMenuWidget(title: snapshot.data!.email, icon: Icons.email),
-                      const ProfileMenuWidget(title: "Password", icon: Icons.key),
-                      const SizedBox(height: 20),
-                      const Divider(),
-                      const SizedBox(height: 20),
-                  
-                      SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).popUntil((route) => route.isFirst);
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Login(),
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          '${snapshot.data!.firstName} ${snapshot.data!.lastName}',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20.0),
+                        ),
+                        Text('User Role: ${snapshot.data!.role}',
+                            style: const TextStyle(fontSize: 16.0)),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                            width: 200,
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              style: const ButtonStyle(
+                                foregroundColor:
+                                    MaterialStatePropertyAll<Color>(white),
+                                backgroundColor:
+                                    MaterialStatePropertyAll<Color>(navy),
                               ),
-                            );
-                          },
-                            style: const ButtonStyle(
-                              foregroundColor: MaterialStatePropertyAll<Color>(white),
-                              backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                            ),
-                            child: const Text("Sign out", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-                        )
-                      ), 
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 40,
-                      child: ElevatedButton(
-                        style: const ButtonStyle(
-                          foregroundColor: MaterialStatePropertyAll<Color>(white),
-                          backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                        ),
-                        onPressed: () {
-                          confirmDeleteDialog(context, snapshot.data!.email);
-                        },
-                        child: const Text('Delete Account', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0))
-                      )
+                              child: const Text("Edit Profile",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0)),
+                            )),
+                        const SizedBox(height: 20),
+                        const Divider(),
+                        const SizedBox(height: 20),
+
+                        ProfileMenuWidget(
+                            title:
+                                "${snapshot.data!.firstName} ${snapshot.data!.lastName}",
+                            icon: Icons.abc),
+                        //ProfileMenuWidget(title: "Username", icon: Icons.account_circle),
+                        ProfileMenuWidget(
+                            title: snapshot.data!.email, icon: Icons.email),
+                        const ProfileMenuWidget(
+                            title: "Password", icon: Icons.key),
+                        const SizedBox(height: 20),
+                        const Divider(),
+                        const SizedBox(height: 20),
+
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).popUntil(
+                                    (route) => route.isFirst);
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Login(),
+                                  ),
+                                );
+                              },
+                              style: const ButtonStyle(
+                                foregroundColor:
+                                    MaterialStatePropertyAll<Color>(white),
+                                backgroundColor:
+                                    MaterialStatePropertyAll<Color>(navy),
+                              ),
+                              child: const Text("Sign out",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0)),
+                            )),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: 40,
+                            child: ElevatedButton(
+                                style: const ButtonStyle(
+                                  foregroundColor:
+                                      MaterialStatePropertyAll<Color>(white),
+                                  backgroundColor:
+                                      MaterialStatePropertyAll<Color>(navy),
+                                ),
+                                onPressed: () {
+                                  confirmDeleteDialog(
+                                      context, snapshot.data!.email);
+                                },
+                                child: const Text('Delete Account',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.0)))),
+                        const SizedBox(height: 20),
+                        RichText(
+                            text: TextSpan(
+                          style: const TextStyle(fontFamily: "PT Serif"),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "Reset Password",
+                                style: const TextStyle(
+                                    color: blue,
+                                    decoration: TextDecoration.underline),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    forgotPassword(email: snapshot.data!.email);
+                                    _showAwaitEmailMessage(context);
+                                  }),
+                          ],
+                        )),
+
+                        const SizedBox(height: 20),
+                        RichText(
+                            text: TextSpan(
+                          style: const TextStyle(fontFamily: "PT Serif"),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "Update Email",
+                                style: const TextStyle(
+                                    color: blue,
+                                    decoration: TextDecoration.underline),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ResetEmailPage(oldEmail: snapshot.data!.email)));
+                                  }),
+                          ],
+                        )),
+                      ],
                     ),
-                      const SizedBox(height: 20),
-                      RichText(
-                        text: TextSpan(
-                        style: const TextStyle(fontFamily: "PT Serif"),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: "Reset Password",
-                            style: const TextStyle(color: blue, decoration: TextDecoration.underline),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                forgotPassword(email: snapshot.data!.email);
-                                _showAwaitEmailMessage(context);
-                              } 
-                          ),
-                        ],
-                      )),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                ],
-              );
-            } else {
-              return const Center(child: Text('No account found'));
-            }
-          },
+                    const SizedBox(height: 10),
+                  ],
+                );
+              } else {
+                return const Center(child: Text('No account found'));
+              }
+            },
+          ),
         ),
       ),
       bottomNavigationBar: const HomeButton(),
@@ -210,10 +257,10 @@ class ManageAccountPageState extends State<ManageAccountPage> {
 
 class ProfileMenuWidget extends StatelessWidget {
   const ProfileMenuWidget({
-    super.key,
+    Key? key,
     required this.title,
     required this.icon,
-  });
+  }) : super(key: key);
 
   final String title;
   final IconData icon;
@@ -228,7 +275,7 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: boxinsides,
         ),
-        child: Icon(icon, color: navy,),
+        child: Icon(icon, color: navy),
       ),
       title: Text(title),
     );
@@ -309,7 +356,14 @@ void confirmDeleteDialog(BuildContext context, String email) {
                   if (checkboxValue) {
                     FirebaseService().deleteUser(email);
                     Navigator.of(context).pop();
-                    Navigator.of(context).pop([email, "delete"]); // passed in info for refreshUsers()
+                    Navigator.of(context).pop([email, "delete"]);
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Login(),
+                      ),
+                    );
                   } else {
                     Fluttertoast.showToast(
                       msg: 'Please click the box to confirm your choice.',
