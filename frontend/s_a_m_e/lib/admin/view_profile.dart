@@ -25,7 +25,7 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("User Profile", style: TextStyle(fontSize: 36.0)),
-        actions: [ProfilePicturePage()],
+        actions: const [ProfilePicturePage()],
       ),
       body: SafeArea(
         child: Padding(
@@ -363,30 +363,3 @@ Future<void> _updateUserRole(BuildContext context, String email, String newRole)
 String confirmDelete = "Are you sure you want go through with these changes? Once you delete a user you cannot revert these changes.";
 String confirmEdit = "Are you sure you want go through with these changes? A user's role can be changed again later if needed.";
 
-
-class ProfileMenuWidget extends StatelessWidget {
-  const ProfileMenuWidget({
-    super.key,
-    required this.title,
-    required this.icon,
-  });
-
-  final String title;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: boxinsides,
-        ),
-        child: Icon(icon, color: navy,),
-      ),
-      title: Text(title),
-    );
-  }
-}

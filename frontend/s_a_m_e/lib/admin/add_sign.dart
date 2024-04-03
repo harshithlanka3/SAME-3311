@@ -30,7 +30,7 @@ class SignCreationPageState extends State<SignCreationPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('S.A.M.E'),
-        actions: [ProfilePicturePage()],
+        actions: const [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

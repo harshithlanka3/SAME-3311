@@ -3,7 +3,6 @@ import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/home_button.dart';
-// import 'package:s_a_m_e/account/profilepicture.dart';
 
 class AdminRequestPage extends StatefulWidget {
   const AdminRequestPage({super.key});
@@ -38,7 +37,7 @@ class AdminRequestPageState extends State<AdminRequestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Admin Requests", style: TextStyle(fontSize: 36.0)),
-        actions: [ProfilePicturePage()],
+        actions: const [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -94,33 +93,6 @@ class AdminRequestPageState extends State<AdminRequestPage> {
           },
         ),
       ),bottomNavigationBar: const HomeButton()
-    );
-  }
-}
-
-class ProfileMenuWidget extends StatelessWidget {
-  const ProfileMenuWidget({
-    super.key,
-    required this.title,
-    required this.icon,
-  });
-
-  final String title;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: boxinsides,
-        ),
-        child: Icon(icon, color: navy,),
-      ),
-      title: Text(title),
     );
   }
 }

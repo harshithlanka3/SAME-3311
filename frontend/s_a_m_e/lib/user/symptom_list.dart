@@ -35,7 +35,7 @@ class SymptomsListPageState extends State<SymptomsListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Symptoms List", style: TextStyle(fontSize: 36.0)),
-        actions: [ProfilePicturePage()],
+        actions: const [ProfilePicturePage()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -80,34 +80,4 @@ class SymptomsListPageState extends State<SymptomsListPage> {
     );
   }
 }
-
-class ProfileMenuWidget extends StatelessWidget {
-  const ProfileMenuWidget({
-    super.key,
-    required this.title,
-    required this.icon,
-  });
-
-  final String title;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: boxinsides,
-        ),
-        child: Icon(icon, color: navy,),
-      ),
-      title: Text(title),
-    );
-  }
-}
-
-
-
 

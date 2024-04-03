@@ -14,7 +14,7 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       title: const Text('Categories', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0)),
-      actions: [ProfilePicturePage()],
+      actions: const [ProfilePicturePage()],
     ),
     
       body: Align(
