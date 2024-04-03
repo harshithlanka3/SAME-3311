@@ -998,6 +998,26 @@ class FirebaseService {
     }
   }
 
+  Future editUserEmail(String oldEmail, String newEmail) async {
+    try {
+      DataSnapshot snapshot = await _usersRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          if (value["email"] == oldEmail) {
+            _usersRef.child(key).update({"email": newEmail});
+          }
+        });
+      }
+    } catch (e) {
+      print("Error with editing user role:");
+      print(e.toString());
+      return null;
+    }
+  }
+
   Future<String> uploadUserProfilePicture(String email, XFile file) async {
     try {
       Reference referenceRoot = FirebaseStorage.instance.ref();

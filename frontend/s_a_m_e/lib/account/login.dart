@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:s_a_m_e/account/forgot_password.dart';
 import 'package:s_a_m_e/admin/admin_home.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/account/signup.dart';
@@ -36,31 +37,45 @@ class LoginState extends State<Login> {
       password: _passwordController.text,
     );
 
-    if (userCredential.user != null) {
-      String uid = userCredential.user!.uid;
+  if (userCredential.user != null) {
+      if (userCredential.user!.emailVerified) {
+        String uid = userCredential.user!.uid;
 
-      UserClass? userData = await FirebaseService().getUser(uid);
+        UserClass? userData = await FirebaseService().getUser(uid);
 
-      if (userData != null) {
-        String role = userData.role;
-        print(role);
+        if (userData != null) {
+          String role = userData.role;
+          print(role);
 
-        if (role == 'user') {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const UserHome()),
-          );
-        } else if (role == 'admin') {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const Admin()),
-          );
+          if (role == 'user') {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const UserHome()),
+            );
+          } else if (role == 'admin') {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const Admin()),
+            );
+          }
+        } else {
+          print('Error: User data not found in the database.');
         }
       } else {
-        print('Error: User data not found in the database.');
+        await userCredential.user?.sendEmailVerification();
+        Fluttertoast.showToast(
+          msg: 'Please verify your email before logging in.',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: blue,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
     } else {
       print('Error: User is null after sign-in.');
     }
   } catch (e) {
+    print('Error during sign-in: $e');
     print('Error during sign-in: $e');
     // Handle exceptions
   }
@@ -261,7 +276,20 @@ class LoginState extends State<Login> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 24.0)))),
               const SizedBox(height: 30),
-              // const Text('Forgot password?'),
+              RichText(
+                text: TextSpan(
+                style: const TextStyle(fontFamily: "PT Serif"),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: "Forgot Password?",
+                    style: const TextStyle(color: blue, decoration: TextDecoration.underline),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPassPage(),));
+                      } 
+                  ),
+                ],
+              )),
             ],
           ),
         ),
