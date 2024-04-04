@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:s_a_m_e/account/change_name.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/account/reset_email.dart';
 import 'package:s_a_m_e/colors.dart';
@@ -124,10 +124,11 @@ class ManageAccountPageState extends State<ManageAccountPage> {
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20.0),
                         ),
+                        const SizedBox(height: 20),
                         Text('User Role: ${snapshot.data!.role}',
                             style: const TextStyle(fontSize: 16.0)),
                         const SizedBox(height: 20),
-                        SizedBox(
+                       /*  SizedBox(
                             width: 200,
                             child: ElevatedButton(
                               onPressed: () {},
@@ -141,7 +142,7 @@ class ManageAccountPageState extends State<ManageAccountPage> {
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18.0)),
-                            )),
+                            )), */
                         const SizedBox(height: 20),
                         const Divider(),
                         const SizedBox(height: 20),
@@ -153,40 +154,19 @@ class ManageAccountPageState extends State<ManageAccountPage> {
                         //ProfileMenuWidget(title: "Username", icon: Icons.account_circle),
                         ProfileMenuWidget(
                             title: snapshot.data!.email, icon: Icons.email),
-                        const ProfileMenuWidget(
-                            title: "Password", icon: Icons.key),
+                        /* const ProfileMenuWidget(
+                            title: "Password", icon: Icons.key), */
                         const SizedBox(height: 20),
                         const Divider(),
                         const SizedBox(height: 20),
-
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).popUntil(
-                                    (route) => route.isFirst);
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const Login(),
-                                  ),
-                                );
-                              },
-                              style: const ButtonStyle(
-                                foregroundColor:
-                                    MaterialStatePropertyAll<Color>(white),
-                                backgroundColor:
-                                    MaterialStatePropertyAll<Color>(navy),
-                              ),
-                              child: const Text("Sign out",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18.0)),
-                            )),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: 40,
-                            child: ElevatedButton(
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 2.25,
+                              height: 40,
+                              child: ElevatedButton(
                                 style: const ButtonStyle(
                                   foregroundColor:
                                       MaterialStatePropertyAll<Color>(white),
@@ -194,50 +174,120 @@ class ManageAccountPageState extends State<ManageAccountPage> {
                                       MaterialStatePropertyAll<Color>(navy),
                                 ),
                                 onPressed: () {
-                                  confirmDeleteDialog(
-                                      context, snapshot.data!.email);
+                                  forgotPassword(
+                                      email: snapshot.data!.email);
+                                  _showAwaitEmailMessage(context);
                                 },
-                                child: const Text('Delete Account',
+                                child: const Text('Reset Password',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 18.0)))),
-                        const SizedBox(height: 20),
-                        RichText(
-                            text: TextSpan(
-                          style: const TextStyle(fontFamily: "PT Serif"),
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: "Reset Password",
-                                style: const TextStyle(
-                                    color: blue,
-                                    decoration: TextDecoration.underline),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    forgotPassword(email: snapshot.data!.email);
-                                    _showAwaitEmailMessage(context);
-                                  }),
+                                        fontSize: 18.0)),
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 2.25,
+                              height: 40,
+                              child: ElevatedButton(
+                                style: const ButtonStyle(
+                                  foregroundColor:
+                                      MaterialStatePropertyAll<Color>(white),
+                                  backgroundColor:
+                                      MaterialStatePropertyAll<Color>(navy),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => ResetEmailPage(
+                                          oldEmail: snapshot.data!.email),
+                                    ),
+                                  );
+                                },
+                                child: const Text('Update Email',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.0)),
+                              ),
+                            ),
                           ],
-                        )),
-
+                        ),
                         const SizedBox(height: 20),
-                        RichText(
-                            text: TextSpan(
-                          style: const TextStyle(fontFamily: "PT Serif"),
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: "Update Email",
-                                style: const TextStyle(
-                                    color: blue,
-                                    decoration: TextDecoration.underline),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ResetEmailPage(oldEmail: snapshot.data!.email)));
-                                  }),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 2.25,
+                              height: 40,
+                              child: ElevatedButton(
+                                style: const ButtonStyle(
+                                  foregroundColor:
+                                      MaterialStatePropertyAll<Color>(white),
+                                  backgroundColor:
+                                      MaterialStatePropertyAll<Color>(navy),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => ChangeNamePage(
+                                          email: snapshot.data!.email),
+                                    ),
+                                  );
+                                },
+                                child: const Text('Update Name',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.0)),
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 2.25,
+                              height: 40,
+                              child: ElevatedButton(
+                                  style: const ButtonStyle(
+                                    foregroundColor:
+                                        MaterialStatePropertyAll<Color>(
+                                            white),
+                                    backgroundColor:
+                                        MaterialStatePropertyAll<Color>(
+                                            navy),
+                                  ),
+                                  onPressed: () {
+                                    confirmDeleteDialog(
+                                        context, snapshot.data!.email);
+                                  },
+                                  child: const Text('Delete Account',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18.0))),
+                            ),
                           ],
-                        )),
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 40,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).popUntil(
+                                  (route) => route.isFirst);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Login(),
+                                ),
+                              );
+                            },
+                            style: const ButtonStyle(
+                              foregroundColor:
+                                  MaterialStatePropertyAll<Color>(white),
+                              backgroundColor:
+                                  MaterialStatePropertyAll<Color>(navy),
+                            ),
+                            child: const Text("Sign out",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0)),
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 10),

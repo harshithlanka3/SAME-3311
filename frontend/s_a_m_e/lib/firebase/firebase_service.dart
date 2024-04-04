@@ -1012,7 +1012,47 @@ class FirebaseService {
         });
       }
     } catch (e) {
-      print("Error with editing user role:");
+      print("Error with editing user email:");
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future editUserFirstName(String email, String newFirstName) async {
+    try {
+      DataSnapshot snapshot = await _usersRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          if (value["email"] == email) {
+            _usersRef.child(key).update({"firstName": newFirstName});
+          }
+        });
+      }
+    } catch (e) {
+      print("Error with editing user first name:");
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future editUserLastName(String email, String newLastName) async {
+    try {
+      DataSnapshot snapshot = await _usersRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          if (value["email"] == email) {
+            _usersRef.child(key).update({"lastName": newLastName});
+          }
+        });
+      }
+    } catch (e) {
+      print("Error with editing user last name:");
       print(e.toString());
       return null;
     }
