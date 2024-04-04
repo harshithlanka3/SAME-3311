@@ -4,6 +4,7 @@ import 'package:s_a_m_e/admin/add_symptom.dart';
 import 'package:s_a_m_e/admin/delete_symptom.dart';
 import 'package:s_a_m_e/admin/update_symptom.dart';
 import 'package:s_a_m_e/colors.dart';
+import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/user/symptom_list.dart';
 
 class SymptomEdit extends StatelessWidget {
@@ -93,7 +94,7 @@ Widget build(BuildContext context) {
             
           ],
         ),
-      ),
+      ), bottomNavigationBar: const HomeButton()
     );
   }
 }

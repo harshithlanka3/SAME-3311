@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/colors.dart';
+import 'package:s_a_m_e/home_button.dart';
 
 
 class UpdateSignPage extends StatefulWidget {
@@ -191,7 +192,7 @@ class UpdateSignPageState extends State<UpdateSignPage> {
           updateCategories();
         },
         child: const Icon(Icons.check, color: white,),
-      ),
+      ), bottomNavigationBar: const HomeButton()
     );
   }
 }

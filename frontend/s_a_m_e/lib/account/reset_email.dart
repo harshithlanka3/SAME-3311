@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/login.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import 'package:s_a_m_e/home_button.dart';
 
 class ResetEmailPage extends StatefulWidget {
   const ResetEmailPage({super.key, required this.oldEmail,});
@@ -129,7 +130,7 @@ class ResetEmailPageState extends State<ResetEmailPage> {
             ],
           ),
         ),
-      ),
+      ), bottomNavigationBar: const HomeButton()
     );
   }
 }

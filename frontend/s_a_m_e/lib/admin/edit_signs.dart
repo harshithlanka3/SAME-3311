@@ -4,6 +4,7 @@ import 'package:s_a_m_e/admin/add_sign.dart';
 import 'package:s_a_m_e/admin/delete_sign.dart';
 import 'package:s_a_m_e/admin/update_sign.dart';
 import 'package:s_a_m_e/colors.dart';
+import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/user/sign_list.dart';
 
 class SignEdit extends StatelessWidget {
@@ -94,7 +95,7 @@ Widget build(BuildContext context) {
             
           ],
         ),
-      ),
+      ), bottomNavigationBar: const HomeButton()
     );
   }
 }
