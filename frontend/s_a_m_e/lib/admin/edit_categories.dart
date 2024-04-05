@@ -4,6 +4,7 @@ import 'package:s_a_m_e/admin/add_category.dart';
 import 'package:s_a_m_e/admin/delete_category.dart';
 import 'package:s_a_m_e/admin/update_category.dart';
 import 'package:s_a_m_e/colors.dart';
+import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/user/categories_list.dart';
 
 class CategoryEdit extends StatelessWidget {
@@ -94,7 +95,7 @@ Widget build(BuildContext context) {
             
           ],
         ),
-      ),
+      ), bottomNavigationBar: const HomeButton()
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart'; 
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import 'package:s_a_m_e/home_button.dart';
 
 
 class DiagnosisCreationPage extends StatefulWidget {
@@ -230,7 +231,7 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
             const SizedBox(height: 20),
           ],
         ),
-      ),
+      ), bottomNavigationBar: const HomeButton()
     );
   }
 }

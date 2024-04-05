@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart'; 
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import 'package:s_a_m_e/home_button.dart';
 
 class UpdateDiagnosisPage extends StatefulWidget {
   const UpdateDiagnosisPage({super.key});
@@ -360,7 +361,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
         //   updateCategories();
         // },
         child: const Icon(Icons.check, color: white,),
-      ),
+      ), bottomNavigationBar: const HomeButton()
     );
   }
 }

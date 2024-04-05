@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
+import 'package:s_a_m_e/home_button.dart';
 
 class DiagnosisPage extends StatefulWidget {
   const DiagnosisPage({super.key, required this.diagnosis, required this.title});
@@ -133,7 +134,7 @@ class DiagnosisPageState extends State<DiagnosisPage> {
               )
             ],
           )
-        )
+        ), bottomNavigationBar: const HomeButton()
       ),
     );
   }
