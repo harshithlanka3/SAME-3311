@@ -244,11 +244,11 @@ class FirebaseService {
     }
   }
 
-  Future<int> addCategory(String name, List<String> symptoms, List<String> signs) async {
+  Future<int> addCategory(String name, List<String> symptoms, List<String> signs, List<String> diagnoses) async {
     try {
       DatabaseReference newCatRef = _catRef.push();
       await newCatRef
-          .set({'name': name, 'symptoms': symptoms, 'signs': signs, 'diagnoses': []});
+          .set({'name': name, 'symptoms': symptoms, 'signs': signs, 'diagnoses': diagnoses});
 
       for (String symptom in symptoms) {
         await addCategoryToSymptom(name, symptom);
@@ -256,6 +256,10 @@ class FirebaseService {
 
       for (String sign in signs) {
         await addCategoryToSign(name, sign);
+      }
+
+      for (String diagnosis in diagnoses) {
+        await addCategoryToDiagnosis(name, diagnosis);
       }
 
       print('Data added successfully');
@@ -326,6 +330,20 @@ class FirebaseService {
                       signValue["categories"].contains(name)) {
                     await removeCategoryFromSign(name, signValue["name"]);
                     print('Category removed from sign: $signKey');
+                  }
+                });
+              }
+            });
+
+            await _diagnosisRef.get().then((diagnosisSnapshot) {
+              if (diagnosisSnapshot.value != null) {
+                Map<dynamic, dynamic> signData =
+                    diagnosisSnapshot.value as Map<dynamic, dynamic>;
+                signData.forEach((diagnosisKey, diagnosisValue) async {
+                  if (diagnosisValue["categories"] != null &&
+                      diagnosisValue["categories"].contains(name)) {
+                    await removeCategoryFromSign(name, diagnosisValue["name"]);
+                    print('Category removed from sign: $diagnosisKey');
                   }
                 });
               }
@@ -1340,6 +1358,37 @@ class FirebaseService {
       print('Error adding sign to diagnosis: $e');
     }
   }
+
+
+  Future<void> addCategoryToDiagnosis(
+      String categoryName, String diagnosisName) async {
+    try {
+      print("does it make it here");
+
+      DataSnapshot snapshot = await _diagnosisRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) async {
+          if (value["name"] == diagnosisName) {
+            List<String> categories =
+                List<String>.from(value["categories"] ?? []);
+            if (!categories.contains(categoryName)) {
+              categories.add(categoryName);
+              await _diagnosisRef.child(key).update({"categories": categories});
+              print('Category added to diagnosis: $categoryName');
+            } else {
+              print('Category already exists for diagnosis: $categoryName');
+            }
+          }
+        });
+      }
+    } catch (e) {
+      print('Error adding category to diagnosis: $e');
+    }
+  }
+
 
   Future<void> removeSymptomFromDiagnosis(
       String symptom, String selectedDiagnosis) async {

@@ -19,6 +19,7 @@ class CategoryCreationPageState extends State<CategoryCreationPage> {
   final FirebaseService _firebaseService = FirebaseService();
   List<String> _selectedSymptoms = [];
   List<String> _selectedSigns = [];
+  List<String> _selectedDiagnosis = [];
 
   @override
   void dispose() {
@@ -35,16 +36,18 @@ class CategoryCreationPageState extends State<CategoryCreationPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Column(
+        child: Scrollbar(
+          trackVisibility: true,
+          child: Column(
           children: [
             const SizedBox(height: 20),
-            const Text('Add Category', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0)),
-            const SizedBox(height: 40),
+            const Text('Add Organ System', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0)),
+            const SizedBox(height: 30),
             TextField(
               controller: _categoryNameController,
               decoration: const InputDecoration(
                 contentPadding: EdgeInsets.all(20.0),
-                labelText: 'Category Name',
+                labelText: 'Organ System Name',
                 labelStyle: TextStyle(color: navy),
                 filled: true,
                 fillColor: boxinsides,
@@ -60,7 +63,7 @@ class CategoryCreationPageState extends State<CategoryCreationPage> {
             ),
 
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 15),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -100,7 +103,7 @@ class CategoryCreationPageState extends State<CategoryCreationPage> {
               ],
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 15),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -141,6 +144,47 @@ class CategoryCreationPageState extends State<CategoryCreationPage> {
             ),
 
 
+            const SizedBox(height: 15),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Diagnoses', style: TextStyle(fontWeight: FontWeight.bold)),
+                FutureBuilder<List<Diagnosis>>(
+                  future: _firebaseService.getAllDiagnosis(),
+                  builder: (context, diagnosisSnapshot) {
+                    if (diagnosisSnapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (diagnosisSnapshot.hasError) {
+                      return Text('Error: ${diagnosisSnapshot.error}');
+                    } else {
+                      List<Diagnosis>? diagnoses = diagnosisSnapshot.data;
+
+                      if (diagnoses != null && diagnoses.isNotEmpty) {
+                        return MultiSelectDialogField<String>(
+                          backgroundColor: background,
+                          cancelText: const Text('CANCEL', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
+                          confirmText: const Text('SELECT', style: TextStyle(fontWeight: FontWeight.bold, color: navy)),
+                          unselectedColor: navy,
+                          selectedColor: navy,
+                          items: diagnoses
+                              .map((diagnosis) => MultiSelectItem<String>(
+                                  diagnosis.name, diagnosis.name))
+                              .toList(),
+                          title: const Text("Select Signs"),
+                          onConfirm: (values) {
+                            _selectedDiagnosis = values;
+                          },
+                        );
+                      } else {
+                        return const Text('No signs available'); // Return an empty SizedBox if no signs available
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
+
+
             const SizedBox(height: 20),
             ElevatedButton(
               style: const ButtonStyle(
@@ -153,25 +197,27 @@ class CategoryCreationPageState extends State<CategoryCreationPage> {
                     _categoryNameController.text,
                     _selectedSymptoms,
                     _selectedSigns,
+                    _selectedDiagnosis
                   );
                   if (response == 200) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Category added successfully')),
+                        content: Text('Organ System added successfully')),
                     );
                     setState(() {
                       _selectedSigns.clear();
                       _selectedSymptoms.clear();
                       _categoryNameController.clear();
+                      _selectedDiagnosis.clear();
                     });
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Failed to add category')),
+                      const SnackBar(content: Text('Failed to add Organ System')),
                     );
                   }
                 } else if (!await _firebaseService.categoryNonExistent(_categoryNameController.text)) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Category already in database')),
+                    const SnackBar(content: Text('Organ System already in database')),
                   );
                   
                 } else {
@@ -180,7 +226,7 @@ class CategoryCreationPageState extends State<CategoryCreationPage> {
                   );
                 }
               },
-              child: const Text('Create Category', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+              child: const Text('Create Organ System', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
 
             const SizedBox(height: 20),
@@ -194,10 +240,10 @@ class CategoryCreationPageState extends State<CategoryCreationPage> {
                   MaterialPageRoute(builder: (context) => const CategoriesListPage()),
                 );
               },
-              child: const Text('View All Categories', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+              child: const Text('View All Organ Systems', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
             ),
           ],
-        ),
+        )),
       ),bottomNavigationBar: const HomeButton()
     );
   }
