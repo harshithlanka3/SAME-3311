@@ -34,7 +34,7 @@ class CategoriesListPageState extends State<CategoriesListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Categories List", style: TextStyle(fontSize: 36.0)),
+        title: const Text("Organ System List", style: TextStyle(fontSize: 33.0)),
         actions: const [ProfilePicturePage()],
       ),
       body: Padding(
@@ -60,7 +60,7 @@ class CategoriesListPageState extends State<CategoriesListPage> {
                       children: <Widget>[
                         Container(
                           decoration: BoxDecoration(
-                            border: Border.all(color: teal),
+                            border: Border.all(color: navy),
                             color: boxinsides,
                             borderRadius: BorderRadius.circular(15),
                           ),

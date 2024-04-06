@@ -85,7 +85,7 @@ class SearchSymptomState extends State<SearchSymptom> {
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.all(20.0),
                         labelText: 'Search',
-                        labelStyle: TextStyle(color: teal),
+                        labelStyle: TextStyle(color: navy),
                         filled: true,
                         fillColor: boxinsides,
                         enabledBorder: OutlineInputBorder(
@@ -141,7 +141,7 @@ class SearchSymptomState extends State<SearchSymptom> {
                               tileColor: boxinsides,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
-                                side: const BorderSide(color: teal)
+                                side: const BorderSide(color: navy)
                               ),
                             ),
                           );

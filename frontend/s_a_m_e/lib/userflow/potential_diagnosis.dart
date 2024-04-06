@@ -69,7 +69,9 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
         padding: const EdgeInsets.all(15),
         child: Column(
           children: [
-            RichText(
+            Container(
+              alignment: Alignment.centerLeft,
+              child: RichText(
               text: TextSpan(
                 style: const TextStyle(
                   fontSize: 16,
@@ -89,6 +91,7 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
                   TextSpan(text: ": $signs")
                 ],
               ),
+            ),
             ),
             const SizedBox(height: 10),
             const Divider(thickness: 2),
@@ -111,7 +114,7 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
                             children: <Widget>[
                               Container(
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: teal),
+                                  border: Border.all(color: navy),
                                   color: boxinsides,
                                   borderRadius: BorderRadius.circular(15),
                                 ),

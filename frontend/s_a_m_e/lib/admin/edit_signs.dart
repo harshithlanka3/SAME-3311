@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
+import 'package:s_a_m_e/admin/add_diagnosis.dart';
 import 'package:s_a_m_e/admin/add_sign.dart';
+import 'package:s_a_m_e/admin/delete_diagnosis.dart';
 import 'package:s_a_m_e/admin/delete_sign.dart';
+import 'package:s_a_m_e/admin/update_diagnosis.dart';
 import 'package:s_a_m_e/admin/update_sign.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/home_button.dart';
+import 'package:s_a_m_e/user/diagnosis_list.dart';
 import 'package:s_a_m_e/user/sign_list.dart';
 
 class SignEdit extends StatelessWidget {
@@ -27,30 +31,65 @@ Widget build(BuildContext context) {
             const SizedBox(height: 10),
             
             
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Add Sign', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SignCreationPage(),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Delete Sign', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 2.25,
+                    height: 250,
+                    child:
+                      OutlinedButton(
+                        style: ButtonStyle(
+                          foregroundColor: const MaterialStatePropertyAll<Color>(navy),
+                overlayColor: const MaterialStatePropertyAll<Color>(background),
+                          side: MaterialStateProperty.all(const BorderSide(
+                              color: navy,
+                              width: 2.0,
+                              style: BorderStyle.solid)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: const BorderSide(color: navy)
+                              )
+                            )
+                      ),
+                        child: const Column(children: [Image(
+                height: 200,
+                image: AssetImage('assets/add.png')
+              ), 
+                            Text('Add Sign', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0))]),
+                      onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignCreationPage(),
+                            ),
+                          );
+                        }, ),),
+                        SizedBox( width: MediaQuery.of(context).size.width / 2.25,
+                    height: 250,
+                    child: OutlinedButton(
+              style: ButtonStyle(
+                foregroundColor: const MaterialStatePropertyAll<Color>(navy),
+                overlayColor: const MaterialStatePropertyAll<Color>(background),
+                side: MaterialStateProperty.all(const BorderSide(
+                              color: navy,
+                              width: 2.0,
+                              style: BorderStyle.solid)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: const BorderSide(color: navy)
+                              )
+                            )
+                      ),
+              child: const Column(children: [Image(
+                height: 200,
+                image: AssetImage('assets/delete.png')
+              ), 
+                            Text('Delete Sign', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0))]),
+                      onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -59,14 +98,38 @@ Widget build(BuildContext context) {
                 );
               },
             ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Update Sign', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
+            )]),
+            
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                  SizedBox(
+                    
+                    width: MediaQuery.of(context).size.width / 2.25,
+                    height: 250,
+                    child:
+            OutlinedButton(
+              style: ButtonStyle(
+                foregroundColor: const MaterialStatePropertyAll<Color>(navy),
+                overlayColor: const MaterialStatePropertyAll<Color>(background),
+                side: MaterialStateProperty.all(const BorderSide(
+                              color: navy,
+                              width: 2.0,
+                              style: BorderStyle.solid)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: const BorderSide(color: navy)
+                              )
+                            )
+                      ),
+              child: const Column(children: [Image(
+                height: 200,
+                image: AssetImage('assets/update.png')
+              ), 
+                            Text('Update Sign', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0))]),
+                      onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -74,14 +137,31 @@ Widget build(BuildContext context) {
                   ),
                 );
               },
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Signs List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+            ),),
+            SizedBox(
+                    width: MediaQuery.of(context).size.width / 2.25,
+                    height: 250,
+                    child: OutlinedButton(
+              style: ButtonStyle(
+                foregroundColor: const MaterialStatePropertyAll<Color>(navy),
+                overlayColor: const MaterialStatePropertyAll<Color>(background),
+                side: MaterialStateProperty.all(const BorderSide(
+                              color: navy,
+                              width: 2.0,
+                              style: BorderStyle.solid)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: const BorderSide(color: navy)
+                              )
+                            )
+                      ),
+                      child: const Column(children: [Image(
+                height: 200,
+                image: AssetImage('assets/list.png')
+              ), 
+                            Text('Signs List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0))]),
+                      
               onPressed: () {
                 Navigator.push(
                   context,
@@ -91,7 +171,10 @@ Widget build(BuildContext context) {
                 );
               },
               
-            ),
+            ),),
+            ]),
+            const SizedBox(height: 10),
+            
             
           ],
         ),
@@ -99,5 +182,3 @@ Widget build(BuildContext context) {
     );
   }
 }
-
-String adminDisclaimer = "This application is for general informational purposes only and is not intended to be a substitute for professional medical advice. The information provided should not be considered as medical advice, and we do not guarantee its accuracy.\nOur application is a guideline, and individual cases may vary.\n\nWe are not liable for any loss or damage arising from the use of this information. Consult with qualified healthcare professionals for advice tailored to your specific circumstances.\n\nBy using this application, you agree to these terms. S.A.M.E. is not responsible for errors or omissions. Use this application responsibly and in accordance with applicable laws.\n";

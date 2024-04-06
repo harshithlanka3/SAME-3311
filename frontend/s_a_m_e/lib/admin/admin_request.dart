@@ -57,18 +57,15 @@ class AdminRequestPageState extends State<AdminRequestPage> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
+                        Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => AdminRequestDetailsPage(user: users[index]),
-                          ),
-                        );
+                            builder: (context) => AdminRequestDetailsPage(user: users[index])));
                       },
                       child: Column(
                         children: <Widget>[
                           Container(
                             decoration: BoxDecoration(
-                              border: Border.all(color: teal),
+                              border: Border.all(color: blue),
                               color: boxinsides,
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -97,7 +94,6 @@ class AdminRequestPageState extends State<AdminRequestPage> {
   }
 }
 
-//testing code 
 class AdminRequestDetailsPage extends StatelessWidget {
   final UserClass user;
 
@@ -108,6 +104,15 @@ class AdminRequestDetailsPage extends StatelessWidget {
     bool approveSelected = false;
     bool denySelected = false;
     String? reasoning;
+
+    void updateAdminStatus() {
+    FirebaseService auth = FirebaseService();
+      if (approveSelected && !denySelected) {
+        auth.editUserRole(user.email, "admin");
+      } else {
+        auth.denyAdminRequest(user.email);
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -125,15 +130,16 @@ class AdminRequestDetailsPage extends StatelessWidget {
               "Request Reason:",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: 10),
             Text(user.requestReason),
             const SizedBox(height: 20),
 
             Text(
-              "Grant ${user.firstName} ${user.lastName} Admin Status?",
+              "Grant ${user.firstName} ${user.lastName} admin status?",
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 20),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -149,24 +155,33 @@ class AdminRequestDetailsPage extends StatelessWidget {
                       denySelected = true;
                     }
                   },
-                  color: Colors.teal,
-                  //backgroundColor: Colors.white,
-                  selectedColor: Colors.white,
-                  fillColor: Colors.teal,
-                  selectedBorderColor: teal,
+                  fillColor: navy,
+                  
+                  borderColor: navy,
+                  renderBorder: true,
+                  splashColor: navy.shade100,
                   borderRadius: BorderRadius.circular(10),
-                  //spacing : 20,
+                  constraints: const BoxConstraints(
+                                minWidth: 150.0,
+                              ),
                   children: const [
                     Padding(
-                      padding: EdgeInsets.all(8.0), // spave btween togggle buttons 
-                      child: Text('Approve'),
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                              "Approve",
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: navy),
+                              textAlign: TextAlign.center,
+                            ),
                     ),
+                    
                     Padding(
-                      padding: EdgeInsets.all(20.0), // spave btween togggle buttons 
-                      child: Text('Deny'),
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                              "Deny",
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: navy),
+                              textAlign: TextAlign.center,
+                            ),
                     ),
-                    // Text('Approve'),
-                    // Text('Deny'),
                   ],
                 ),
               ],
@@ -175,57 +190,59 @@ class AdminRequestDetailsPage extends StatelessWidget {
             const SizedBox(height: 20),
 
             const Text(
-              "Reason:",
+              
+              "Approval/Denial Reason:",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              selectionColor: teal,
+              selectionColor: navy,
+              
             ),
+            const SizedBox(height: 20),
             TextField(
               onChanged: (value) {
                 reasoning = value;
               },
-              decoration: InputDecoration(
-                labelText: "Enter reason",
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.teal),
-                  borderRadius: BorderRadius.circular(10)
-                ),
-              ),
+              decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.all(20.0),
+                          labelText: 'Reason',
+                          labelStyle: TextStyle(color: navy),
+                          filled: true,
+                          fillColor: boxinsides,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderSide: BorderSide(color: boxinsides),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderSide: BorderSide(color: boxinsides),
+                          ),
+                        ),
+              
+              
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
 
             Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.teal),
-                  color: boxinsides,
-                  borderRadius: BorderRadius.circular(15),
-                ),
               child: ElevatedButton(
+                style: const ButtonStyle(
+                      foregroundColor: MaterialStatePropertyAll<Color>(background),
+                      backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                ),
                 onPressed: () {
-                  // Perform action on submit
                   print('Reasoning: $reasoning');
                   print('Approve Selected: $approveSelected');
                   print('Deny Selected: $denySelected');
-                  // You can handle submit action here
+                  updateAdminStatus();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                      
                 },
                 child: const Text(
-                  'Submit Admin Review', 
-                  style: TextStyle(
-                    color: Colors.teal
-                  ),
-                ),
-                //child: const Text("Admin Requests", style: TextStyle(fontSize: 36.0)),
-                
-                // style: ElevatedButton.styleFrom(
-                //   primary: Colors.transparent,
-                //   elevation: 0, // Remove button elevation
-                //   shape: RoundedRectangleBorder(
-                //     borderRadius: BorderRadius.circular(15),
-                //   ),
-                // ),
+                          "Submit Admin Review",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          selectionColor: navy,
+                        ),
               ),
               ),
-            ),
           ],
         ),
       ),

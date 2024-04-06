@@ -75,6 +75,14 @@ flutter:
   assets:
     - assets/logo.png
     - assets/profile_pic.png
+    - assets/diagnoses.png
+    - assets/signs.png
+    - assets/symptoms.png
+    - assets/organ_systems.png
+    - assets/add.png
+    - assets/delete.png
+    - assets/update.png
+    - assets/list.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

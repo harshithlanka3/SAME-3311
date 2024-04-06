@@ -34,7 +34,7 @@ class HomeButtonState extends State<HomeButton> {
     return SizedBox(
         height: 80,
         child: BottomAppBar(
-          color: teal.withOpacity(.8),
+          color: teal,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
