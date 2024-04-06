@@ -129,7 +129,7 @@ Widget build(BuildContext context) {
                 foregroundColor: MaterialStatePropertyAll<Color>(white),
                 backgroundColor: MaterialStatePropertyAll<Color>(navy),
               ),
-              child: const Text('Categories', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+              child: const Text('Organ Systems', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
                 Navigator.push(
                   context,

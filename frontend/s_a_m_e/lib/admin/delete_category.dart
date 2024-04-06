@@ -30,7 +30,7 @@ class CategoryDeletionPageState extends State<CategoryDeletionPage> {
           children: [
             const SizedBox(height: 20),
             const Text(
-              'Delete Category',
+              'Delete Organ System',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0),
             ),
             const SizedBox(height: 40),
@@ -60,13 +60,13 @@ class CategoryDeletionPageState extends State<CategoryDeletionPage> {
                       items: categories
                           .map((category) => MultiSelectItem<String>(category.name, category.name))
                           .toList(),
-                      title: const Text("Categories"),
+                      title: const Text("Organ System"),
                       onConfirm: (values) {
                         _selectedCategories = values;
                       },
                     );
                   } else {
-                    return const Text('No categories available');
+                    return const Text('No Organ Systems available');
                   }
                 }
               },
@@ -84,7 +84,7 @@ class CategoryDeletionPageState extends State<CategoryDeletionPage> {
                   }
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Category deleted successfully'),
+                      content: Text('Organ System deleted successfully'),
                     ),
                   );
                   setState(() {
@@ -94,13 +94,13 @@ class CategoryDeletionPageState extends State<CategoryDeletionPage> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Please select categories to delete'),
+                      content: Text('Please select organ systems to delete'),
                     ),
                   );
                 }
               },
               child: const Text(
-                'Delete Categories',
+                'Delete Organ System',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
               ),
             ),

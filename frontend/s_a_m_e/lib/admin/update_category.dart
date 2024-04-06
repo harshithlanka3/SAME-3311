@@ -95,8 +95,8 @@ class UpdateCatPageState extends State<UpdateCatPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Update Category',
-          style: TextStyle(fontSize: 32), 
+          'Update Organ System',
+          style: TextStyle(fontSize: 28), 
         ),
         actions: const [ProfilePicturePage()],
       ),
