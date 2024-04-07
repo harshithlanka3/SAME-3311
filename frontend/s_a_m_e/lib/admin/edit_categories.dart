@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/admin/add_category.dart';
-import 'package:s_a_m_e/admin/add_diagnosis.dart';
 import 'package:s_a_m_e/admin/delete_category.dart';
-import 'package:s_a_m_e/admin/delete_diagnosis.dart';
 import 'package:s_a_m_e/admin/update_category.dart';
-import 'package:s_a_m_e/admin/update_diagnosis.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/user/categories_list.dart';
-import 'package:s_a_m_e/user/diagnosis_list.dart';
 
 class CategoryEdit extends StatelessWidget {
   //const Admin({super.key});
