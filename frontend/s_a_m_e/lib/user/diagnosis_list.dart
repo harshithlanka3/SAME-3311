@@ -61,17 +61,31 @@ class DiagnosisListPageState extends State<DiagnosisListPage> {
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: [
+            const SizedBox(height: 20),
             TextField(
               controller: _searchController,
-              decoration: const InputDecoration(
-                labelText: 'Search Diagnoses',
-                prefixIcon: Icon(Icons.search),
-              ),
+              
               onChanged: (value) {
                 setState(() {});
               },
+              decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.all(20.0),
+                          labelText: 'Search Diagnoses',
+                          prefixIcon: Icon(Icons.search),
+                          labelStyle: TextStyle(color: navy),
+                          filled: true,
+                          fillColor: boxinsides,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderSide: BorderSide(color: boxinsides),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderSide: BorderSide(color: boxinsides),
+                          ),
+                        ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             Expanded(
               child: FutureBuilder<List<Diagnosis>>(
                 future: diagnosis,
@@ -97,7 +111,7 @@ class DiagnosisListPageState extends State<DiagnosisListPage> {
                             children: <Widget>[
                               Container(
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: teal),
+                                  border: Border.all(color: navy),
                                   color: boxinsides,
                                   borderRadius: BorderRadius.circular(15),
                                 ),

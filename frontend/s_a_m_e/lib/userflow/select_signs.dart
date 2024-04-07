@@ -67,9 +67,22 @@ class _SelectSignState extends State<SelectSign> {
             TextField(
               onChanged: searchSigns,
               decoration: const InputDecoration(
-                hintText: 'Search Signs',
-                prefixIcon: Icon(Icons.search),
-              ),
+                          contentPadding: EdgeInsets.all(20.0),
+                          hintText: 'Search Signs',
+                          prefixIcon: Icon(Icons.search),
+                          labelStyle: TextStyle(color: navy),
+                          filled: true,
+                          fillColor: boxinsides,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderSide: BorderSide(color: boxinsides),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderSide: BorderSide(color: boxinsides),
+                          ),
+                        ),
+              
             ),
             const SizedBox(height: 10),
             Expanded(
@@ -92,7 +105,7 @@ class _SelectSignState extends State<SelectSign> {
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(color: teal),
+                                  border: Border.all(color: navy),
                                 ),
                                 child: ExpansionTile(
                                   collapsedBackgroundColor: navy,
@@ -117,7 +130,7 @@ class _SelectSignState extends State<SelectSign> {
                                               visualDensity: const VisualDensity(horizontal: -4.0, vertical: -4.0),
                                               controlAffinity: ListTileControlAffinity.leading,
                                               title: Text(sign),
-                                              activeColor: teal,
+                                              activeColor: navy,
                                               value: checkedSigns[sign] ?? false,
                                               onChanged: (bool? value) {
                                                 setState(() {
@@ -149,10 +162,15 @@ class _SelectSignState extends State<SelectSign> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ElevatedButton(
-        style: const ButtonStyle(
-          foregroundColor: MaterialStatePropertyAll<Color>(white),
-          backgroundColor: MaterialStatePropertyAll<Color>(navy),
-          shadowColor: MaterialStatePropertyAll<Color>(white),
+        style: ButtonStyle(
+          side: MaterialStateProperty.all(const BorderSide(
+                              color: navy,
+                              width: 2.0,
+                              style: BorderStyle.solid)),
+          foregroundColor: MaterialStatePropertyAll<Color>(navy),
+          backgroundColor: MaterialStatePropertyAll<Color>(background),
+          overlayColor: MaterialStatePropertyAll<Color>(navy.shade100),
+          shadowColor: MaterialStatePropertyAll<Color>(navy),
         ),
         child: const Text('Get Potential Diagnoses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {

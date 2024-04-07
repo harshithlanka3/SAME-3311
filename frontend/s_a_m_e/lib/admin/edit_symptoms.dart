@@ -17,6 +17,7 @@ Widget build(BuildContext context) {
       title: const Text('Symptoms', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0)),
       actions: const [ProfilePicturePage()],
     ),
+    
       body: Align(
         alignment: Alignment.topCenter,
         child: Column(
@@ -26,30 +27,65 @@ Widget build(BuildContext context) {
             const SizedBox(height: 10),
             
             
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Add Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SymptomCreationPage(),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Delete Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 2.25,
+                    height: 250,
+                    child:
+                      OutlinedButton(
+                        style: ButtonStyle(
+                          foregroundColor: const MaterialStatePropertyAll<Color>(navy),
+                overlayColor: const MaterialStatePropertyAll<Color>(background),
+                          side: MaterialStateProperty.all(const BorderSide(
+                              color: navy,
+                              width: 2.0,
+                              style: BorderStyle.solid)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: const BorderSide(color: navy)
+                              )
+                            )
+                      ),
+                        child: const Column(children: [Image(
+                height: 200,
+                image: AssetImage('assets/add.png')
+              ), 
+                            Text('Add Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0))]),
+                      onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SymptomCreationPage(),
+                            ),
+                          );
+                        }, ),),
+                        SizedBox( width: MediaQuery.of(context).size.width / 2.25,
+                    height: 250,
+                    child: OutlinedButton(
+              style: ButtonStyle(
+                foregroundColor: const MaterialStatePropertyAll<Color>(navy),
+                overlayColor: const MaterialStatePropertyAll<Color>(background),
+                side: MaterialStateProperty.all(const BorderSide(
+                              color: navy,
+                              width: 2.0,
+                              style: BorderStyle.solid)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: const BorderSide(color: navy)
+                              )
+                            )
+                      ),
+              child: const Column(children: [Image(
+                height: 200,
+                image: AssetImage('assets/delete.png')
+              ), 
+                            Text('Delete Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0))]),
+                      onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -58,14 +94,38 @@ Widget build(BuildContext context) {
                 );
               },
             ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Update Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
+            )]),
+            
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                  SizedBox(
+                    
+                    width: MediaQuery.of(context).size.width / 2.25,
+                    height: 250,
+                    child:
+            OutlinedButton(
+              style: ButtonStyle(
+                foregroundColor: const MaterialStatePropertyAll<Color>(navy),
+                overlayColor: const MaterialStatePropertyAll<Color>(background),
+                side: MaterialStateProperty.all(const BorderSide(
+                              color: navy,
+                              width: 2.0,
+                              style: BorderStyle.solid)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: const BorderSide(color: navy)
+                              )
+                            )
+                      ),
+              child: const Column(children: [Image(
+                height: 200,
+                image: AssetImage('assets/update.png')
+              ), 
+                            Text('Update Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0))]),
+                      onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -73,14 +133,31 @@ Widget build(BuildContext context) {
                   ),
                 );
               },
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Symptoms List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+            ),),
+            SizedBox(
+                    width: MediaQuery.of(context).size.width / 2.25,
+                    height: 250,
+                    child: OutlinedButton(
+              style: ButtonStyle(
+                foregroundColor: const MaterialStatePropertyAll<Color>(navy),
+                overlayColor: const MaterialStatePropertyAll<Color>(background),
+                side: MaterialStateProperty.all(const BorderSide(
+                              color: navy,
+                              width: 2.0,
+                              style: BorderStyle.solid)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: const BorderSide(color: navy)
+                              )
+                            )
+                      ),
+                      child: const Column(children: [Image(
+                height: 200,
+                image: AssetImage('assets/list.png')
+              ), 
+                            Text('Symptoms List', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0))]),
+                      
               onPressed: () {
                 Navigator.push(
                   context,
@@ -90,7 +167,10 @@ Widget build(BuildContext context) {
                 );
               },
               
-            ),
+            ),),
+            ]),
+            const SizedBox(height: 10),
+            
             
           ],
         ),
@@ -98,5 +178,3 @@ Widget build(BuildContext context) {
     );
   }
 }
-
-String adminDisclaimer = "This application is for general informational purposes only and is not intended to be a substitute for professional medical advice. The information provided should not be considered as medical advice, and we do not guarantee its accuracy.\nOur application is a guideline, and individual cases may vary.\n\nWe are not liable for any loss or damage arising from the use of this information. Consult with qualified healthcare professionals for advice tailored to your specific circumstances.\n\nBy using this application, you agree to these terms. S.A.M.E. is not responsible for errors or omissions. Use this application responsibly and in accordance with applicable laws.\n";
