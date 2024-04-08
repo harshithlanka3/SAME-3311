@@ -3,7 +3,6 @@ import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
-import 'package:s_a_m_e/user/user_home.dart';
 
 
 class UpdateDisclaimerPage extends StatefulWidget {
@@ -78,7 +77,6 @@ class UpdateDisclaimerPageState extends State<UpdateDisclaimerPage> {
                   backgroundColor: MaterialStatePropertyAll<Color>(navy),
                 ),
               onPressed: () async {
-                userDisclaimer = _diclaimerController.text;
                 if (_diclaimerController.text.isNotEmpty) {
                   final response = await _firebaseService.updateDisclaimer(
                     _diclaimerController.text,
