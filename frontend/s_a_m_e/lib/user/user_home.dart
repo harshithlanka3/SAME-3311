@@ -317,6 +317,4 @@ Widget build(BuildContext context) {
   }
 }
 
-String userDisclaimer = "This application is for general informational purposes only and is not intended to be a substitute for professional medical advice. The information provided should not be considered as medical advice, and we do not guarantee its accuracy.\nOur application is a guideline, and individual cases may vary.\n\nWe are not liable for any loss or damage arising from the use of this information. Consult with qualified healthcare professionals for advice tailored to your specific circumstances.\n\nBy using this application, you agree to these terms. S.A.M.E. is not responsible for errors or omissions. Use this application responsibly and in accordance with applicable laws.\n";
-
 String adminAccesss = "You are requesting administrative access to the Software Aid for Medical Emergencies. Please give the reason for why you are requesting access. Upon submission, an administrator will review the request.\n\nPossible reasons for admin access requests could be to add symptoms/diagnoses, monitor the application, a promotion, etc.";

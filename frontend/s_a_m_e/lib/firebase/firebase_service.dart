@@ -136,6 +136,7 @@ class FirebaseService {
   final _catRef = FirebaseDatabase.instance.ref('data/categories');
   final _usersRef = FirebaseDatabase.instance.ref('users/');
   final _diagnosisRef = FirebaseDatabase.instance.ref('data/diagnoses');
+  final _dataRef = FirebaseDatabase.instance.ref('disclaimer');
 
   Future<int> addSymptom(String name, List<Category> categories) async {
     try {
@@ -1571,5 +1572,26 @@ class FirebaseService {
     }
 
     return distance;
+  }
+
+  Future<String> getDisclaimer() async {
+    try {
+      DataSnapshot snapshot = await _dataRef.get();
+      return snapshot.value.toString();
+    } catch (e) {
+      print("Error with getting disclaimer:");
+      return e.toString();
+    }
+  }
+
+  Future<int> updateDisclaimer(String newDisclaimer) async {
+    try {
+      _dataRef.set(newDisclaimer);
+      print('Data added successfully');
+      return 200;
+    } catch (e) {
+      print('Error adding data: $e');
+      return 400;
+    }
   }
 }

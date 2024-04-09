@@ -6,6 +6,7 @@ import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/admin/admin_request.dart';
 import 'package:s_a_m_e/admin/edit_categories.dart';
 import 'package:s_a_m_e/admin/edit_diagnosis.dart';
+import 'package:s_a_m_e/admin/update_disclaimer.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/account/login.dart';
 import 'package:s_a_m_e/admin/view_accounts.dart';
@@ -46,6 +47,12 @@ Widget build(BuildContext context) {
             title: const Text('Admin Requests'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminRequestPage(),));
+            },
+          ),
+          ListTile(
+            title: const Text('Update Disclaimer'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const UpdateDisclaimerPage(),));
             },
           ),
           ListTile(
