@@ -170,7 +170,7 @@ class CategoryCreationPageState extends State<CategoryCreationPage> {
                               .map((diagnosis) => MultiSelectItem<String>(
                                   diagnosis.name, diagnosis.name))
                               .toList(),
-                          title: const Text("Select Signs"),
+                          title: const Text("Select Diagnoses"),
                           onConfirm: (values) {
                             _selectedDiagnosis = values;
                           },
