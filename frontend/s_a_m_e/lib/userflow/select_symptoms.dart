@@ -63,11 +63,27 @@ class _SelectSymptomState extends State<SelectSymptom> {
             const Divider(thickness: 2),
             const SizedBox(height: 5),
             TextField(
+              cursorColor: navy,
               onChanged: searchSymptoms,
               decoration: const InputDecoration(
-                hintText: 'Search Symptoms',
-                prefixIcon: Icon(Icons.search),
-              ),
+                          contentPadding: EdgeInsets.all(20.0),
+                          hintText: 'Search Symptoms',
+                          prefixIcon: Icon(Icons.search),
+                          labelStyle: TextStyle(color: navy),
+                          filled: true,
+                          fillColor: boxinsides,
+                          hoverColor: boxinsides,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderSide: BorderSide(color: boxinsides),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderSide: BorderSide(color: boxinsides),
+                          ),
+                          
+                        ),
+              
             ),
             const SizedBox(height: 10),
             
@@ -92,7 +108,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(color: teal),
+                                  border: Border.all(color: navy),
                                 ),
                                 child: ExpansionTile(
                                   collapsedBackgroundColor: navy,
@@ -118,7 +134,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
                                               visualDensity: const VisualDensity(horizontal: -4.0, vertical: -4.0),
                                               controlAffinity: ListTileControlAffinity.leading,
                                               title: Text(symptom),
-                                              activeColor: teal,
+                                              activeColor: navy,
                                               value: checkedSymptoms[symptom] ?? false,
                                               onChanged: (bool? value) {
                                                 setState(() {
@@ -149,12 +165,19 @@ class _SelectSymptomState extends State<SelectSymptom> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: ElevatedButton(
-        style: const ButtonStyle(
-          foregroundColor: MaterialStatePropertyAll<Color>(white),
-          backgroundColor: MaterialStatePropertyAll<Color>(navy),
-          shadowColor: MaterialStatePropertyAll<Color>(white),
+      floatingActionButton: OutlinedButton(
+        
+        style: ButtonStyle(
+          side: MaterialStateProperty.all(const BorderSide(
+                              color: navy,
+                              width: 2.0,
+                              style: BorderStyle.solid)),
+          foregroundColor: MaterialStatePropertyAll<Color>(navy),
+          backgroundColor: MaterialStatePropertyAll<Color>(background),
+          overlayColor: MaterialStatePropertyAll<Color>(navy.shade100),
+          shadowColor: MaterialStatePropertyAll<Color>(navy),
         ),
+        
         child: const Text('Select Signs', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
         onPressed: () {
           int count = checkedSymptoms.values.where((element) => element).length;

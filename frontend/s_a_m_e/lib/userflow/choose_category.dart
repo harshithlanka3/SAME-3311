@@ -50,7 +50,7 @@ class ChooseCategoryState extends State<ChooseCategory> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: teal),
+                          border: Border.all(color: navy),
                           color: boxinsides,
                           borderRadius: BorderRadius.circular(15),
                         ),
@@ -77,7 +77,7 @@ class ChooseCategoryState extends State<ChooseCategory> {
                         itemBuilder: (context, index) {
                           return Container(
                             decoration: BoxDecoration(
-                              border: Border.all(color: teal),
+                              border: Border.all(color: navy),
                               color: boxinsides,
                               borderRadius: BorderRadius.circular(15),
                             ),

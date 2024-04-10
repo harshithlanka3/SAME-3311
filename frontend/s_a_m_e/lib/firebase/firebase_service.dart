@@ -140,6 +140,7 @@ class FirebaseService {
   final _catRef = FirebaseDatabase.instance.ref('data/categories');
   final _usersRef = FirebaseDatabase.instance.ref('users/');
   final _diagnosisRef = FirebaseDatabase.instance.ref('data/diagnoses');
+  final _dataRef = FirebaseDatabase.instance.ref('disclaimer');
 
   Future<int> addSymptom(String name, List<Category> categories) async {
     try {
@@ -1013,7 +1014,43 @@ class FirebaseService {
               print("Not changing role as the user already is this role");
               return;
             }
+            try {
+              if (role == "admin") {
+                _usersRef.child(key).update({"activeRequest": false});
+              }
+            } catch (e) {
+              //
+            }
             _usersRef.child(key).update({"role": role});
+          }
+        });
+      }
+    } catch (e) {
+      print("Error with editing user role:");
+      print(e.toString());
+      return null;
+    }
+  }
+  
+
+  Future denyAdminRequest(String email) async {
+    try {
+      DataSnapshot snapshot = await _usersRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          if (value["email"] == email) {
+            print("User to be changed:");
+            print(value);
+            try {
+             
+                _usersRef.child(key).update({"activeRequest": false});
+    
+            } catch (e) {
+              //
+            }
           }
         });
       }
@@ -1543,5 +1580,26 @@ class FirebaseService {
     }
 
     return distance;
+  }
+
+  Future<String> getDisclaimer() async {
+    try {
+      DataSnapshot snapshot = await _dataRef.get();
+      return snapshot.value.toString();
+    } catch (e) {
+      print("Error with getting disclaimer:");
+      return e.toString();
+    }
+  }
+
+  Future<int> updateDisclaimer(String newDisclaimer) async {
+    try {
+      _dataRef.set(newDisclaimer);
+      print('Data added successfully');
+      return 200;
+    } catch (e) {
+      print('Error adding data: $e');
+      return 400;
+    }
   }
 }

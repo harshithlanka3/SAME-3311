@@ -48,13 +48,13 @@ class SignsListPageState extends State<SignsListPage> {
                       children: <Widget>[
                         Container( // where the UI starts
                           decoration: BoxDecoration(
-                            border: Border.all(color: teal),
+                            border: Border.all(color: navy),
                             color: boxinsides,
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: ListTile(
                             title: Text(snapshot.data![index], style: const TextStyle(fontWeight: FontWeight.bold)),
-                            subtitle: const Text('Sign Description'), 
+                            //subtitle: const Text('Sign Description'), 
                           ),
                         ),
                         const SizedBox(height: 10),

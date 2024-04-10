@@ -34,7 +34,7 @@ class CategoriesListPageState extends State<CategoriesListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Organ System List", style: TextStyle(fontSize: 32.0)),
+        title: const Text("Organ System List", style: TextStyle(fontSize: 33.0)),
         actions: const [ProfilePicturePage()],
       ),
       body: Padding(

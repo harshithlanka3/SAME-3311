@@ -21,14 +21,22 @@ class LoginState extends State<Login> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  //final _apiService = ApiService(); // API service instance
+  final FirebaseService _firebaseService = FirebaseService();
+  late Future<String> disclaimer;
 
+  @override
+  void initState() {
+    super.initState();
+    disclaimer = _firebaseService.getDisclaimer();
+  }
+ 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
+  
 
   Future<void> _signIn() async {
   try {
@@ -97,14 +105,26 @@ class LoginState extends State<Login> {
               content: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    Text(
-                      userDisclaimer,
-                      style: const TextStyle(
-                        fontFamily: "PT Serif",
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
+                    FutureBuilder<String>(
+                      future: disclaimer,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return CircularProgressIndicator(); 
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return Text(
+                            snapshot.data ?? '', 
+                            style: const TextStyle(
+                              fontFamily: "PT Serif",
+                              fontSize: 16.0,
+                              color: Colors.black,
+                            ),
+                          );
+                        }
+                      },
                     ),
+
                     const SizedBox(height: 10), 
                     Row(
                       children: <Widget>[

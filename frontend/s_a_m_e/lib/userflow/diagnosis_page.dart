@@ -114,6 +114,24 @@ class DiagnosisPageState extends State<DiagnosisPage> {
                           ),
                           const SizedBox(height: 15,),
                           const Text("Signs:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                          const SizedBox(height: 5,),
+                          SizedBox(
+                            height: widget.diagnosis.signs.length * 25,
+                            child: ListView.builder(
+                              itemCount: widget.diagnosis.signs.length,
+                              itemBuilder: (context, index) {
+                                return Row(
+                                  children:[
+                                    const Text("\t\t \u2022", style: TextStyle(fontSize: 16),), 
+                                    const SizedBox(width: 10,),
+                                    Expanded( 
+                                      child: Text(widget.diagnosis.signs[index], style: const TextStyle(fontSize: 16),), 
+                                    )
+                                  ]
+                                );
+                              }
+                            )
+                          ),
                         ]
                       ),
                     ),
