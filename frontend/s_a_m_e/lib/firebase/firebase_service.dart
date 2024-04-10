@@ -27,12 +27,16 @@ class Sign {
 class Category {
   final String name;
   final List<String> symptoms;
+  final List<String> signs;
+  final List<String> diagnoses;
 
-  Category({required this.name, required this.symptoms});
+  Category({required this.name, required this.symptoms, required this.signs, required this.diagnoses});
 
   Category.fromJson(Map<String, dynamic> json)
       : name = json['name'],
-        symptoms = json['symptoms'] ?? [];
+        symptoms = json['symptoms'] ?? [],
+        signs = json['signs'] ?? [],
+        diagnoses = json['diagnoses'] ?? [];
 
   @override
   bool operator ==(Object other) =>
@@ -515,39 +519,39 @@ class FirebaseService {
     }
   }
 
-  Future<List<Category>> getCategoriesForSymptom(String symptomName) async {
-    try {
-      DatabaseEvent event =
-          await _symptomsRef.orderByChild('name').equalTo(symptomName).once();
-      DataSnapshot snapshot = event.snapshot;
+  // Future<List<Category>> getCategoriesForSymptom(String symptomName) async {
+  //   try {
+  //     DatabaseEvent event =
+  //         await _symptomsRef.orderByChild('name').equalTo(symptomName).once();
+  //     DataSnapshot snapshot = event.snapshot;
 
-      List<Category> categoriesList = [];
+  //     List<Category> categoriesList = [];
 
-      if (snapshot.value != null) {
-        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+  //     if (snapshot.value != null) {
+  //       Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
 
-        data.forEach((key, value) {
-          if (value is Map<dynamic, dynamic> &&
-              value.containsKey('categories')) {
-            List<dynamic> categoriesData = value['categories'] as List<dynamic>;
-            List<Category> categories = categoriesData.map((categoryData) {
-              if (categoryData is String) {
-                return Category(name: categoryData, symptoms: []);
-              } else if (categoryData is Map<dynamic, dynamic>) {
-                return Category(name: categoryData['name'], symptoms: []);
-              }
-              return Category(name: '', symptoms: []);
-            }).toList();
-            categoriesList.addAll(categories);
-          }
-        });
-      }
-      return categoriesList;
-    } catch (e) {
-      print('Error getting categories for symptom: $e');
-      return [];
-    }
-  }
+  //       data.forEach((key, value) {
+  //         if (value is Map<dynamic, dynamic> &&
+  //             value.containsKey('categories')) {
+  //           List<dynamic> categoriesData = value['categories'] as List<dynamic>;
+  //           List<Category> categories = categoriesData.map((categoryData) {
+  //             if (categoryData is String) {
+  //               return Category(name: categoryData, symptoms: []);
+  //             } else if (categoryData is Map<dynamic, dynamic>) {
+  //               return Category(name: categoryData['name'], symptoms: []);
+  //             }
+  //             return Category(name: '', symptoms: []);
+  //           }).toList();
+  //           categoriesList.addAll(categories);
+  //         }
+  //       });
+  //     }
+  //     return categoriesList;
+  //   } catch (e) {
+  //     print('Error getting categories for symptom: $e');
+  //     return [];
+  //   }
+  // }
 
   Future<Category> getCategory(String categoryName) async {
     try {
@@ -560,9 +564,11 @@ class FirebaseService {
         for (var value in data.values) {
           if (value is Map<dynamic, dynamic> && value.containsKey('symptoms')) {
             List<String> symptoms = List<String>.from(value['symptoms']);
+            List<String> signs = List<String>.from(value['signs']);
+            List<String> diagnoses = List<String>.from(value['diagnoses']);
 
             Category category =
-                Category(name: categoryName, symptoms: symptoms);
+                Category(name: categoryName, symptoms: symptoms, signs: signs, diagnoses: diagnoses);
             return category;
           }
         }
@@ -587,8 +593,10 @@ class FirebaseService {
           if (value is Map<dynamic, dynamic> && value.containsKey('name')) {
             String name = value['name'];
             List<String> symptoms = List<String>.from(value['symptoms'] ?? []);
+            List<String> signs = List<String>.from(value['signs'] ?? []);
+            List<String> diagnoses = List<String>.from(value['diagnoses'] ?? []);
 
-            Category category = Category(name: name, symptoms: symptoms);
+            Category category = Category(name: name, symptoms: symptoms, signs: signs, diagnoses: diagnoses);
             categoriesList.add(category);
           }
         });

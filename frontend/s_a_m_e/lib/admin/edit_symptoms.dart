@@ -66,12 +66,12 @@ Widget build(BuildContext context) {
               ),
               child: const Text('Update Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UpdateSymptomPage(),
-                  ),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => UpdateSymptomPage(),
+                //   ),
+                // );
               },
             ),
             const SizedBox(height: 10),
