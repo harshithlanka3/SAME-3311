@@ -520,39 +520,39 @@ class FirebaseService {
     }
   }
 
-  // Future<List<Category>> getCategoriesForSymptom(String symptomName) async {
-  //   try {
-  //     DatabaseEvent event =
-  //         await _symptomsRef.orderByChild('name').equalTo(symptomName).once();
-  //     DataSnapshot snapshot = event.snapshot;
+  Future<List<Category>> getCategoriesForSymptom(String symptomName) async {
+    try {
+      DatabaseEvent event =
+          await _symptomsRef.orderByChild('name').equalTo(symptomName).once();
+      DataSnapshot snapshot = event.snapshot;
 
-  //     List<Category> categoriesList = [];
+      List<Category> categoriesList = [];
 
-  //     if (snapshot.value != null) {
-  //       Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
 
-  //       data.forEach((key, value) {
-  //         if (value is Map<dynamic, dynamic> &&
-  //             value.containsKey('categories')) {
-  //           List<dynamic> categoriesData = value['categories'] as List<dynamic>;
-  //           List<Category> categories = categoriesData.map((categoryData) {
-  //             if (categoryData is String) {
-  //               return Category(name: categoryData, symptoms: []);
-  //             } else if (categoryData is Map<dynamic, dynamic>) {
-  //               return Category(name: categoryData['name'], symptoms: []);
-  //             }
-  //             return Category(name: '', symptoms: []);
-  //           }).toList();
-  //           categoriesList.addAll(categories);
-  //         }
-  //       });
-  //     }
-  //     return categoriesList;
-  //   } catch (e) {
-  //     print('Error getting categories for symptom: $e');
-  //     return [];
-  //   }
-  // }
+        data.forEach((key, value) {
+          if (value is Map<dynamic, dynamic> &&
+              value.containsKey('categories')) {
+            List<dynamic> categoriesData = value['categories'] as List<dynamic>;
+            List<Category> categories = categoriesData.map((categoryData) {
+              if (categoryData is String) {
+                return Category(name: categoryData, symptoms: [], signs: [], diagnoses: []);
+              } else if (categoryData is Map<dynamic, dynamic>) {
+                return Category(name: categoryData['name'], symptoms: [], signs: [], diagnoses: []);
+              }
+              return Category(name: '', symptoms: [], signs: [], diagnoses: []);
+            }).toList();
+            categoriesList.addAll(categories);
+          }
+        });
+      }
+      return categoriesList;
+    } catch (e) {
+      print('Error getting categories for symptom: $e');
+      return [];
+    }
+  }
 
   Future<Category> getCategory(String categoryName) async {
     try {

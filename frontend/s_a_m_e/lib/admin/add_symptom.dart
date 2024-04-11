@@ -80,7 +80,7 @@ class SymptomCreationPageState extends State<SymptomCreationPage> {
                           .map((complaint) => MultiSelectItem<Category>(
                               complaint, complaint.name))
                           .toList(),
-                      title: const Text("Categories"),
+                      title: const Text("Organ Systems"),
                       onConfirm: (values) {
                         _selectedComplaints = values;
                       },

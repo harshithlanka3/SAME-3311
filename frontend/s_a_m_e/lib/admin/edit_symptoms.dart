@@ -94,14 +94,38 @@ Widget build(BuildContext context) {
                 );
               },
             ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll<Color>(white),
-                backgroundColor: MaterialStatePropertyAll<Color>(navy),
-              ),
-              child: const Text('Update Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-              onPressed: () {
+            )]),
+            
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                  SizedBox(
+                    
+                    width: MediaQuery.of(context).size.width / 2.25,
+                    height: 250,
+                    child:
+            OutlinedButton(
+              style: ButtonStyle(
+                foregroundColor: const MaterialStatePropertyAll<Color>(navy),
+                overlayColor: const MaterialStatePropertyAll<Color>(background),
+                side: MaterialStateProperty.all(const BorderSide(
+                              color: navy,
+                              width: 2.0,
+                              style: BorderStyle.solid)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: const BorderSide(color: navy)
+                              )
+                            )
+                      ),
+              child: const Column(children: [Image(
+                height: 200,
+                image: AssetImage('assets/update.png')
+              ), 
+                            Text('Update Symptom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0))]),
+                      onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
