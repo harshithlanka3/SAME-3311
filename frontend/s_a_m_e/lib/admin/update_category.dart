@@ -17,6 +17,10 @@ class UpdateCatPageState extends State<UpdateCatPage> {
   List<String> symptomsToDelete = [];
   Map<String, bool> symptomsCheckedState = {};
 
+  List<String> signsToAdd = [];
+  List<String> signsToDelete = [];
+  Map<String,bool> signsCheckedState = {};
+
   @override
   void initState() {
     super.initState();
@@ -29,6 +33,7 @@ class UpdateCatPageState extends State<UpdateCatPage> {
       selectedCat = categories.isNotEmpty ? categories[0].name : '';
     });
     fetchSymptoms(selectedCat);
+    fetchSigns(selectedCat);
   }
 
   Future<void> fetchSymptoms(String catName) async {
@@ -49,10 +54,36 @@ class UpdateCatPageState extends State<UpdateCatPage> {
     setState(() {
       symptomsToDelete = currentSymptoms;
       symptomsToAdd = symptomsForAddition;
+      
       symptomsCheckedState = Map.fromIterable(allSymptoms, 
         key: (symptom) => symptom, value: (_) => false);
     });
   }
+
+  Future<void> fetchSigns(String catName) async {
+    List<String> allSigns =
+        await FirebaseService().getAllSigns();
+
+    List<String> currentSigns =
+        await FirebaseService().getSignsForCat(catName);
+
+    List<String> signsForAddition = [];
+
+    for (String sign in allSigns) { 
+      if (!currentSigns.contains(sign)) {
+        signsForAddition.add(sign);
+      }
+    }
+  
+    setState(() {
+      signsToDelete = currentSigns;
+      signsToAdd = signsForAddition;
+      
+      signsCheckedState = Map.fromIterable(allSigns, 
+        key: (sign) => sign, value: (_) => false);
+    });
+  }
+
 
   Future<void> updateSymptoms() async {
     List<String> symptomsSelectedAdd = [];
@@ -89,6 +120,45 @@ class UpdateCatPageState extends State<UpdateCatPage> {
 
     fetchSymptoms(selectedCat);
   }
+
+  // New code for updating signs
+  Future<void> updateSigns() async {
+    List<String> signsSelectedAdd = [];
+    List<String> signsSelectedDel = [];
+
+    signsCheckedState.forEach((category, isChecked) {
+      if (isChecked && signsToAdd.contains(category)) {
+        signsSelectedAdd.add(category);
+      } else if (isChecked && signsToDelete.contains(category)) {
+        signsSelectedDel.add(category);
+      }
+    });
+
+    for (String sign in signsSelectedAdd) {
+      await FirebaseService().addCategoryToSign(
+        selectedCat,
+        sign,
+      );
+      await FirebaseService().addSignToCategory(sign, selectedCat);
+    }
+
+    for (String sign in signsSelectedDel) {
+      await FirebaseService().removeCategoryFromSign(
+        selectedCat,
+        sign,
+      );
+      await FirebaseService().removeSignFromCategory(sign, selectedCat);
+    }
+
+    setState(() {
+      signsSelectedAdd.clear();
+      signsSelectedDel.clear();
+    });
+
+    fetchSigns(selectedCat);
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -181,6 +251,56 @@ class UpdateCatPageState extends State<UpdateCatPage> {
                 },
               ),
             ),
+            const SizedBox(height: 16),
+            const Text(
+              'Add Signs:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Flexible(
+              child: ListView.builder(
+                itemCount: signsToAdd.length,
+                itemBuilder: (context, index) {
+                  final sign = signsToAdd[index];
+                  return CheckboxListTile(
+                    title: Text(sign),
+                    activeColor: navy,
+                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    value: signsCheckedState[sign],
+                    onChanged: (bool? value) {
+                      setState(() {
+                        signsCheckedState[sign] = value!;
+                      });
+                    },
+                  );
+                },
+              ),
+            ),
+
+            const SizedBox(height: 16),
+            const Text(
+              'Remove Signs:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Flexible(
+              child: ListView.builder(
+                itemCount: signsToDelete.length,
+                itemBuilder: (context, index) {
+                  final sign = signsToDelete[index];
+                  return CheckboxListTile(
+                    title: Text(sign),
+                    activeColor: navy,
+                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    value: signsCheckedState[sign],
+                    onChanged: (bool? value) {
+                      setState(() {
+                        signsCheckedState[sign] = value!;
+                      });
+                    },
+                  );
+                },
+              ),
+            ),
+
           ],
         ),
       ),
@@ -188,6 +308,7 @@ class UpdateCatPageState extends State<UpdateCatPage> {
         backgroundColor: navy,
         onPressed: () {
           updateSymptoms();
+          updateSigns();
         },
         child: const Icon(Icons.check, color: white,),
       ),

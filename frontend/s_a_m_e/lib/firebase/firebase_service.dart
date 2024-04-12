@@ -1389,6 +1389,39 @@ class FirebaseService {
     return [];
   }
 
+  Future<List<String>> getSignsForCat(String catName) async {
+    try {
+      DatabaseEvent event =
+          await _catRef.orderByChild('name').equalTo(catName).once();
+      DataSnapshot snapshot = event.snapshot;
+
+      List<String> signsList = [];
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) {
+          if (value is Map<dynamic, dynamic> && value.containsKey('signs')) {
+            List<dynamic> signsData = value['signs'] as List<dynamic>;
+            List<String> signs = signsData.map((signsData) {
+              if (signsData is String) {
+                return signsData;
+              } else if (signsData is Map<dynamic, dynamic>) {
+                return signsData['name'] as String;
+              }
+              return '';
+            }).toList();
+            signsList.addAll(signs);
+          }
+        });
+      }
+      return signsList;
+    } catch (e) {
+      print('Error getting signs for category: $e');
+      return [];
+    }
+  }
+
   Future<void> addSymptomToDiagnosis(
       String symptom, String selectedDiagnosis) async {
     try {
