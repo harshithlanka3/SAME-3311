@@ -8,7 +8,7 @@ import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/user/categories_list.dart';
 
 class CategoryEdit extends StatelessWidget {
-  //const Admin({super.key});
+
 
 @override
 Widget build(BuildContext context) {

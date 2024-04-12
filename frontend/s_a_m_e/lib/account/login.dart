@@ -85,7 +85,6 @@ class LoginState extends State<Login> {
   } catch (e) {
     print('Error during sign-in: $e');
     print('Error during sign-in: $e');
-    // Handle exceptions
   }
 }
 

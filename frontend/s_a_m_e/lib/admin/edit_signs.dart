@@ -8,7 +8,7 @@ import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/user/sign_list.dart';
 
 class SignEdit extends StatelessWidget {
-  //const Admin({super.key});
+
 
 @override
 Widget build(BuildContext context) {

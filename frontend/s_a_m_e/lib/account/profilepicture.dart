@@ -61,7 +61,6 @@ class ProfilePicturePageState extends State<ProfilePicturePage> {
 
   void selectImage() async {
     XFile file = await pickImage(ImageSource.gallery);
-    // ignore: unnecessary_null_comparison
     if (file == null) {
       return;
     }
