@@ -115,7 +115,7 @@ class ManageAccountPageState extends State<ManageAccountPage> {
                           height: 120,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(100),
-                            child: ProfilePicturePage(),
+                            child: InteractiveProfilePicturePage(),
                           ),
                         ),
                         const SizedBox(height: 20),
