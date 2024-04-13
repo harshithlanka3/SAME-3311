@@ -62,7 +62,6 @@ class SymptomsListPageState extends State<SymptomsListPage> {
                           ),
                           child: ListTile(
                             title: Text(snapshot.data![index], style: const TextStyle(fontWeight: FontWeight.bold)),
-                            //subtitle: const Text('Symptom Description'), 
                           ),
                         ),
                         const SizedBox(height: 10),

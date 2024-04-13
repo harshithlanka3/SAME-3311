@@ -4,7 +4,6 @@ import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/home_button.dart';
-// import 'package:s_a_m_e/account/profilepicture.dart';
 
 class SignDeletionPage extends StatefulWidget {
   const SignDeletionPage({super.key});

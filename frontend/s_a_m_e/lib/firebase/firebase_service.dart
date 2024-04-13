@@ -105,14 +105,7 @@ class UserClass {
     this.requestReason = '',
     List<String>? messages,
   }) : messages = messages ?? [];
-  // {required this.email,
-  // required this.firstName,
-  // required this.lastName,
-  // required this.role,
-  // this.activeRequest = false,
-  // this.requestReason = ''}
 
-  // );
 
   factory UserClass.fromJson(Map<String, dynamic> json) {
     return UserClass(
@@ -741,10 +734,6 @@ class FirebaseService {
                 List<String>.from(value["categories"] ?? []);
             if (categories.contains(categoryName)) {
               categories.remove(categoryName);
-              // if (categories.isEmpty) {
-              //   deleteSymptom(signName);
-              //   return;
-              // }
               await _signsRef.child(key).update({"categories": categories});
               print('Category removed from sign: $categoryName');
             } else {
@@ -1293,9 +1282,9 @@ class FirebaseService {
     return true;
   }
 
-  //RAMYA: for updating name and definiton -- later is symtom updates look to functions at bottom :)
+
   Future<void> updateDiagnosis(String name) async {}
-  //RAMYA
+
   Future<void> deleteDiagnosis(String name) async {
     try {
       DataSnapshot snapshot = await _diagnosisRef.get();
@@ -1317,7 +1306,7 @@ class FirebaseService {
     }
   }
 
-  //RAMYA -- whoops Allison did this b/c I needed the method lol -- Need to fix Diagnosis List now though...
+
   Future<List<Diagnosis>> getAllDiagnosis() async {
     try {
       DataSnapshot snapshot = await _diagnosisRef.get();

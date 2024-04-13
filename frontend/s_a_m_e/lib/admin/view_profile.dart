@@ -7,14 +7,12 @@ import 'package:s_a_m_e/home_button.dart';
 
 class ProfilePage extends StatelessWidget {
 
-  // final String profilePic;
   final String name;
   final String email;
   final String role;
 
   const ProfilePage({
     Key? key,
-    // required this.profilePic,
     required this.name,
     required this.email,
     required this.role,

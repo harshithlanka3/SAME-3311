@@ -16,10 +16,7 @@ class UserHome extends StatelessWidget {
   const UserHome({super.key});
 
   void _adminAccessQuestionnaire(BuildContext context) {
-    // bool addSymptomsOption = false;
-    // bool monitorOption = false;
-    // bool promotionOption = false;
-    // bool otherOption = false;
+
     final reasonForAdminAccess = TextEditingController();
 
     showDialog(
