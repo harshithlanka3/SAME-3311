@@ -127,7 +127,6 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
               },
             ),
 
-////////fixing after spring but not displaing signs here for now --- Giselle
             FutureBuilder<List<String>>(
               future: _firebaseService.getAllSigns(),
               builder: (context, snapshot) {

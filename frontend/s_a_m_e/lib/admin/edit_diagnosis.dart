@@ -8,7 +8,6 @@ import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/user/diagnosis_list.dart';
 
 class DiagnosisEdit extends StatelessWidget {
-  //const Admin({super.key});
 
 @override
 Widget build(BuildContext context) {

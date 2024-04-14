@@ -83,7 +83,6 @@ class DiagnosisDeletionPageState extends State<DiagnosisDeletionPage> {
               onPressed: () async {
                 if (_selectedDiagnosis.isNotEmpty) {
                   for (String diagnosis in _selectedDiagnosis) {
-                    //RAMYA MAKE FIREBASE METHOD
                     await _firebaseService.deleteDiagnosis(diagnosis);
                   }
                   ScaffoldMessenger.of(context).showSnackBar(

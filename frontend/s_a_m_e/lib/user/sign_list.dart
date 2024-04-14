@@ -3,7 +3,7 @@ import 'package:s_a_m_e/account/profilepicture.dart';
 import 'package:s_a_m_e/colors.dart';
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/home_button.dart';
-// import 'package:s_a_m_e/account/profilepicture.dart';
+
 
 class SignsListPage extends StatefulWidget {
   const SignsListPage({super.key});
@@ -26,7 +26,6 @@ class SignsListPageState extends State<SignsListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Signs List", style: TextStyle(fontSize: 36.0)),
-        // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
         actions: [ProfilePicturePage()]
       ),
       body: Padding(
@@ -54,7 +53,6 @@ class SignsListPageState extends State<SignsListPage> {
                           ),
                           child: ListTile(
                             title: Text(snapshot.data![index], style: const TextStyle(fontWeight: FontWeight.bold)),
-                            //subtitle: const Text('Sign Description'), 
                           ),
                         ),
                         const SizedBox(height: 10),

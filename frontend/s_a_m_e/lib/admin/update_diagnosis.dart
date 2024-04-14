@@ -24,7 +24,6 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
 
   @override
   void initState() {
-    //_diagnosisUpdateDefinitionController.dispose();
     super.initState();
     fetchDiagnoses();
   }
@@ -233,10 +232,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                 ),
               ),
             ),
-            // Text(
-            //   'Update Definition:',
-            //   style: TextStyle(fontWeight: FontWeight.bold),
-            // ),
+
             const SizedBox(height: 10),
             const Text(
               'Add Symptoms:',
@@ -357,9 +353,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
           updateSymptoms();
           updateSigns();
         },
-        // onPressed: () {
-        //   updateCategories();
-        // },
+
         child: const Icon(Icons.check, color: white,),
       ), bottomNavigationBar: const HomeButton()
     );
