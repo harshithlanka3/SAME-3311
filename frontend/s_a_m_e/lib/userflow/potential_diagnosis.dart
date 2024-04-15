@@ -7,7 +7,8 @@ import 'package:s_a_m_e/home_button.dart';
 import 'package:s_a_m_e/userflow/diagnosis_page.dart';
 
 class PotentialDiagnosis extends StatefulWidget {
-  const PotentialDiagnosis({Key? key, required this.selectedSymptoms, required this.selectedSigns});
+  const PotentialDiagnosis(
+      {Key? key, required this.selectedSymptoms, required this.selectedSigns});
 
   final Map<String, bool> selectedSymptoms;
   final Map<String, bool> selectedSigns;
@@ -45,7 +46,9 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
 
     symptoms = symptoms.substring(0, symptoms.length - 2);
     signs = signs.substring(0, signs.length - 2);
-    diagnoses = FirebaseService().getSortedDiagnosesBySymptoms(checkedSymptoms); // Need to update diagnoses search to also include signs
+    diagnoses = FirebaseService().getSortedDiagnosesBySymptomsAndSigns(
+        checkedSymptoms,
+        checkedSigns); // Need to update diagnoses search to also include signs
   }
 
   Future<UserClass?> fetchUser() async {
@@ -72,26 +75,26 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
             Container(
               alignment: Alignment.centerLeft,
               child: RichText(
-              text: TextSpan(
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontFamily: "PT Serif",
+                text: TextSpan(
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontFamily: "PT Serif",
+                  ),
+                  children: <TextSpan>[
+                    const TextSpan(
+                      text: "Symptoms",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: ": $symptoms\n"),
+                    const TextSpan(
+                      text: "Signs",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: ": $signs")
+                  ],
                 ),
-                children: <TextSpan>[
-                  const TextSpan(
-                    text: "Symptoms",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: ": $symptoms\n"),
-                  const TextSpan(
-                    text: "Signs",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: ": $signs")
-                ],
               ),
-            ),
             ),
             const SizedBox(height: 10),
             const Divider(thickness: 2),
@@ -121,7 +124,8 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
                                 child: ListTile(
                                   title: Text(
                                     snapshot.data![index].name,
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   subtitle: Text(
                                     snapshot.data![index].definition,
@@ -134,9 +138,8 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => DiagnosisPage(
-                                            diagnosis: snapshot.data![index],
-                                            title: "Potential Diagnosis"
-                                          ),
+                                              diagnosis: snapshot.data![index],
+                                              title: "Potential Diagnosis"),
                                         ),
                                       );
                                     },
@@ -176,4 +179,3 @@ class _PotentialDiagnosisState extends State<PotentialDiagnosis> {
     );
   }
 }
-
