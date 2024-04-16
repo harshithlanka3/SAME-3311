@@ -11,7 +11,6 @@ class ViewAccounts extends StatefulWidget {
 
   @override
   ViewAccountsState createState() => ViewAccountsState();
-  
 }
 
 class ViewAccountsState extends State<ViewAccounts> {
@@ -30,7 +29,7 @@ class ViewAccountsState extends State<ViewAccounts> {
   Future<void> startAsyncInit() async {
     usersSearch = await FirebaseService().getAllUsers();
     setState(() {
-      displayedUsers = usersSearch; 
+      displayedUsers = usersSearch;
     });
   }
 
@@ -90,60 +89,63 @@ class ViewAccountsState extends State<ViewAccounts> {
             } else if (snapshot.hasData) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 15.0),
-                child: Scrollbar(
-                  trackVisibility: true,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 20),
-                      const Text(
-                        ' Search for a user below',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24.0, color: Colors.black),
-                      ),
-                      const SizedBox(height: 10),
-                      TextField(
-                        controller: _searchController,
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(20.0),
-                          labelText: 'Search',
-                          labelStyle: TextStyle(color: navy),
-                          filled: true,
-                          fillColor: boxinsides,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                            borderSide: BorderSide(color: boxinsides),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                            borderSide: BorderSide(color: boxinsides),
-                          ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    const Text(
+                      ' Search for a user below',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24.0,
+                          color: Colors.black),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _searchController,
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.all(20.0),
+                        labelText: 'Search',
+                        labelStyle: TextStyle(color: navy),
+                        filled: true,
+                        fillColor: boxinsides,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                          borderSide: BorderSide(color: boxinsides),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                          borderSide: BorderSide(color: boxinsides),
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(white),
-                          backgroundColor: MaterialStateProperty.all<Color>(navy),
-                        ),
-                        onPressed: () async {
-                          List<UserClass> searchedUsers = await getSearchedUsers(_searchController.text);
-                          setState(() {
-                            displayedUsers = searchedUsers;
-                          });
-                        },
-                        child: const Text('Search',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all<Color>(white),
+                        backgroundColor: MaterialStateProperty.all<Color>(navy),
                       ),
-                      const SizedBox(height: 10),
-                      const Divider(),
-                      const SizedBox(height: 10),
-                      ListView.builder(
-                        shrinkWrap: true,
+                      onPressed: () async {
+                        List<UserClass> searchedUsers =
+                            await getSearchedUsers(_searchController.text);
+                        setState(() {
+                          displayedUsers = searchedUsers;
+                        });
+                      },
+                      child: const Text('Search',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16.0)),
+                    ),
+                    const SizedBox(height: 10),
+                    const Divider(),
+                    const SizedBox(height: 10),
+                    Expanded(
+                      child: ListView.builder(
                         itemCount: displayedUsers.length,
                         itemBuilder: (context, index) {
                           return ListTile(
-                            title: Text("${displayedUsers[index].firstName} ${displayedUsers[index].lastName}"), // change this when add name var
+                            title: Text(
+                                "${displayedUsers[index].firstName} ${displayedUsers[index].lastName}"), // change this when add name var
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -154,13 +156,16 @@ class ViewAccountsState extends State<ViewAccounts> {
                             ),
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(100),
-                              child: ViewAllProfilePicturePage(email: displayedUsers[index].email, url: displayedUsers[index].profilePicture),
+                              child: ViewAllProfilePicturePage(
+                                  email: displayedUsers[index].email,
+                                  url: displayedUsers[index].profilePicture),
                             ),
                             trailing: GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => ProfilePage(
-                                        name: "${displayedUsers[index].firstName} ${displayedUsers[index].lastName}",
+                                        name:
+                                            "${displayedUsers[index].firstName} ${displayedUsers[index].lastName}",
                                         email: displayedUsers[index].email,
                                         role: displayedUsers[index].role))).then((info) => refreshUsers(info));
                               },
@@ -172,14 +177,15 @@ class ViewAccountsState extends State<ViewAccounts> {
                                       color: navy,
                                       width: 1.0,
                                     )),
-                                child: const Icon(Icons.arrow_forward_ios_outlined, color: navy),
+                                child: const Icon(Icons.arrow_forward_ios_outlined,
+                                    color: navy),
                               ),
                             ),
                           );
                         },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               );
             } else {
@@ -188,8 +194,7 @@ class ViewAccountsState extends State<ViewAccounts> {
           },
         ),
       ),
-      bottomNavigationBar: const HomeButton()
+      bottomNavigationBar: const HomeButton(),
     );
   }
 }
-
