@@ -35,8 +35,7 @@ class CategoryCreationPageState extends State<CategoryCreationPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Scrollbar(
-          trackVisibility: true,
+        child: SingleChildScrollView(
           child: Column(
           children: [
             const SizedBox(height: 20),

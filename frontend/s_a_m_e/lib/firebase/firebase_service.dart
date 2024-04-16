@@ -27,12 +27,16 @@ class Sign {
 class Category {
   final String name;
   final List<String> symptoms;
+  final List<String> signs;
+  final List<String> diagnoses;
 
-  Category({required this.name, required this.symptoms});
+  Category({required this.name, required this.symptoms, required this.signs, required this.diagnoses});
 
   Category.fromJson(Map<String, dynamic> json)
       : name = json['name'],
-        symptoms = json['symptoms'] ?? [];
+        symptoms = json['symptoms'] ?? [],
+        signs = json['signs'] ?? [],
+        diagnoses = json['diagnoses'] ?? [];
 
   @override
   bool operator ==(Object other) =>
@@ -530,11 +534,11 @@ class FirebaseService {
             List<dynamic> categoriesData = value['categories'] as List<dynamic>;
             List<Category> categories = categoriesData.map((categoryData) {
               if (categoryData is String) {
-                return Category(name: categoryData, symptoms: []);
+                return Category(name: categoryData, symptoms: [], signs: [], diagnoses: []);
               } else if (categoryData is Map<dynamic, dynamic>) {
-                return Category(name: categoryData['name'], symptoms: []);
+                return Category(name: categoryData['name'], symptoms: [], signs: [], diagnoses: []);
               }
-              return Category(name: '', symptoms: []);
+              return Category(name: '', symptoms: [], signs: [], diagnoses: []);
             }).toList();
             categoriesList.addAll(categories);
           }
@@ -558,9 +562,11 @@ class FirebaseService {
         for (var value in data.values) {
           if (value is Map<dynamic, dynamic> && value.containsKey('symptoms')) {
             List<String> symptoms = List<String>.from(value['symptoms']);
+            List<String> signs = List<String>.from(value['signs']);
+            List<String> diagnoses = List<String>.from(value['diagnoses']);
 
             Category category =
-                Category(name: categoryName, symptoms: symptoms);
+                Category(name: categoryName, symptoms: symptoms, signs: signs, diagnoses: diagnoses);
             return category;
           }
         }
@@ -585,8 +591,10 @@ class FirebaseService {
           if (value is Map<dynamic, dynamic> && value.containsKey('name')) {
             String name = value['name'];
             List<String> symptoms = List<String>.from(value['symptoms'] ?? []);
+            List<String> signs = List<String>.from(value['signs'] ?? []);
+            List<String> diagnoses = List<String>.from(value['diagnoses'] ?? []);
 
-            Category category = Category(name: name, symptoms: symptoms);
+            Category category = Category(name: name, symptoms: symptoms, signs: signs, diagnoses: diagnoses);
             categoriesList.add(category);
           }
         });

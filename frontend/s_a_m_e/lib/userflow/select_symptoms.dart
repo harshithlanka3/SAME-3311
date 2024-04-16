@@ -86,6 +86,8 @@ class _SelectSymptomState extends State<SelectSymptom> {
               
             ),
             const SizedBox(height: 10),
+            
+            // accordion section
             Expanded(
               child: FutureBuilder(
                 future: categories,
@@ -121,6 +123,7 @@ class _SelectSymptomState extends State<SelectSymptom> {
                                     style: const TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                   children: [
+                                    // the drop down portion
                                     SizedBox(
                                       height: categorySymptoms.length * 42,
                                       child: ListView.builder(
