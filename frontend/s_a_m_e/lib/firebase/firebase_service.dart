@@ -106,7 +106,6 @@ class UserClass {
     List<String>? messages,
   }) : messages = messages ?? [];
 
-
   factory UserClass.fromJson(Map<String, dynamic> json) {
     return UserClass(
       email: json['email'],
@@ -238,11 +237,16 @@ class FirebaseService {
     }
   }
 
-  Future<int> addCategory(String name, List<String> symptoms, List<String> signs, List<String> diagnoses) async {
+  Future<int> addCategory(String name, List<String> symptoms,
+      List<String> signs, List<String> diagnoses) async {
     try {
       DatabaseReference newCatRef = _catRef.push();
-      await newCatRef
-          .set({'name': name, 'symptoms': symptoms, 'signs': signs, 'diagnoses': diagnoses});
+      await newCatRef.set({
+        'name': name,
+        'symptoms': symptoms,
+        'signs': signs,
+        'diagnoses': diagnoses
+      });
 
       for (String symptom in symptoms) {
         await addCategoryToSymptom(name, symptom);
@@ -601,11 +605,11 @@ class FirebaseService {
       DatabaseReference newSignRef = _signsRef.push();
 
       List<String> complaintNames =
-        categories.map((complaint) => complaint.name).toList();
+          categories.map((complaint) => complaint.name).toList();
 
       await newSignRef
           .set({'name': name, 'categories': complaintNames, 'diagnoses': []});
-          // .set({'name': name, 'diagnoses': []});
+      // .set({'name': name, 'diagnoses': []});
       print('Data added successfully');
 
       for (Category category in categories) {
@@ -618,6 +622,7 @@ class FirebaseService {
       return 400;
     }
   }
+
   Future<List<SignCategory>> getAllSignCategories() async {
     try {
       DataSnapshot snapshot = await _catRef.get();
@@ -644,10 +649,7 @@ class FirebaseService {
     }
   }
 
-
-
-  Future<void> addCategoryToSign(
-      String categoryName, String signName) async {
+  Future<void> addCategoryToSign(String categoryName, String signName) async {
     try {
       DataSnapshot snapshot = await _signsRef.get();
 
@@ -673,9 +675,7 @@ class FirebaseService {
     }
   }
 
-
-   Future<void> addSignToCategory(
-      String signName, String categoryName) async {
+  Future<void> addSignToCategory(String signName, String categoryName) async {
     try {
       DataSnapshot snapshot = await _catRef.get();
 
@@ -802,9 +802,6 @@ class FirebaseService {
       print('Error adding sign to category: $e');
     }
   }
-
-
-
 
   Future<bool> signNonExistent(String name) async {
     try {
@@ -1012,7 +1009,6 @@ class FirebaseService {
       return null;
     }
   }
-  
 
   Future denyAdminRequest(String email) async {
     try {
@@ -1026,9 +1022,7 @@ class FirebaseService {
             print("User to be changed:");
             print(value);
             try {
-             
-                _usersRef.child(key).update({"activeRequest": false});
-    
+              _usersRef.child(key).update({"activeRequest": false});
             } catch (e) {
               //
             }
@@ -1282,7 +1276,6 @@ class FirebaseService {
     return true;
   }
 
-
   Future<void> updateDiagnosis(String name) async {}
 
   Future<void> deleteDiagnosis(String name) async {
@@ -1305,7 +1298,6 @@ class FirebaseService {
       print("Error delteting diagnosis: $e");
     }
   }
-
 
   Future<List<Diagnosis>> getAllDiagnosis() async {
     try {
@@ -1458,7 +1450,6 @@ class FirebaseService {
     }
   }
 
-
   Future<void> addCategoryToDiagnosis(
       String categoryName, String diagnosisName) async {
     try {
@@ -1487,7 +1478,6 @@ class FirebaseService {
       print('Error adding category to diagnosis: $e');
     }
   }
-
 
   Future<void> removeSymptomFromDiagnosis(
       String symptom, String selectedDiagnosis) async {
@@ -1559,15 +1549,19 @@ class FirebaseService {
     return 200;
   }
 
-  Future<List<Diagnosis>> getSortedDiagnosesBySymptoms(
-      List<String> currentSymptoms) async {
+  Future<List<Diagnosis>> getSortedDiagnosesBySymptomsAndSigns(
+      List<String> currentSymptoms, List<String> currentSigns) async {
     List<String> allSymptoms = await getAllSymptoms();
+    List<String> allSigns = await getAllSigns();
     List<Diagnosis> allDiagnoses = await getAllDiagnosis();
 
-    // Calculate the distance of each diagnosis to the current symptoms.
+    // Combine symptoms and signs into a single list.
+    List<String> allFeatures = List.from(allSymptoms)..addAll(allSigns);
+
+    // Calculate the distance of each diagnosis to the current symptoms and signs.
     List<Map<String, dynamic>> distances = allDiagnoses.map((diagnosis) {
-      int distance = calculateHammingDistance(
-          currentSymptoms, diagnosis.symptoms, allSymptoms);
+      int distance = calculateHammingDistance(currentSymptoms, currentSigns,
+          diagnosis.symptoms, diagnosis.signs, allFeatures);
       return {'diagnosis': diagnosis, 'distance': distance};
     }).toList();
 
@@ -1581,14 +1575,14 @@ class FirebaseService {
     return sortedDiagnoses;
   }
 
-  int calculateHammingDistance(List<String> symptomsA, List<String> symptomsB,
-      List<String> allSymptoms) {
+  int calculateHammingDistance(List<String> symptomsA, List<String> signsA,
+      List<String> symptomsB, List<String> signsB, List<String> allFeatures) {
     int distance = 0;
-    Set<String> setA = Set.from(symptomsA);
-    Set<String> setB = Set.from(symptomsB);
+    Set<String> setA = Set.from(symptomsA)..addAll(signsA);
+    Set<String> setB = Set.from(symptomsB)..addAll(signsB);
 
-    for (String symptom in allSymptoms) {
-      if (setA.contains(symptom) != setB.contains(symptom)) {
+    for (String feature in allFeatures) {
+      if (setA.contains(feature) != setB.contains(feature)) {
         distance++;
       }
     }
