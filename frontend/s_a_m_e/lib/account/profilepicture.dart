@@ -83,6 +83,12 @@ class ProfilePicturePageState extends State<ProfilePicturePage> {
   }
 }
 
+// The below class is only different in the above class with what happens when you click on the
+// profile picture. The above class is used in every example except when you are on your own profile.
+// Once you are here, instead of taking you to the profile page, like above, you will be taken to your
+// photo library on your phone and be able to select a new image. This comes with new functions in addition
+// to the functions that just display your profile picture
+
 class InteractiveProfilePicturePage extends StatefulWidget {
   const InteractiveProfilePicturePage({super.key});
 
@@ -134,6 +140,8 @@ class InteractiveProfilePicturePageState extends State<InteractiveProfilePicture
 
   void selectImage() async {
     XFile file = await pickImage(ImageSource.gallery);
+    // keep below comment, there is a chance file can be null here
+    // ignore: unnecessary_null_comparison
     if (file == null) {
       return;
     }
