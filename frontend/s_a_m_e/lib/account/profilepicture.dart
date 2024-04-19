@@ -35,7 +35,7 @@ class ProfilePicturePageState extends State<ProfilePicturePage> {
       final storageRef = FirebaseStorage.instance.ref();
       final photoRef = storageRef.child("images/profilephotos/${user!.email}");
       try {
-        const fiveMBs = 1024 * 1024 * 5;
+        const fiveMBs = 1024 * 1024 * 5; // important to make sure users cannot upload images > 5MBs (Firebase issue)
         final Uint8List? img = await photoRef.getData(fiveMBs);
         setState(() {
           _image = img;
@@ -114,7 +114,7 @@ class InteractiveProfilePicturePageState extends State<InteractiveProfilePicture
       final storageRef = FirebaseStorage.instance.ref();
       final photoRef = storageRef.child("images/profilephotos/${user!.email}");
       try {
-        const fiveMBs = 1024 * 1024 * 5;
+        const fiveMBs = 1024 * 1024 * 5; // important to make sure users cannot upload images > 5MBs (Firebase issue)
         final Uint8List? img = await photoRef.getData(fiveMBs);
         setState(() {
           _image = img;
