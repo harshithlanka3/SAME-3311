@@ -33,7 +33,10 @@ class ViewAccountsState extends State<ViewAccounts> {
     });
   }
 
-  // below method runs to properly display users if updated/deleted by admin
+  // Below method runs to properly display users if updated/deleted by admin
+  // Without this function, app would not display most current information
+  // when exiting from other accounts to view all accounts
+  
   void refreshUsers(info) async {
     usersSearch = await FirebaseService().getAllUsers();
     if (info[1] == "delete") {
