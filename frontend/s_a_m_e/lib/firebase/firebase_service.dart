@@ -30,7 +30,11 @@ class Category {
   final List<String> signs;
   final List<String> diagnoses;
 
-  Category({required this.name, required this.symptoms, required this.signs, required this.diagnoses});
+  Category(
+      {required this.name,
+      required this.symptoms,
+      required this.signs,
+      required this.diagnoses});
 
   Category.fromJson(Map<String, dynamic> json)
       : name = json['name'],
@@ -75,18 +79,21 @@ class Diagnosis {
   final String definition;
   final List<String> symptoms;
   final List<String> signs;
+  final String nextSteps;
 
   Diagnosis(
       {required this.name,
       required this.symptoms,
       required this.signs,
-      required this.definition});
+      required this.definition,
+      required this.nextSteps});
 
   Diagnosis.fromJson(Map<String, dynamic> json)
       : definition = json['definition'],
         name = json['name'],
         symptoms = json['symptoms'],
-        signs = json['signs'];
+        signs = json['signs'],
+        nextSteps = json['nextSteps'];
 }
 
 class UserClass {
@@ -534,9 +541,14 @@ class FirebaseService {
             List<dynamic> categoriesData = value['categories'] as List<dynamic>;
             List<Category> categories = categoriesData.map((categoryData) {
               if (categoryData is String) {
-                return Category(name: categoryData, symptoms: [], signs: [], diagnoses: []);
+                return Category(
+                    name: categoryData, symptoms: [], signs: [], diagnoses: []);
               } else if (categoryData is Map<dynamic, dynamic>) {
-                return Category(name: categoryData['name'], symptoms: [], signs: [], diagnoses: []);
+                return Category(
+                    name: categoryData['name'],
+                    symptoms: [],
+                    signs: [],
+                    diagnoses: []);
               }
               return Category(name: '', symptoms: [], signs: [], diagnoses: []);
             }).toList();
@@ -565,8 +577,11 @@ class FirebaseService {
             List<String> signs = List<String>.from(value['signs']);
             List<String> diagnoses = List<String>.from(value['diagnoses']);
 
-            Category category =
-                Category(name: categoryName, symptoms: symptoms, signs: signs, diagnoses: diagnoses);
+            Category category = Category(
+                name: categoryName,
+                symptoms: symptoms,
+                signs: signs,
+                diagnoses: diagnoses);
             return category;
           }
         }
@@ -592,9 +607,14 @@ class FirebaseService {
             String name = value['name'];
             List<String> symptoms = List<String>.from(value['symptoms'] ?? []);
             List<String> signs = List<String>.from(value['signs'] ?? []);
-            List<String> diagnoses = List<String>.from(value['diagnoses'] ?? []);
+            List<String> diagnoses =
+                List<String>.from(value['diagnoses'] ?? []);
 
-            Category category = Category(name: name, symptoms: symptoms, signs: signs, diagnoses: diagnoses);
+            Category category = Category(
+                name: name,
+                symptoms: symptoms,
+                signs: signs,
+                diagnoses: diagnoses);
             categoriesList.add(category);
           }
         });
@@ -1236,19 +1256,16 @@ class FirebaseService {
 
   //RAMYA
   Future<int> addDiagnosis(String name, String definition,
-      List<String> symptoms, List<String> signs) async {
+      List<String> symptoms, List<String> signs, String nextSteps) async {
     try {
       DatabaseReference newDiagnosisReference = _diagnosisRef.push();
-
-      await newDiagnosisReference
-          .set({'name': name, 'definition': definition, 'symptoms': symptoms});
-      print('Data added successfully');
 
       await newDiagnosisReference.set({
         'name': name,
         'definition': definition,
         'symptoms': symptoms,
-        'signs': signs
+        'signs': signs,
+        'nextSteps': nextSteps,
       });
       print('Data added successfully');
 
@@ -1321,12 +1338,14 @@ class FirebaseService {
             String definition = value['definition'];
             List<String> symptoms = List<String>.from(value['symptoms'] ?? []);
             List<String> signs = List<String>.from(value['signs'] ?? []);
+            String nextSteps = value['nextSteps'];
 
             Diagnosis diagnosis = Diagnosis(
                 name: name,
                 symptoms: symptoms,
                 signs: signs,
-                definition: definition);
+                definition: definition,
+                nextSteps: nextSteps);
             diagnoses.add(diagnosis);
           }
         });
@@ -1545,6 +1564,29 @@ class FirebaseService {
         data.forEach((key, value) async {
           if (value["name"] == diagnosisname) {
             await _diagnosisRef.child(key).update({"definition": def});
+            print("Definition updated");
+          }
+        });
+        return 200;
+      }
+    } catch (e) {
+      print('Error removing symptom from diagnosis: $e');
+      return 400;
+    }
+    return 200;
+  }
+
+  Future<int> updateDiagnosisNextSteps(
+      String diagnosisname, String nextSteps) async {
+    try {
+      DataSnapshot snapshot = await _diagnosisRef.get();
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+        data.forEach((key, value) async {
+          if (value["name"] == diagnosisname) {
+            await _diagnosisRef.child(key).update({"nextSteps": nextSteps});
             print("Definition updated");
           }
         });
