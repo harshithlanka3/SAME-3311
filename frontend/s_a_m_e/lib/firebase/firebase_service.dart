@@ -241,6 +241,16 @@ class FirebaseService {
     }
   }
 
+/**
+ * Adds a new category with the given name, symptoms, signs, and diagnoses.
+ *
+ * @param name      The name of the category.
+ * @param symptoms  The list of symptoms associated with the category.
+ * @param signs     The list of signs associated with the category.
+ * @param diagnoses The list of diagnoses associated with the category.
+ * @return A {@code Future<Integer>} representing the HTTP status code indicating the success or failure of the operation.
+ */
+
   Future<int> addCategory(String name, List<String> symptoms,
       List<String> signs, List<String> diagnoses) async {
     try {
@@ -272,6 +282,14 @@ class FirebaseService {
     }
   }
 
+
+/**
+ * Checks if a category with the given name already exists.
+ *
+ * @param name The name of the category to check.
+ * @return A {@code Future<Boolean>} indicating whether the category exists (true) or not (false).
+ */
+
   Future<bool> categoryNonExistent(String name) async {
     try {
       String lowerName = name.toLowerCase();
@@ -296,6 +314,13 @@ class FirebaseService {
     }
     return true;
   }
+
+
+/**
+ * Deletes a category with the given name and removes its associations with symptoms, signs, and diagnoses.
+ *
+ * @param name The name of the category to delete.
+ */
 
   Future<void> deleteCategory(String name) async {
     try {
@@ -358,6 +383,14 @@ class FirebaseService {
     }
   }
 
+
+/**
+ * Adds a category to a symptom's list of associated categories.
+ *
+ * @param categoryName The name of the category to add.
+ * @param symptomName  The name of the symptom.
+ */
+
   Future<void> addCategoryToSymptom(
       String categoryName, String symptomName) async {
     try {
@@ -384,6 +417,13 @@ class FirebaseService {
       print('Error adding category to symptom: $e');
     }
   }
+
+/**
+ * Retrieves the list of symptoms associated with a given category.
+ *
+ * @param catName The name of the category.
+ * @return A {@code Future<List<String>>} containing the list of symptoms associated with the category.
+ */
 
   Future<List<String>> getSymptomsForCat(String catName) async {
     try {
@@ -417,6 +457,13 @@ class FirebaseService {
       return [];
     }
   }
+
+/**
+ * Adds a symptom to a category's list of associated symptoms.
+ *
+ * @param symptomName   The name of the symptom to add.
+ * @param categoryName  The name of the category.
+ */
 
   Future<void> addSymptomToCategory(
       String symptomName, String categoryName) async {
@@ -464,6 +511,13 @@ class FirebaseService {
     }
   }
 
+/**
+ * Removes a category from a symptom's list of associated categories.
+ *
+ * @param categoryName The name of the category to remove.
+ * @param symptomName  The name of the symptom.
+ */
+
   Future<void> removeCategoryFromSymptom(
       String categoryName, String symptomName) async {
     try {
@@ -495,6 +549,14 @@ class FirebaseService {
     }
   }
 
+
+/**
+ * Removes a symptom from a category's list of associated symptoms.
+ *
+ * @param symptomName   The name of the symptom to remove.
+ * @param categoryName  The name of the category.
+ */
+
   Future<void> removeSymptomFromCategory(
       String symptomName, String categoryName) async {
     try {
@@ -516,6 +578,13 @@ class FirebaseService {
       print('Error adding symptom to category: $e');
     }
   }
+
+/**
+ * Retrieves the list of categories associated with a given symptom.
+ *
+ * @param symptomName The name of the symptom.
+ * @return A {@code Future<List<Category>>} containing the list of categories associated with the symptom.
+ */
 
   Future<List<Category>> getCategoriesForSymptom(String symptomName) async {
     try {
@@ -551,6 +620,14 @@ class FirebaseService {
     }
   }
 
+/**
+ * Retrieves the category with the given name.
+ *
+ * @param categoryName The name of the category to retrieve.
+ * @return A {@code Future<Category>} representing the retrieved category.
+ * @throws Exception if the category is not found.
+ */
+
   Future<Category> getCategory(String categoryName) async {
     try {
       DataSnapshot snapshot =
@@ -578,6 +655,12 @@ class FirebaseService {
       rethrow;
     }
   }
+
+/**
+ * Retrieves all categories.
+ *
+ * @return A {@code Future<List<Category>>} containing all categories.
+ */
 
   Future<List<Category>> getAllCategories() async {
     try {
