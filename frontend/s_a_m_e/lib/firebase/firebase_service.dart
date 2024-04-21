@@ -289,7 +289,6 @@ class FirebaseService {
     }
   }
 
-
 /**
  * Checks if a category with the given name already exists.
  *
@@ -321,7 +320,6 @@ class FirebaseService {
     }
     return true;
   }
-
 
 /**
  * Deletes a category with the given name and removes its associations with symptoms, signs, and diagnoses.
@@ -389,7 +387,6 @@ class FirebaseService {
       print("Error deleting symptom or signs: $e");
     }
   }
-
 
 /**
  * Adds a category to a symptom's list of associated categories.
@@ -555,7 +552,6 @@ class FirebaseService {
       print('Error removing category from symptom: $e');
     }
   }
-
 
 /**
  * Removes a symptom from a category's list of associated symptoms.
@@ -1383,8 +1379,6 @@ class FirebaseService {
     }
     return true;
   }
-
-  Future<void> updateDiagnosis(String name) async {}
 
   Future<void> deleteDiagnosis(String name) async {
     try {
