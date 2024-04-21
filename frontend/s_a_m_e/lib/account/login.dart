@@ -29,66 +29,70 @@ class LoginState extends State<Login> {
     super.initState();
     disclaimer = _firebaseService.getDisclaimer();
   }
- 
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
-  
 
   Future<void> _signIn() async {
-  try {
-    UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwordController.text,
-    );
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
 
-  if (userCredential.user != null) {
-      if (userCredential.user!.emailVerified) {
-        String uid = userCredential.user!.uid;
+      if (userCredential.user != null) {
+        if (userCredential.user!.emailVerified) {
+          String uid = userCredential.user!.uid;
 
-        UserClass? userData = await FirebaseService().getUser(uid);
+          UserClass? userData = await FirebaseService().getUser(uid);
 
-        if (userData != null) {
-          String role = userData.role;
-          print(role);
+          if (userData != null) {
+            String role = userData.role;
+            print(role);
 
-          if (role == 'user') {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const UserHome()),
-            );
-          } else if (role == 'admin') {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const Admin()),
-            );
+            if (role == 'user') {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const UserHome()),
+              );
+            } else if (role == 'admin') {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const Admin()),
+              );
+            }
+          } else {
+            print('Error: User data not found in the database.');
           }
         } else {
-          print('Error: User data not found in the database.');
+          await userCredential.user?.sendEmailVerification();
+          Fluttertoast.showToast(
+            msg: 'Please verify your email before logging in.',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: blue,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
         }
       } else {
-        await userCredential.user?.sendEmailVerification();
-        Fluttertoast.showToast(
-          msg: 'Please verify your email before logging in.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: blue,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        print('Error: User is null after sign-in.');
       }
-    } else {
-      print('Error: User is null after sign-in.');
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: 'Incorrect username and/or password',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: blue,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
     }
-  } catch (e) {
-    print('Error during sign-in: $e');
-    print('Error during sign-in: $e');
   }
-}
-
-
 
   void _showDisclaimerDialog(BuildContext context) {
     bool checkboxValue = false;
@@ -107,13 +111,14 @@ class LoginState extends State<Login> {
                     FutureBuilder<String>(
                       future: disclaimer,
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return CircularProgressIndicator(); 
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
                         } else if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
                         } else {
                           return Text(
-                            snapshot.data ?? '', 
+                            snapshot.data ?? '',
                             style: const TextStyle(
                               fontFamily: "PT Serif",
                               fontSize: 16.0,
@@ -123,12 +128,12 @@ class LoginState extends State<Login> {
                         }
                       },
                     ),
-
-                    const SizedBox(height: 10), 
+                    const SizedBox(height: 10),
                     Row(
                       children: <Widget>[
                         Checkbox(
-                          fillColor: MaterialStateProperty.resolveWith((states) {
+                          fillColor:
+                              MaterialStateProperty.resolveWith((states) {
                             if (!states.contains(MaterialState.selected)) {
                               return Colors.transparent;
                             }
@@ -149,7 +154,7 @@ class LoginState extends State<Login> {
                           style: TextStyle(
                             fontFamily: "PT Serif",
                             fontSize: 14.0,
-                            color: Colors.black, 
+                            color: Colors.black,
                           ),
                         ),
                       ],
@@ -166,7 +171,7 @@ class LoginState extends State<Login> {
                       style: TextStyle(
                         fontFamily: "PT Serif",
                         fontSize: 16.0,
-                        color: Colors.black, 
+                        color: Colors.black,
                       )),
                 ),
                 ElevatedButton(
@@ -219,31 +224,28 @@ class LoginState extends State<Login> {
           child: Column(
             children: <Widget>[
               const SizedBox(height: 15),
-              const Image(
-                height: 220,
-                image: AssetImage('assets/logo.png')
-              ),
-              const SizedBox(height: 20), 
-              const Text('Welcome back!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0)),
-              const Text('Login with your credentials below', style: TextStyle(fontSize: 14.0)),
+              const Image(height: 220, image: AssetImage('assets/logo.png')),
+              const SizedBox(height: 20),
+              const Text('Welcome back!',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0)),
+              const Text('Login with your credentials below',
+                  style: TextStyle(fontSize: 14.0)),
               const SizedBox(height: 40),
               TextField(
                 controller: _emailController,
                 decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.all(20.0),
-                  labelText: 'Email',
-                  labelStyle: TextStyle(color: navy),
-                  filled: true,
-                  fillColor: boxinsides,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                    borderSide: BorderSide(color: boxinsides)
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                    borderSide: BorderSide(color: boxinsides)
-                  )
-                ),
+                    contentPadding: EdgeInsets.all(20.0),
+                    labelText: 'Email',
+                    labelStyle: TextStyle(color: navy),
+                    filled: true,
+                    fillColor: boxinsides,
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                        borderSide: BorderSide(color: boxinsides)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                        borderSide: BorderSide(color: boxinsides))),
               ),
               const SizedBox(height: 30),
               TextField(
@@ -265,48 +267,52 @@ class LoginState extends State<Login> {
               ),
               const SizedBox(height: 40),
               RichText(
-                text: TextSpan(
+                  text: TextSpan(
                 style: const TextStyle(fontFamily: "PT Serif"),
                 children: <TextSpan>[
                   const TextSpan(
                       text: "Don't have an account?  ",
                       style: TextStyle(color: Colors.black)),
                   TextSpan(
-                    text: "Register here",
-                    style: const TextStyle(color: blue, decoration: TextDecoration.underline),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        _showDisclaimerDialog(context);
-                      } 
-                  ),
+                      text: "Register here",
+                      style: const TextStyle(
+                          color: blue, decoration: TextDecoration.underline),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          _showDisclaimerDialog(context);
+                        }),
                 ],
               )),
               const SizedBox(height: 40),
               SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                child: ElevatedButton(
-                    style: const ButtonStyle(
-                      foregroundColor: MaterialStatePropertyAll<Color>(white),
-                      backgroundColor: MaterialStatePropertyAll<Color>(navy),
-                    ),
-                    onPressed: _signIn,
-                    child: const Text('Sign In',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24.0)))),
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: ElevatedButton(
+                      style: const ButtonStyle(
+                        foregroundColor: MaterialStatePropertyAll<Color>(white),
+                        backgroundColor: MaterialStatePropertyAll<Color>(navy),
+                      ),
+                      onPressed: _signIn,
+                      child: const Text('Sign In',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 24.0)))),
               const SizedBox(height: 30),
               RichText(
-                text: TextSpan(
+                  text: TextSpan(
                 style: const TextStyle(fontFamily: "PT Serif"),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "Forgot Password?",
-                    style: const TextStyle(color: blue, decoration: TextDecoration.underline),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPassPage(),));
-                      } 
-                  ),
+                      text: "Forgot Password?",
+                      style: const TextStyle(
+                          color: blue, decoration: TextDecoration.underline),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ForgotPassPage(),
+                              ));
+                        }),
                 ],
               )),
             ],
