@@ -15,6 +15,7 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
   //final _apiService = ApiService();
   final _diagnosisNameController = TextEditingController();
   final _diagnosisDefinitionController = TextEditingController();
+  final _diagnosisNextStepsController = TextEditingController();
   final FirebaseService _firebaseService = FirebaseService();
   List<String> _selectedSymptoms = [];
   List<String> _selectedSigns = [];
@@ -23,6 +24,7 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
   void dispose() {
     _diagnosisNameController.dispose();
     _diagnosisDefinitionController.dispose();
+    _diagnosisNextStepsController.dispose();
     super.dispose();
   }
 
@@ -41,7 +43,7 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
               const Text('Add Diagnosis',
                   style:
                       TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0)),
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
               TextField(
                 controller: _diagnosisNameController,
                 decoration: const InputDecoration(
@@ -58,7 +60,7 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                       borderRadius: BorderRadius.all(Radius.circular(40.0))),
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               TextField(
                 controller: _diagnosisDefinitionController,
                 decoration: const InputDecoration(
@@ -75,7 +77,24 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                       borderRadius: BorderRadius.all(Radius.circular(40.0))),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _diagnosisNextStepsController,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.all(20.0),
+                  labelText: 'Diagnosis Next Steps',
+                  labelStyle: TextStyle(color: navy),
+                  filled: true,
+                  fillColor: boxinsides,
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: boxinsides),
+                      borderRadius: BorderRadius.all(Radius.circular(40.0))),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: boxinsides),
+                      borderRadius: BorderRadius.all(Radius.circular(40.0))),
+                ),
+              ),
+              const SizedBox(height: 20),
               FutureBuilder<List<String>>(
                 future: _firebaseService.getAllSymptoms(),
                 builder: (context, snapshot) {
@@ -177,6 +196,7 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                 onPressed: () async {
                   if ((_diagnosisNameController.text.isNotEmpty &&
                           _diagnosisDefinitionController.text.isNotEmpty &&
+                          _diagnosisNextStepsController.text.isNotEmpty &&
                           _selectedSymptoms.isNotEmpty &&
                           _selectedSigns.isNotEmpty) &&
                       await _firebaseService.diagnosisNonExistent(
@@ -186,7 +206,7 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                       _diagnosisDefinitionController.text,
                       _selectedSymptoms,
                       _selectedSigns,
-                      "NEXT STEPS",
+                      _diagnosisNextStepsController.text,
                     );
                     if (response == 200) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -195,6 +215,7 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                       );
                       _diagnosisNameController.clear();
                       _diagnosisDefinitionController.clear();
+                      _diagnosisNextStepsController.clear();
                       setState(() {
                         _selectedSymptoms.clear();
                         _selectedSigns.clear();
@@ -222,7 +243,7 @@ class DiagnosisCreationPageState extends State<DiagnosisCreationPage> {
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
             ],
           ),
         ),
