@@ -69,7 +69,6 @@ Currently, the application runs on our production database. To run on your own d
 * Seperation of Admin and User pages
 * Admin privileges implemented
 * Chief complaints renamed to categories
-* 
 
 #### Bug Fixes
 * Log-in page now throws error on failed log-in attempts
