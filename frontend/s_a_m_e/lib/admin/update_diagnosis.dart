@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:s_a_m_e/account/profilepicture.dart';
+import 'package:s_a_m_e/admin/updateNextSteps.dart';
 import 'package:s_a_m_e/colors.dart'; 
 import 'package:s_a_m_e/firebase/firebase_service.dart';
 import 'package:s_a_m_e/home_button.dart';
+//import 'package:flutter_quill/flutter_quill.dart' as quill;
+//import 'dart:convert'; 
+
 
 class UpdateDiagnosisPage extends StatefulWidget {
   const UpdateDiagnosisPage({super.key});
@@ -13,8 +17,11 @@ class UpdateDiagnosisPage extends StatefulWidget {
 
 class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
   final _diagnosisUpdateDefinitionController = TextEditingController();
+  final _diagnosisUpdateNextStepsController = TextEditingController();
+  //quill.QuillController _diagnosisUpdateNextStepsController = quill.QuillController.basic();
   String selectedDiagnosis = '';
   String definitionUdate = '';
+  String nextStepsUdate = '';
   List<String> symptomsToAdd = [];
   List<String> symptomsToDelete = [];
   Map<String, bool> symptomCheckedState = {};
@@ -31,6 +38,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
    @override
   void dispose() {
     _diagnosisUpdateDefinitionController.dispose();
+    _diagnosisUpdateNextStepsController.dispose();
     super.dispose();
   }
 
@@ -234,6 +242,43 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
             ),
 
             const SizedBox(height: 10),
+            // TextField(
+            //   controller: _diagnosisUpdateNextStepsController,
+            //   decoration: const InputDecoration(
+            //     contentPadding: EdgeInsets.all(20.0),
+            //     labelText: 'Update Next Steps',
+            //     labelStyle: TextStyle(color: navy),
+            //     filled: true,
+            //     fillColor: boxinsides,
+            //     focusedBorder: OutlineInputBorder(
+            //       borderSide: BorderSide(color: boxinsides),
+            //       borderRadius: BorderRadius.all(Radius.circular(40.0))
+            //     ),
+            //     enabledBorder: OutlineInputBorder(
+            //       borderSide: BorderSide(color: boxinsides),
+            //       borderRadius: BorderRadius.all(Radius.circular(40.0))
+            //     ),
+            //   ),
+            // ),
+            ElevatedButton(
+                style: const ButtonStyle(
+                  foregroundColor: MaterialStatePropertyAll<Color>(navy),
+                  backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 228, 247, 255)),
+                ),
+                onPressed: () async {
+                  // Navigate to UpdateNextStepsPage
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UpdateNextStepsPage(diagnosisName: selectedDiagnosis)
+                    ),
+                  );
+                },
+                child: const Text('Update Next Steps',
+                    style:
+                        TextStyle(fontWeight: FontWeight.normal, fontSize: 16.0)),
+              ),
+            const SizedBox(height: 10),
             const Text(
               'Add Symptoms:',
               style: TextStyle(fontWeight: FontWeight.bold),
@@ -246,7 +291,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                   return CheckboxListTile(
                     title: Text(symptom),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity: const VisualDensity(horizontal: -1.0, vertical: -1.0),
                     value: symptomCheckedState[symptom] ?? false,
                     onChanged: (bool? value) {
                       setState(() {
@@ -270,7 +315,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                   return CheckboxListTile(
                     title: Text(sign),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity: const VisualDensity(horizontal: -1.0, vertical: -1.0),
                     value: signCheckedState[sign] ?? false,
                     onChanged: (bool? value) {
                       setState(() {
@@ -294,7 +339,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                   return CheckboxListTile(
                     title: Text(symptom),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity: const VisualDensity(horizontal: -1.0, vertical: -1.0),
                     value: symptomCheckedState[symptom] ?? false,
                     onChanged: (bool? value) {
                       setState(() {
@@ -318,7 +363,7 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
                   return CheckboxListTile(
                     title: Text(sign),
                     activeColor: navy,
-                    visualDensity: const VisualDensity(horizontal: -2.0, vertical: -2.0),
+                    visualDensity: const VisualDensity(horizontal: -1.0, vertical: -1.0),
                     value: signCheckedState[sign] ?? false,
                     onChanged: (bool? value) {
                       setState(() {
@@ -350,6 +395,22 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
               );
             }
           } 
+          if (_diagnosisUpdateNextStepsController.text.isNotEmpty) {
+          //if (_diagnosisUpdateNextStepsController.document.toPlainText().isNotEmpty) {
+            final response = await FirebaseService().updateDiagnosisNextSteps(selectedDiagnosis, _diagnosisUpdateNextStepsController.text);
+            if (response == 200) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Diagnosis added successfully')),
+              );
+              setState(() {
+                _diagnosisUpdateNextStepsController.clear();
+              });
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Failed to add diagnosis')),
+              );
+            }
+          }
           updateSymptoms();
           updateSigns();
         },
@@ -359,3 +420,4 @@ class UpdateDiagnosisPageState extends State<UpdateDiagnosisPage> {
     );
   }
 }
+
